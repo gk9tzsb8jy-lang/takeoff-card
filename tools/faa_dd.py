@@ -1,4 +1,4 @@
-"""Merge FAA NASR declared distances (TORA/ASDA) into runways.json.
+"""Merge FAA NASR declared distances (TORA/ASDA/LDA) into runways.json.
 
 Run by .github/workflows/faa-declared-distances.yml. Optional argument: a local
 APT_CSV zip to use instead of downloading (for testing).
@@ -69,16 +69,16 @@ def main():
     h = list(rows[0].keys())
     print('columns:', h)
     c_apt, c_end = col(h, 'ARPT_ID'), col(h, 'RWY_END_ID')
-    c_tora, c_asda = col(h, 'TKOF_RUN'), col(h, 'ACLT_STOP')
+    c_tora, c_asda, c_lda = col(h, 'TKOF_RUN'), col(h, 'ACLT_STOP'), col(h, 'LNDG_DIST')
     c_eff = next((x for x in h if x == 'EFF_DATE'), None)
     if c_eff and rows[0].get(c_eff):
         print('FAA effective date:', rows[0][c_eff])
 
     dd = {}
     for r in rows:
-        t, a = num(r[c_tora]), num(r[c_asda])
-        if t or a:
-            dd[(r[c_apt].strip().upper(), end_key(r[c_end]))] = (t, a)
+        t, a, l = num(r[c_tora]), num(r[c_asda]), num(r[c_lda])
+        if t or a or l:
+            dd[(r[c_apt].strip().upper(), end_key(r[c_end]))] = (t, a, l)
     print(len(dd), 'runway ends with declared distances')
 
     db = json.load(open('runways.json'))
@@ -101,10 +101,10 @@ def main():
         ids = by_apt.get(k, ())
         for r in rws:
             r[:] = r[:8]
-            vals = []
-            for e in (r[0], r[1]):
-                v = next((dd[(i, end_key(e))] for i in ids if (i, end_key(e)) in dd), (0, 0))
-                vals += v
+            ends = [next((dd[(i, end_key(e))] for i in ids if (i, end_key(e)) in dd), (0, 0, 0))
+                    for e in (r[0], r[1])]
+            # [toraLE, asdaLE, toraHE, asdaHE, ldaLE, ldaHE]
+            vals = [ends[0][0], ends[0][1], ends[1][0], ends[1][1], ends[0][2], ends[1][2]]
             if any(vals):
                 r.append(vals); hits += 1
     db['dd'] = f'FAA NASR declared distances, cycle effective {cyc:%Y-%m-%d}'
