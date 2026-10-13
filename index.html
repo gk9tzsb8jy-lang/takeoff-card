@@ -119,8 +119,11 @@ details[open] summary{margin-bottom:10px}
   </fieldset>
   <fieldset id="fsOther" hidden>
     <legend>Other field</legend>
+    <label for="oId">Airport identifier<input id="oId" type="text" autocapitalize="characters" spellcheck="false" maxlength="5" placeholder="e.g. KTPA, X26, MMUN"></label>
+    <label for="oRwy">Runway<select id="oRwy"><option value="">Enter manually</option></select></label>
+    <div class="wxstat" id="oStat" style="grid-column:1/-1">Type an identifier to load its runways from the built-in database, or fill in the boxes below.</div>
     <label for="elev">Field elevation (ft)<input id="elev" type="number" inputmode="numeric" step="10" value="2000"></label>
-    <label for="hdg">Runway heading (°)<input id="hdg" type="number" inputmode="numeric" step="10" value="360"></label>
+    <label for="hdg">Runway heading (°T)<input id="hdg" type="number" inputmode="numeric" step="10" value="360"></label>
     <label for="rwy">Takeoff run available (ft)<input id="rwy" type="number" inputmode="numeric" step="50" value="7400"></label>
     <label for="asda">Accel-stop available (ft)<input id="asda" type="number" inputmode="numeric" step="50" placeholder="same as runway"></label>
   </fieldset>
@@ -134,7 +137,7 @@ details[open] summary{margin-bottom:10px}
     <label for="metar" style="grid-column:1/-1">Or paste a METAR<input id="metar" type="text" spellcheck="false" autocapitalize="characters" placeholder="KSPG 131253Z 07009KT 10SM FEW030 27/21 A3001"></label>
     <label for="alt">Altimeter (in Hg)<input id="alt" type="number" inputmode="decimal" step="0.01" value="29.92"></label>
     <label for="oat">OAT (°C)<input id="oat" type="number" inputmode="decimal" step="1" value="21"></label>
-    <label for="wdir">Wind from (°)<input id="wdir" type="number" inputmode="numeric" step="10" value="360"></label>
+    <label for="wdir">Wind from (°T)<input id="wdir" type="number" inputmode="numeric" step="10" value="360"></label>
     <label for="wspd">Wind speed (kt)<input id="wspd" type="number" inputmode="numeric" step="1" value="9"></label>
     <label for="wcred">Wind credit<select id="wcred"><option value="chart">As charted</option><option value="half">50% head, 150% tail</option></select></label>
     <div class="derived" id="wdOut"></div>
@@ -184,6 +187,7 @@ details[open] summary{margin-bottom:10px}
     <li>Sea level to 8,000 ft pressure altitude, ISA −15°C to ISA +30°C.</li>
     <li>3,000 to 4,750 lb. Headwind to 15 kt, tailwind to 5 kt.</li>
     <li>Accelerate-stop includes a 3-second recognition time. The chart value is multiplied by 0.93 (0° flaps) or 0.87 (25° flaps), as the chart notes direct.</li>
+    <li>Off-station runways come from the OurAirports database (public domain, October 2026). Lengths are full runway length with no declared distances. Headings and winds are true, matching METARs; ATIS winds are magnetic.</li>
     <li>KSPG runway data uses the declared distances: takeoff run available (TORA) for the over-50 ft distance and accelerate-stop available (ASDA) for accelerate-stop. They were taken from FAA data as published by AirNav in October 2026. Verify them against the current Chart Supplement and NOTAMs.</li>
     <li>Charts are unfactored. The POH warns against using values extrapolated beyond the chart, so the card flags any input outside these limits.</li>
   </ul>
@@ -212,12 +216,12 @@ function run(ch,i){
   return o;
 }
 const $=id=>document.getElementById(id);
-const ids=['stn','elev','alt','oat','rwy','asda','hdg','wdir','wspd','wcred','wt','pad','spgRwy'];
+const ids=['stn','oId','oRwy','elev','alt','oat','rwy','asda','hdg','wdir','wspd','wcred','wt','pad','spgRwy'];
 // KSPG declared distances (FAA data via AirNav / PilotGPT, Oct 2026). Verify against the current Chart Supplement.
-const SPG={elev:7,rwy:{'7':{hdg:70,tora:3646,asda:3376},'25':{hdg:250,tora:3180,asda:3312},'18':{hdg:180,tora:2864,asda:2749},'36':{hdg:360,tora:2864,asda:2674}}};
+const SPG={elev:7,rwy:{'7':{hdg:62,tora:3646,asda:3376},'25':{hdg:242,tora:3180,asda:3312},'18':{hdg:180,tora:2864,asda:2749},'36':{hdg:360,tora:2864,asda:2674}}};
 let mode='norm', site='home';
-try{const s=JSON.parse(localStorage.getItem('sen3to2')||'null');if(s){ids.forEach(k=>{if(s[k]!=null&&s[k]!=='')$(k).value=s[k]});if(s.mode)mode=s.mode;if(s.site)site=s.site;}}catch(e){}
-function setSite(m){site=m;$('sHome').setAttribute('aria-pressed',m==='home');$('sOther').setAttribute('aria-pressed',m==='other');$('fsHome').hidden=m!=='home';$('fsOther').hidden=m==='home';$('stn').readOnly=m==='home';if(m==='home')$('stn').value='KSPG';else if($('stn').value==='KSPG')$('stn').value=($('stnOther')&&$('stnOther').value)||'';calc();}
+try{const s=JSON.parse(localStorage.getItem('sen3to2')||'null');if(s){ids.forEach(k=>{if(s[k]!=null&&s[k]!=='')$(k).value=s[k]});if(s.mode)mode=s.mode;if(s.site)site=s.site;window.__oR=s.oRwy;}}catch(e){}
+function setSite(m){site=m;$('sHome').setAttribute('aria-pressed',m==='home');$('sOther').setAttribute('aria-pressed',m==='other');$('fsHome').hidden=m!=='home';$('fsOther').hidden=m==='home';$('stn').readOnly=true;$('stn').value=m==='home'?'KSPG':($('oId').value||'').toUpperCase();calc();}
 $('sHome').onclick=()=>setSite('home');$('sOther').onclick=()=>setSite('other');
 const fmt=n=>Math.round(n).toLocaleString('en-US');
 const up=n=>Math.ceil(n/10)*10;
@@ -332,13 +336,48 @@ async function getWx(){
     const age=p.timestamp?Math.round((Date.now()-Date.parse(p.timestamp))/60000):null;
     applyWx(o,`${id} latest${age!=null?`, ${age} min old`:''}`);
     if(age!=null&&age>90){st.className='wxstat warn';st.insertAdjacentHTML('beforeend','<br>This report is over 90 minutes old.');}
-    if(site==='other'){try{const s=await fetch(`https://api.weather.gov/stations/${id}`,{headers:{Accept:'application/geo+json'}});if(s.ok){const sj=await s.json();const e=sj.properties&&sj.properties.elevation&&sj.properties.elevation.value;if(e!=null){$('elev').value=Math.round(e*3.28084);calc();st.insertAdjacentHTML('beforeend',`<br>Field elevation set from the station: ${Math.round(e*3.28084)} ft.`);}}}catch(e){}}
+    if(site==='other'&&!curApt){try{const s=await fetch(`https://api.weather.gov/stations/${id}`,{headers:{Accept:'application/geo+json'}});if(s.ok){const sj=await s.json();const e=sj.properties&&sj.properties.elevation&&sj.properties.elevation.value;if(e!=null){$('elev').value=Math.round(e*3.28084);calc();st.insertAdjacentHTML('beforeend',`<br>Field elevation set from the station: ${Math.round(e*3.28084)} ft.`);}}}catch(e){}}
   }catch(e){
     st.className='wxstat warn';
     st.textContent=e.message==='nostation'?`No US weather station found for ${id}. Paste its METAR or enter the values by hand.`:'Couldn’t reach the weather service, so the values below are what you entered. Paste a METAR or type them in.';
   }finally{b.disabled=false;b.textContent='Get current weather';}
 }
 $('getWx').onclick=getWx;
+// ---- Built-in runway database (OurAirports, public domain) ----
+let RDB=null,curApt=null;
+const rdbReady=fetch('runways.json').then(r=>r.ok?r.json():null).then(j=>{RDB=j;return j;}).catch(()=>null);
+function findApt(id){if(!RDB||!id)return null;id=id.toUpperCase();const k=RDB.a[id]?id:RDB.x[id];return k?{id:k,d:RDB.a[k]}:null;}
+async function lookupApt(keepRwy){
+  const id=($('oId').value||'').trim().toUpperCase(); const st=$('oStat'), sel=$('oRwy'); const prev=keepRwy?(window.__oR||sel.value):'';
+  $('stn').value=id; curApt=null;
+  sel.innerHTML='<option value="">Enter manually</option>';
+  if(id.length<3){st.className='wxstat';st.textContent='Type an identifier to load its runways from the built-in database, or fill in the boxes below.';return;}
+  await rdbReady;
+  if(!RDB){st.className='wxstat warn';st.textContent='The runway database isn’t available in this view. Enter the runway by hand.';return;}
+  const a=findApt(id);
+  if(!a){st.className='wxstat warn';st.textContent=`${id} isn’t in the database (paved runways of 1,800 ft or more, North America and the Caribbean). Enter the runway by hand.`;return;}
+  curApt=a; $('stn').value=a.id;
+  const [name,elev,rws]=a.d; $('elev').value=elev;
+  rws.forEach((r,i)=>{const [le,he,len,w,h1,h2,d1,d2]=r;
+    sel.insertAdjacentHTML('beforeend',`<option value="${i}:0">${le} · ${fmt(len)} ft</option><option value="${i}:1">${he} · ${fmt(len)} ft</option>`);});
+  st.className='wxstat ok';st.textContent=`${a.id} ${name}, elevation ${fmt(elev)} ft. Pick a runway.`;
+  if(prev&&[...sel.options].some(o=>o.value===prev)){sel.value=prev;pickRwy();}
+  else if(sel.options.length>1){sel.selectedIndex=1;pickRwy();}
+  calc();
+}
+function pickRwy(){
+  const v=$('oRwy').value, st=$('oStat'); if(!v||!curApt){calc();return;}
+  const [i,e]=v.split(':').map(Number); const r=curApt.d[2][i]; const [le,he,len,w,h1,h2,d1,d2]=r;
+  $('hdg').value=e?h2:h1; $('rwy').value=len; $('asda').value='';
+  const disp=e?d2:d1, dispFar=e?d1:d2;
+  st.className='wxstat ok';
+  st.textContent=`${curApt.id} ${curApt.d[0]}. Runway ${e?he:le}: ${fmt(len)} ft, heading ${String(e?h2:h1).padStart(3,'0')}°T${disp?`, ${fmt(disp)} ft displaced threshold at this end (usable for takeoff)`:''}. No declared distances in the database, so full length is used; check the Chart Supplement and NOTAMs.`;
+  calc();
+}
+let oT=null;
+$('oId').addEventListener('input',()=>{clearTimeout(oT);oT=setTimeout(()=>lookupApt(false),250);});
+$('oRwy').addEventListener('change',pickRwy);
+
 // ---- Weight buttons ----
 function noteW(t,cls){const n=$('wNote');n.hidden=false;n.className='wxstat '+(cls||'');n.textContent=t;}
 $('wMax').onclick=()=>{$('wt').value=4750;calc();noteW('Set to the 4,750 lb maximum takeoff weight.');};
@@ -358,6 +397,7 @@ $('wt').addEventListener('input',()=>{$('wNote').hidden=true;});
 $('metar').addEventListener('input',()=>{const o=parseMetar($('metar').value);if(o&&(o.alt!=null||o.oat!=null||o.wspd!=null))applyWx(o,'Pasted METAR');});
 $('stn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();getWx();}});
 setMode(mode);setSite(site);
+if($('oId').value)lookupApt(true);
 if(site==='home'&&navigator.onLine!==false)getWx();
 </script>
 
