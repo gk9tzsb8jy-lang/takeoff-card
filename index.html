@@ -358,8 +358,8 @@ async function lookupApt(keepRwy){
   if(!a){st.className='wxstat warn';st.textContent=`${id} isn’t in the database (paved runways of 2,800 ft or more, North America and the Caribbean). Enter the runway by hand.`;return;}
   curApt=a; $('stn').value=a.id;
   const [name,elev,rws]=a.d; $('elev').value=elev;
-  rws.forEach((r,i)=>{const [le,he,len,w,h1,h2,d1,d2]=r;
-    sel.insertAdjacentHTML('beforeend',`<option value="${i}:0">${le} · ${fmt(len)} ft</option><option value="${i}:1">${he} · ${fmt(len)} ft</option>`);});
+  rws.forEach((r,i)=>{const [le,he,len,w,h1,h2,d1,d2,dd]=r; const t0=dd&&dd[0]||len, t1=dd&&dd[2]||len;
+    sel.insertAdjacentHTML('beforeend',`<option value="${i}:0">${le} · ${fmt(t0)} ft</option><option value="${i}:1">${he} · ${fmt(t1)} ft</option>`);});
   st.className='wxstat ok';st.textContent=`${a.id} ${name}, elevation ${fmt(elev)} ft. Pick a runway.`;
   if(prev&&[...sel.options].some(o=>o.value===prev)){sel.value=prev;pickRwy();}
   else if(sel.options.length>1){sel.selectedIndex=1;pickRwy();}
@@ -367,11 +367,14 @@ async function lookupApt(keepRwy){
 }
 function pickRwy(){
   const v=$('oRwy').value, st=$('oStat'); if(!v||!curApt){calc();return;}
-  const [i,e]=v.split(':').map(Number); const r=curApt.d[2][i]; const [le,he,len,w,h1,h2,d1,d2]=r;
-  $('hdg').value=e?h2:h1; $('rwy').value=len; $('asda').value='';
-  const disp=e?d2:d1, dispFar=e?d1:d2;
+  const [i,e]=v.split(':').map(Number); const r=curApt.d[2][i]; const [le,he,len,w,h1,h2,d1,d2,dd]=r;
+  const tora=dd?dd[e?2:0]:0, asda=dd?dd[e?3:1]:0;
+  $('hdg').value=e?h2:h1; $('rwy').value=tora||len; $('asda').value=asda||'';
+  const disp=e?d2:d1, hd=String(e?h2:h1).padStart(3,'0');
   st.className='wxstat ok';
-  st.textContent=`${curApt.id} ${curApt.d[0]}. Runway ${e?he:le}: ${fmt(len)} ft, heading ${String(e?h2:h1).padStart(3,'0')}°T${disp?`, ${fmt(disp)} ft displaced threshold at this end (usable for takeoff)`:''}. No declared distances in the database, so full length is used; check the Chart Supplement and NOTAMs.`;
+  st.textContent=(tora||asda)
+    ? `${curApt.id} ${curApt.d[0]}. Runway ${e?he:le}: heading ${hd}°T, FAA declared distances TORA ${fmt(tora||len)} ft, ASDA ${fmt(asda||tora||len)} ft (${(RDB.dd||'FAA').replace('FAA NASR declared distances, ','')}). Check NOTAMs.`
+    : `${curApt.id} ${curApt.d[0]}. Runway ${e?he:le}: ${fmt(len)} ft, heading ${hd}°T${disp?`, ${fmt(disp)} ft displaced threshold at this end (usable for takeoff)`:''}. No declared distances published, so full length is used; check the Chart Supplement and NOTAMs.`;
   calc();
 }
 let oT=null;
