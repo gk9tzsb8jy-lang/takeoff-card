@@ -355,7 +355,7 @@ async function lookupApt(keepRwy){
   await rdbReady;
   if(!RDB){st.className='wxstat warn';st.textContent='The runway database isn’t available in this view. Enter the runway by hand.';return;}
   const a=findApt(id);
-  if(!a){st.className='wxstat warn';st.textContent=`${id} isn’t in the database (paved runways of 1,800 ft or more, North America and the Caribbean). Enter the runway by hand.`;return;}
+  if(!a){st.className='wxstat warn';st.textContent=`${id} isn’t in the database (paved runways of 2,800 ft or more, North America and the Caribbean). Enter the runway by hand.`;return;}
   curApt=a; $('stn').value=a.id;
   const [name,elev,rws]=a.d; $('elev').value=elev;
   rws.forEach((r,i)=>{const [le,he,len,w,h1,h2,d1,d2]=r;
