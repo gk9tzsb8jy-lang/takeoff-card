@@ -108,6 +108,7 @@ def main():
             if any(vals):
                 r.append(vals); hits += 1
     db['dd'] = f'FAA NASR declared distances, cycle effective {cyc:%Y-%m-%d}'
+    db['ddEff'] = f'{cyc:%Y-%m-%d}'
     print(hits, 'runways updated')
     print('KSPG:', A.get('KSPG'))
     if hits < 100:

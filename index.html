@@ -122,6 +122,7 @@ details[open] summary{margin-bottom:10px}
     <label for="oId">Airport identifier<input id="oId" type="text" autocapitalize="characters" spellcheck="false" maxlength="5" placeholder="e.g. KTPA, X26, MMUN"></label>
     <label for="oRwy">Runway<select id="oRwy"><option value="">Enter manually</option></select></label>
     <div class="wxstat" id="oStat" style="grid-column:1/-1">Type an identifier to load its runways from the built-in database, or fill in the boxes below.</div>
+    <div class="wxstat" id="oData" style="grid-column:1/-1"></div>
     <label for="elev">Field elevation (ft)<input id="elev" type="number" inputmode="numeric" step="10" value="2000"></label>
     <label for="hdg">Runway heading (°T)<input id="hdg" type="number" inputmode="numeric" step="10" value="360"></label>
     <label for="rwy">Takeoff run available (ft)<input id="rwy" type="number" inputmode="numeric" step="50" value="7400"></label>
@@ -345,7 +346,16 @@ async function getWx(){
 $('getWx').onclick=getWx;
 // ---- Built-in runway database (OurAirports, public domain) ----
 let RDB=null,curApt=null;
-const rdbReady=fetch('runways.json').then(r=>r.ok?r.json():null).then(j=>{RDB=j;return j;}).catch(()=>null);
+const rdbReady=fetch('runways.json').then(r=>r.ok?r.json():null).then(j=>{RDB=j;dataNote();return j;}).catch(()=>null);
+function dataNote(){
+  const el=$('oData'); if(!RDB){el.textContent='';return;}
+  const D=s=>new Date(s+'T12:00:00Z'), f=d=>d.toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
+  if(!RDB.ddEff){el.className='wxstat warn';el.textContent='FAA declared distances not loaded yet. Runway lengths are from OurAirports.';return;}
+  const eff=D(RDB.ddEff), next=new Date(+eff+28*864e5), stale=Date.now()>+next+7*864e5;
+  el.className='wxstat '+(stale?'warn':'ok');
+  el.textContent=stale?`FAA data is out of date: current as of ${f(eff)}, and a newer cycle began ${f(next)}. Check the Chart Supplement and connect to update.`
+    :`FAA data current as of ${f(eff)} (next cycle ${f(next)}).`;
+}
 function findApt(id){if(!RDB||!id)return null;id=id.toUpperCase();const k=RDB.a[id]?id:RDB.x[id];return k?{id:k,d:RDB.a[k]}:null;}
 async function lookupApt(keepRwy){
   const id=($('oId').value||'').trim().toUpperCase(); const st=$('oStat'), sel=$('oRwy'); const prev=keepRwy?(window.__oR||sel.value):'';
