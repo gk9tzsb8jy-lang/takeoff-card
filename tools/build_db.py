@@ -17,10 +17,11 @@ UA = {'User-Agent': 'takeoff-card (github.com/gk9tzsb8jy-lang/takeoff-card)'}
 EPOCH = dt.date(2025, 1, 23)  # a known AIRAC / NASR effective date
 MIN_LEN = 2800
 OA = 'https://raw.githubusercontent.com/davidmegginson/ourairports-data/main/'
-# OurAirports countries kept (US, PR and VI come from the FAA instead)
-OA_C = set('CA MX BS CU JM KY TC DO HT BZ GT HN SV NI CR PA AW CW BQ SX BB TT AG KN LC VC GD DM MQ GP VG AI MS BM BL MF'.split())
+# OurAirports countries kept (anything the FAA also lists comes from the FAA instead)
+OA_C = set('PR VI CA MX BS CU JM KY TC DO HT BZ GT HN SV NI CR PA AW CW BQ SX BB TT AG KN LC VC GD DM MQ GP VG AI MS BM BL MF'.split())
 OA_HARD = ('ASP', 'CON', 'PEM', 'BIT', 'TAR', 'PAV', 'MAC', 'PSP')
-FAA_HARD = ('ASPH', 'CONC', 'PEM', 'BITU', 'PSP', 'TRTD')
+FAA_HARD = ('ASPH', 'CONC', 'PEM', 'BITU', 'PSP')
+FAA_COUNTRIES = ('US', 'PR', 'VI', 'GU', 'AS', 'MP', '')  # NASR also lists some foreign fields; skip those
 REPORT = []
 
 
@@ -96,7 +97,7 @@ def ident_hdg(e):
 
 
 def nice(name):
-    return ' '.join(w.capitalize() for w in name.split())[:40]
+    return re.sub(r"[A-Za-z]+", lambda m: m.group().capitalize(), ' '.join(name.split()))[:40]
 
 
 def build_faa(blob):
@@ -106,6 +107,7 @@ def build_faa(blob):
     b_type, b_name = col(B, 'SITE_TYPE_CODE'), col(B, 'ARPT_NAME')
     b_elev, b_icao = col(B, 'ELEV'), col(B, 'ICAO_ID', need=False)
     b_stat = col(B, 'ARPT_STATUS', need=False)
+    b_ctry = col(B, 'COUNTRY_CODE', need=False)
     r_site, r_id, r_len = col(R, 'SITE_NO'), col(R, 'RWY_ID'), col(R, 'RWY_LEN')
     r_wid, r_surf = col(R, 'RWY_WIDTH'), col(R, 'SURFACE_TYPE_CODE')
     e_site, e_rwy, e_end = col(E, 'SITE_NO'), col(E, 'RWY_ID'), col(E, 'RWY_END_ID')
@@ -113,6 +115,7 @@ def build_faa(blob):
     e_lat, e_lon = col(E, 'LAT_DECIMAL', need=False), col(E, 'LONG_DECIMAL', need=False)
     e_tora, e_asda, e_lda = col(E, 'TKOF_RUN_AVBL'), col(E, 'ACLT_STOP_DIST_AVBL', 'ACLT_STOP'), col(E, 'LNDG_DIST_AVBL', 'LNDG_DIST')
     log('site types:', dict(__import__('collections').Counter(r[b_type] for r in B).most_common(8)))
+    if b_ctry: log('countries:', dict(__import__('collections').Counter(r[b_ctry] for r in B).most_common(12)))
     if b_stat: log('status:', dict(__import__('collections').Counter(r[b_stat] for r in B).most_common(8)))
     log('surfaces:', dict(__import__('collections').Counter(r[r_surf] for r in R).most_common(25)))
     if B[0].get('EFF_DATE'): log('FAA effective date:', B[0]['EFF_DATE'])
@@ -121,6 +124,7 @@ def build_faa(blob):
     for r in B:
         if r[b_type].strip().upper() not in ('A', 'AIRPORT'): continue
         if b_stat and r[b_stat].strip().upper() not in ('O', ''): continue
+        if b_ctry and r[b_ctry].strip().upper() not in FAA_COUNTRIES: continue
         apt[r[b_site]] = r
     ends = {}
     for r in E:
@@ -130,8 +134,8 @@ def build_faa(blob):
     for r in R:
         a = apt.get(r[r_site]); L = num(r[r_len]); rid = r[r_id].strip().upper()
         if not a or not L or L < MIN_LEN or rid.startswith('H'): continue
-        surf = r[r_surf].upper()
-        if not any(h in surf for h in FAA_HARD): continue
+        surf = r[r_surf].upper().split('-')[0].split('/')[0].strip()  # primary surface, e.g. ASPH-TURF -> ASPH
+        if surf not in FAA_HARD: continue
         parts = rid.split('/')
         if len(parts) != 2: continue
         le, he = parts
