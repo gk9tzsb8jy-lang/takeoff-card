@@ -100,6 +100,13 @@ def nice(name):
     return re.sub(r"[A-Za-z]+", lambda m: m.group().capitalize(), ' '.join(name.split()))[:40]
 
 
+def keep_long(A, X):
+    """Keep airports with at least one paved runway of MIN_LEN or more, with all their paved runways."""
+    A = {k: v for k, v in A.items() if max(r[2] for r in v[2]) >= MIN_LEN}
+    for v in A.values(): v[2].sort(key=lambda r: -r[2])
+    return A, {k: v for k, v in X.items() if v in A}
+
+
 def build_faa(blob):
     z = zipfile.ZipFile(io.BytesIO(blob))
     B, R, E = table(z, 'APT_BASE.CSV'), table(z, 'APT_RWY.CSV'), table(z, 'APT_RWY_END.CSV')
@@ -133,7 +140,7 @@ def build_faa(blob):
     A, X = {}, {}
     for r in R:
         a = apt.get(r[r_site]); L = num(r[r_len]); rid = r[r_id].strip().upper()
-        if not a or not L or L < MIN_LEN or rid.startswith('H'): continue
+        if not a or not L or rid.startswith('H'): continue
         surf = r[r_surf].upper().split('-')[0].split('/')[0].strip()  # primary surface, e.g. ASPH-TURF -> ASPH
         if surf not in FAA_HARD: continue
         parts = rid.split('/')
@@ -162,7 +169,7 @@ def build_faa(blob):
             if fid != key: X[fid] = key
             if not icao and len(fid) == 3: X.setdefault('K' + fid, key)
         A[key][2].append(row)
-    return A, X
+    return keep_long(A, X)
 
 
 def build_oa(apt_csv, rwy_csv, faa_keys, faa_alias):
@@ -170,7 +177,7 @@ def build_oa(apt_csv, rwy_csv, faa_keys, faa_alias):
     A, X = {}, {}
     for r in csv.DictReader(io.StringIO(rwy_csv)):
         a = ap.get(r['airport_ident']); L = num(r['length_ft'])
-        if not a or r['closed'] == '1' or not L or L < MIN_LEN or not any(h in r['surface'].upper() for h in OA_HARD): continue
+        if not a or r['closed'] == '1' or not L or not any(h in r['surface'].upper() for h in OA_HARD): continue
         def hd(end, other):
             h = num(r[end + '_heading_degT'])
             if h is not None: return int(round(h)) % 360
@@ -180,6 +187,7 @@ def build_oa(apt_csv, rwy_csv, faa_keys, faa_alias):
         A.setdefault(a['ident'], [a['name'][:40], ival(a['elevation_ft']), []])[2].append(
             [r['le_ident'], r['he_ident'], int(L), ival(r['width_ft']), hd('le', 'he') or 360, hd('he', 'le') or 360,
              ival(r['le_displaced_threshold_ft']), ival(r['he_displaced_threshold_ft'])])
+    A, _ = keep_long(A, {})
     # Prefer the current 4-letter code when OurAirports keeps an old ident
     for k in list(A):
         g = ap[k]['gps_code'].strip().upper()

@@ -201,7 +201,7 @@ details[open] summary{margin-bottom:10px}
     <li>Takeoff 3,000 to 4,750 lb; landing 3,000 to 4,513 lb (maximum landing weight). Headwind to 15 kt, tailwind to 5 kt.</li>
     <li>Landing charts assume both throttles closed, full-stall touchdown and maximum braking. Ground roll is the same for normal and short-field landings; the short-field technique only shortens the air distance, by crossing the 50 ft barrier slower (68 to 82 KIAS instead of 76 to 90).</li>
     <li>Accelerate-stop includes a 3-second recognition time. The chart value is multiplied by 0.93 (0° flaps) or 0.87 (25° flaps), as the chart notes direct.</li>
-    <li>Off-station runways (paved, 2,800 ft or more): US airports come entirely from the FAA's 28-day airport data, refreshed weekly, including lengths, true headings, field elevations, displaced thresholds and declared distances (TORA, ASDA, LDA). Airports outside the US come from OurAirports (public domain). Where no declared distances are published, takeoff uses full runway length and landing uses length minus any displaced threshold. Headings and winds are true, matching METARs; ATIS winds are magnetic.</li>
+    <li>Off-station runways (airports with a paved runway of 2,800 ft or more; all their paved runways are listed): US airports come entirely from the FAA's 28-day airport data, refreshed weekly, including lengths, true headings, field elevations, displaced thresholds and declared distances (TORA, ASDA, LDA). Airports outside the US come from OurAirports (public domain). Where no declared distances are published, takeoff uses full runway length and landing uses length minus any displaced threshold. Headings and winds are true, matching METARs; ATIS winds are magnetic.</li>
     <li>KSPG runway data uses the declared distances: takeoff run available (TORA) for the over-50 ft distance, accelerate-stop available (ASDA) for accelerate-stop and landing distance available (LDA) for landing over 50 ft. They come from the FAA's 28-day airport data (cycle effective October 1, 2026). Verify them against the current Chart Supplement and NOTAMs.</li>
     <li>Charts are unfactored. The POH warns against using values extrapolated beyond the chart, so the card flags any input outside these limits.</li>
   </ul>
@@ -432,7 +432,7 @@ async function lookupApt(keepRwy){
   await rdbReady;
   if(!RDB){st.className='wxstat warn';st.textContent='The runway database isn’t available in this view. Enter the runway by hand.';return;}
   const a=findApt(id);
-  if(!a){st.className='wxstat warn';st.textContent=`${id} isn’t in the database (paved runways of 2,800 ft or more, North America and the Caribbean). Enter the runway by hand.`;return;}
+  if(!a){st.className='wxstat warn';st.textContent=`${id} isn’t in the database (airports with a paved runway of 2,800 ft or more, North America and the Caribbean). Enter the runway by hand.`;return;}
   curApt=a; $('stn').value=a.id;
   const [name,elev,rws]=a.d; $('elev').value=elev;
   rws.forEach((r,i)=>{const [le,he,len,w,h1,h2,d1,d2,dd]=r; const t0=ph==='ld'?(dd&&dd[4]||len-d1):(dd&&dd[0]||len), t1=ph==='ld'?(dd&&dd[5]||len-d2):(dd&&dd[2]||len);
