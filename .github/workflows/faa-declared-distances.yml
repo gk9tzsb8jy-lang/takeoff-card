@@ -1,11 +1,11 @@
-name: FAA declared distances
+name: Runway database (FAA + OurAirports)
 on:
   schedule:
     - cron: '17 9 * * 1'   # weekly; picks up each new 28-day FAA cycle
   workflow_dispatch:
   push:
     branches: [main]
-    paths: [tools/faa_dd.py, .github/workflows/faa-declared-distances.yml]
+    paths: [tools/build_db.py, .github/workflows/faa-declared-distances.yml]
 permissions:
   contents: write
 jobs:
@@ -16,11 +16,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python tools/faa_dd.py
+      - run: python tools/build_db.py
       - name: Commit if changed
         run: |
-          if git diff --quiet; then echo "No change"; exit 0; fi
+          if git diff --quiet && git diff --cached --quiet && [ -z "$(git status --porcelain tools/build-report.txt)" ]; then echo "No change"; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          git commit -am "Update FAA declared distances"
+          git add -A runways.json sw.js tools/build-report.txt
+          git commit -m "Update runway database"
           git push
