@@ -232,14 +232,13 @@ details[open] summary{margin-bottom:10px}
     <label for="wbBa">Aft (cabin)<input id="wbBa" type="number" inputmode="numeric" step="5" placeholder="0"></label>
   </fieldset>
   <fieldset>
-    <legend>Fuel · 6 lb per gallon</legend>
-    <label for="wbFuel">Fuel at engine start (gal)<input id="wbFuel" type="number" inputmode="decimal" step="1" value="93"></label>
+    <legend>Fuel · 123 gal usable · 6 lb/gal</legend>
+    <label for="wbFuel">Fuel at engine start (gal)<input id="wbFuel" type="number" inputmode="decimal" step="1" value="123"></label>
     <div class="wbtns">
-      <button type="button" class="btn ghost" id="wbFull">FULL <span id="wbCapL">93</span></button>
+      <button type="button" class="btn ghost" id="wbFull">FULL 123</button>
       <button type="button" class="btn ghost" id="wbMaxF">Max fuel</button>
     </div>
-    <label for="wbBurn">Trip fuel burn (gal)<input id="wbBurn" type="number" inputmode="decimal" step="1" value="30"></label>
-    <label for="wbCap">Usable capacity<select id="wbCap"><option value="93">93 gal (std)</option><option value="123">123 gal (opt)</option></select></label>
+    <label for="wbBurn" style="grid-column:1/-1">Trip fuel burn (gal)<input id="wbBurn" type="number" inputmode="decimal" step="1" value="30"></label>
     <div class="wxstat" id="wbNote" style="grid-column:1/-1" hidden></div>
     <div class="derived" id="wbFOut"></div>
   </fieldset>
@@ -276,7 +275,7 @@ details[open] summary{margin-bottom:10px}
 <div class="cols2 wb">
 <section class="panel">
   <h2>Checked against the POH sample</h2>
-  <p class="note">The sample loading problem in POH Figure 6-9: 3,212 lb empty at 88.5 in, 340 lb in front, 236 lb in the center seats, 340 lb in the rear, 100 lb in the nose, 545 lb of fuel and 450 lb burned. The POH drops the second decimal of the CG rather than rounding it.</p>
+  <p class="note">The sample loading problem in POH Figure 6-9: 3,212 lb empty at 88.5 in, 340 lb in front, 236 lb in the center seats, 340 lb in the rear, 100 lb in the nose, 545 lb of fuel and 450 lb burned. The POH prints CGs to one decimal, rounded on some lines and cut off on others, so they agree within 0.1 in.</p>
   <div class="tbl"><table><thead><tr><th>Line</th><th class="n">POH</th><th class="n">Calculator</th></tr></thead><tbody id="wbChk"></tbody></table></div>
 </section>
 <section class="panel">
@@ -545,8 +544,8 @@ $('oId').addEventListener('input',()=>{clearTimeout(oT);oT=setTimeout(()=>lookup
 $('oRwy').addEventListener('change',pickRwy);
 
 // ---- Weight and balance (POH Sections 2 and 6) ----
-const WB={ramp:4773,mtow:4750,mlw:4513,taxi:23,ppg:6,bag:100,aft:94.6,arm:{front:85.5,center:119.1,rear:157.6,bf:22.5,ba:178.7,fuel:93.6}};
-const WBDEF={wbEw:'3417.1',wbEa:'88.89',wbZf:'4470',wbP1:'200',wbP2:'',wbC1:'',wbC2:'',wbR1:'',wbR2:'',wbBf:'',wbBa:'',wbFuel:'93',wbBurn:'30',wbCap:'93'};
+const WB={cap:123,ramp:4773,mtow:4750,mlw:4513,taxi:23,ppg:6,bag:100,aft:94.6,arm:{front:85.5,center:119.1,rear:157.6,bf:22.5,ba:178.7,fuel:93.6}};
+const WBDEF={wbEw:'3417.1',wbEa:'88.89',wbZf:'4470',wbP1:'200',wbP2:'',wbC1:'',wbC2:'',wbR1:'',wbR2:'',wbBf:'',wbBa:'',wbFuel:'123',wbBurn:'30'};
 const wbIds=Object.keys(WBDEF);
 // Forward limit, straight line between the POH points (Section 2.13).
 const fwdLim=w=>w<=3400?82:w<=4250?82+(w-3400)*4.7/850:86.7+(w-4250)*3.9/500;
@@ -561,10 +560,10 @@ const inEnv=p=>p.cg>=fwdLim(p.w)-0.005&&p.cg<=WB.aft+0.005;
 const f1=n=>n.toFixed(1), fgal=lb=>Math.round(lb/WB.ppg*10)/10;
 let wbLast=null;
 function wbIn(){const g=k=>{const x=parseFloat($(k).value);return isNaN(x)?0:x;};
-  return {ew:g('wbEw'),ea:g('wbEa'),zfMax:g('wbZf')||4470,front:g('wbP1')+g('wbP2'),center:g('wbC1')+g('wbC2'),rear:g('wbR1')+g('wbR2'),bf:g('wbBf'),ba:g('wbBa'),fuel:g('wbFuel')*WB.ppg,burn:g('wbBurn')*WB.ppg,cap:+$('wbCap').value};}
+  return {ew:g('wbEw'),ea:g('wbEa'),zfMax:g('wbZf')||4470,front:g('wbP1')+g('wbP2'),center:g('wbC1')+g('wbC2'),rear:g('wbR1')+g('wbR2'),bf:g('wbBf'),ba:g('wbBa'),fuel:g('wbFuel')*WB.ppg,burn:g('wbBurn')*WB.ppg,cap:WB.cap};}
 function wbRun(){
   try{const s={};wbIds.forEach(k=>s[k]=$(k).value);localStorage.setItem('sen3wb',JSON.stringify(s));}catch(e){}
-  const i=wbIn();$('wbCapL').textContent=i.cap;
+  const i=wbIn();
   if(!i.ew||!i.ea){$('wbVerdict').innerHTML='<span class="pill warn">Incomplete</span> Enter the basic empty weight and CG.';return;}
   const r=wbCalc(i);wbLast=r;const fl=[];
   const over=(p,max,what,fix)=>{if(p.w>max+0.05)fl.push(`${what} is ${fmt(p.w)} lb, ${fmt(Math.ceil(p.w-max))} lb over the ${fmt(max)} lb maximum. ${fix(p.w-max)}`);};
@@ -622,10 +621,9 @@ function drawEnv(r,zfMax){
 }
 function wbNote(t,cls){const n=$('wbNote');n.hidden=false;n.className='wxstat '+(cls||'');n.textContent=t;}
 wbIds.forEach(k=>$(k).addEventListener('input',()=>{$('wbNote').hidden=true;wbRun();}));
-$('wbCap').addEventListener('change',wbRun);
 let wbRz=0;addEventListener('resize',()=>{clearTimeout(wbRz);wbRz=setTimeout(()=>{if(ph==='wb')wbRun();},150);});
 $('wbf').addEventListener('submit',e=>e.preventDefault());
-$('wbFull').onclick=()=>{$('wbFuel').value=$('wbCap').value;wbRun();wbNote('Set to full usable fuel.');};
+$('wbFull').onclick=()=>{$('wbFuel').value=WB.cap;wbRun();wbNote('Set to full usable fuel.');};
 $('wbMaxF').onclick=()=>{const i=wbIn();const z=wbCalc({...i,fuel:0,burn:0}).zf.w;
   const lb=Math.min(i.cap*WB.ppg,WB.ramp-z,WB.mtow+WB.taxi-z);const g=Math.floor(lb/WB.ppg);
   if(g<=0){wbNote('No room for fuel: the airplane is at maximum weight before fuel. Take load out first.','warn');return;}
