@@ -30,7 +30,13 @@
   --bar-gr:#6FA8E8; --bar-50:#4A7BB3; --bar-as:#5E6F80; color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body[data-ph="to"] .ld-only,body[data-ph="ld"] .to-only{display:none!important}
+body[data-ph="to"] .ld-only,body[data-ph="ld"] .to-only,body[data-ph="wb"] .told,body:not([data-ph="wb"]) .wb{display:none!important}
+.seg.three{grid-template-columns:1fr 1fr 1fr}
+.env svg{display:block;width:100%;height:auto}
+.wbgo{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wbgo .btn{white-space:normal}
+tr.sum td{font-weight:600;background:var(--paper)}
+td.bad{color:var(--bad);font-weight:600}
 .seg.big button{font-size:15px;padding:11px 6px}
 body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:20px 48px}
 .wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
@@ -94,17 +100,19 @@ details[open] summary{margin-bottom:10px}
 
 <div class="wrap">
 <header>
-  <div class="tag">PA-34-220T Seneca III · POH Report VB-1110 · Section 5</div>
+  <div class="tag" id="tagl">PA-34-220T Seneca III · POH Report VB-1110 · Section 5</div>
   <h1 id="h1">Seneca III Takeoff Card</h1>
-  <p class="note">Test build. The four takeoff charts (Figures 5-11 to 5-17) and two landing charts (Figures 5-75 and 5-77) were digitized from the scanned POH and run here the same way you'd trace them by hand. It's a preview of what the Aerostar version will look like, not a substitute for the POH.</p>
+  <p class="note told">Test build. The four takeoff charts (Figures 5-11 to 5-17) and two landing charts (Figures 5-75 and 5-77) were digitized from the scanned POH and run here the same way you'd trace them by hand. It's a preview of what the Aerostar version will look like, not a substitute for the POH.</p>
+  <p class="note wb">Test build. Arms, limits and the envelope come from POH Sections 2 and 6 (Figure 6-15). It runs the same arithmetic as the POH loading form and plots the result on the envelope. A preview of the Aerostar version, not a substitute for the POH.</p>
 </header>
+<div class="seg big three" role="group" aria-label="Page">
+  <button type="button" id="phTo" aria-pressed="true">Takeoff</button>
+  <button type="button" id="phLd" aria-pressed="false">Landing</button>
+  <button type="button" id="phWb" aria-pressed="false">Weight &amp; balance</button>
+</div>
 
-<div class="grid">
+<div class="grid told">
 <form class="panel" id="f" autocomplete="off">
-  <div class="seg big" role="group" aria-label="Phase">
-    <button type="button" id="phTo" aria-pressed="true">Takeoff</button>
-    <button type="button" id="phLd" aria-pressed="false">Landing</button>
-  </div>
   <div class="seg ld-only" role="group" aria-label="Landing procedure">
     <button type="button" id="lNorm" aria-pressed="true">Normal<small>40° flaps · barrier speed by weight</small></button>
     <button type="button" id="lShort" aria-pressed="false">Short field effort<small>40° flaps · slower barrier speed</small></button>
@@ -187,7 +195,7 @@ details[open] summary{margin-bottom:10px}
 </section>
 </div>
 
-<div class="cols2">
+<div class="cols2 told">
 <section class="panel">
   <h2>Checked against the POH examples</h2>
   <p class="note">Each chart prints a worked example. These are the calculator's answers for the same conditions. The landing examples are the one place the POH's own drawing strays from its guide lines: the example path is drawn shallower than the guide lines in the wind step, and steeper in the short field barrier step. The calculator follows the guide lines, so it reads 20 to 90 ft shorter than those printed examples. A safety margin covers the difference.</p>
@@ -207,7 +215,82 @@ details[open] summary{margin-bottom:10px}
   </ul>
 </section>
 </div>
-<p class="note"><a href="tab-data.pdf">Printable tab data (PDF, half-letter)</a>: the same charts as zero-wind tables by weight, pressure altitude and OAT, with wind factors.</p>
+<div class="grid wb">
+<form class="panel" id="wbf" autocomplete="off">
+  <fieldset>
+    <legend>Occupants (lb)</legend>
+    <label for="wbP1">Pilot<input id="wbP1" type="number" inputmode="numeric" step="5" value="200"></label>
+    <label for="wbP2">Front passenger<input id="wbP2" type="number" inputmode="numeric" step="5" placeholder="0"></label>
+    <label for="wbC1">Center seat, left<input id="wbC1" type="number" inputmode="numeric" step="5" placeholder="0"></label>
+    <label for="wbC2">Center seat, right<input id="wbC2" type="number" inputmode="numeric" step="5" placeholder="0"></label>
+    <label for="wbR1">Rear seat, left<input id="wbR1" type="number" inputmode="numeric" step="5" placeholder="0"></label>
+    <label for="wbR2">Rear seat, right<input id="wbR2" type="number" inputmode="numeric" step="5" placeholder="0"></label>
+  </fieldset>
+  <fieldset>
+    <legend>Baggage (lb) · 100 max each</legend>
+    <label for="wbBf">Forward (nose)<input id="wbBf" type="number" inputmode="numeric" step="5" placeholder="0"></label>
+    <label for="wbBa">Aft (cabin)<input id="wbBa" type="number" inputmode="numeric" step="5" placeholder="0"></label>
+  </fieldset>
+  <fieldset>
+    <legend>Fuel · 6 lb per gallon</legend>
+    <label for="wbFuel">Fuel at engine start (gal)<input id="wbFuel" type="number" inputmode="decimal" step="1" value="93"></label>
+    <div class="wbtns">
+      <button type="button" class="btn ghost" id="wbFull">FULL <span id="wbCapL">93</span></button>
+      <button type="button" class="btn ghost" id="wbMaxF">Max fuel</button>
+    </div>
+    <label for="wbBurn">Trip fuel burn (gal)<input id="wbBurn" type="number" inputmode="decimal" step="1" value="30"></label>
+    <label for="wbCap">Usable capacity<select id="wbCap"><option value="93">93 gal (std)</option><option value="123">123 gal (opt)</option></select></label>
+    <div class="wxstat" id="wbNote" style="grid-column:1/-1" hidden></div>
+    <div class="derived" id="wbFOut"></div>
+  </fieldset>
+  <details>
+    <summary>Empty weight and limits</summary>
+    <fieldset>
+      <label for="wbEw">Basic empty weight (lb)<input id="wbEw" type="number" inputmode="decimal" step="0.1" value="3417.1"></label>
+      <label for="wbEa">Empty weight CG (in)<input id="wbEa" type="number" inputmode="decimal" step="0.01" value="88.89"></label>
+      <label for="wbZf">Max zero fuel weight (lb)<input id="wbZf" type="number" inputmode="numeric" step="1" value="4470"></label>
+      <div class="wbtns"><button type="button" class="btn ghost" id="wbDef" style="grid-column:1/-1">Restore defaults</button></div>
+      <p class="wxstat">Defaults are N8467X's weight and balance of October 15, 2021 (3,417.1 lb at 88.89 in, moment 303,746). Replace them with the airplane's current Weight and Balance Record. The 4,470 lb zero fuel weight is the standard figure; options listed in POH 6.13 (o) can raise it, but never above 4,513 lb.</p>
+    </fieldset>
+  </details>
+</form>
+
+<section class="panel" aria-live="polite">
+  <h2>Loading summary</h2>
+  <div class="results">
+    <div class="res gr"><span class="k">Takeoff</span><span class="v" id="wbVTo">–</span><span class="s" id="wbSTo"></span></div>
+    <div class="res o50"><span class="k">Landing</span><span class="v" id="wbVLd">–</span><span class="s" id="wbSLd"></span></div>
+    <div class="res as"><span class="k">Zero fuel</span><span class="v" id="wbVZf">–</span><span class="s" id="wbSZf"></span></div>
+  </div>
+  <div class="verdict" id="wbVerdict"></div>
+  <div class="env"><svg id="env" viewBox="0 0 600 380" role="img" aria-label="Weight and CG plotted on the POH envelope"></svg></div>
+  <ul class="flags" id="wbFlags"></ul>
+  <div class="wbgo">
+    <button type="button" class="btn" id="wbUseTo">Use for takeoff</button>
+    <button type="button" class="btn" id="wbUseLd">Use for landing</button>
+  </div>
+  <div class="tbl"><table><thead><tr><th>Item</th><th class="n">Weight (lb)</th><th class="n">Arm (in)</th><th class="n">Moment (in-lb)</th></tr></thead><tbody id="wbTbl"></tbody></table></div>
+</section>
+</div>
+
+<div class="cols2 wb">
+<section class="panel">
+  <h2>Checked against the POH sample</h2>
+  <p class="note">The sample loading problem in POH Figure 6-9: 3,212 lb empty at 88.5 in, 340 lb in front, 236 lb in the center seats, 340 lb in the rear, 100 lb in the nose, 545 lb of fuel and 450 lb burned. The POH drops the second decimal of the CG rather than rounding it.</p>
+  <div class="tbl"><table><thead><tr><th>Line</th><th class="n">POH</th><th class="n">Calculator</th></tr></thead><tbody id="wbChk"></tbody></table></div>
+</section>
+<section class="panel">
+  <h2>Limits used</h2>
+  <ul class="note" style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px">
+    <li>Maximum ramp 4,773 lb, takeoff 4,750 lb, landing 4,513 lb, zero fuel 4,470 lb standard (POH 2.11).</li>
+    <li>Forward CG limit 82.0 in at 3,400 lb and below, 86.7 in at 4,250 lb, 90.6 in at 4,750 lb, straight line between. Aft limit 94.6 in at all weights (POH 2.13, Figure 6-15).</li>
+    <li>Arms: front seats 85.5 in, center seats 119.1 in (aft facing; 118.1 forward facing), rear seats 157.6 in, forward baggage 22.5 in, aft baggage 178.7 in, fuel 93.6 in. Datum 78.4 in ahead of the wing leading edge at the inboard edge of the fuel tank.</li>
+    <li>Start, taxi and runup fuel: 23 lb (POH Figure 6-9). Takeoff weight is fuel at engine start less this allowance.</li>
+    <li>The burn line from takeoff to landing is checked every 50 lb, since the forward limit moves with weight. Gear retraction moves the moment by only −32 in-lb, which the POH calls insignificant.</li>
+  </ul>
+</section>
+</div>
+<p class="note told"><a href="tab-data.pdf">Printable tab data (PDF, half-letter)</a>: the same charts as zero-wind tables by weight, pressure altitude and OAT, with wind factors.</p>
 <p class="note">Saved to your device, this page runs with no connection, because the chart and runway data are saved on the device. Inputs are remembered on this device only.</p>
 </div>
 
@@ -242,8 +325,8 @@ const fmt=n=>Math.round(n).toLocaleString('en-US');
 const up=n=>Math.ceil(n/10)*10;
 function setMode(m){mode=m;$('mNorm').setAttribute('aria-pressed',m==='norm');$('mMax').setAttribute('aria-pressed',m==='max');calc();}
 $('mNorm').onclick=()=>setMode('norm');$('mMax').onclick=()=>setMode('max');
-function setPh(p){ph=p;document.body.dataset.ph=p;$('phTo').setAttribute('aria-pressed',p==='to');$('phLd').setAttribute('aria-pressed',p==='ld');$('h1').textContent=p==='to'?'Seneca III Takeoff Card':'Seneca III Landing Card';$('wNote').hidden=true;if(site==='other'&&curApt)lookupApt(true);else calc();}
-$('phTo').onclick=()=>setPh('to');$('phLd').onclick=()=>setPh('ld');
+function setPh(p){ph=p;document.body.dataset.ph=p;['To','Ld','Wb'].forEach(k=>$('ph'+k).setAttribute('aria-pressed',p===k.toLowerCase()));$('h1').textContent={to:'Seneca III Takeoff Card',ld:'Seneca III Landing Card',wb:'Seneca III Weight & Balance'}[p];$('tagl').textContent='PA-34-220T Seneca III · POH Report VB-1110 · '+(p==='wb'?'Sections 2 and 6':'Section 5');$('wNote').hidden=true;if(p==='wb'){calc();wbRun();return;}if(site==='other'&&curApt)lookupApt(true);else calc();}
+$('phTo').onclick=()=>setPh('to');$('phLd').onclick=()=>setPh('ld');$('phWb').onclick=()=>setPh('wb');
 function setLMode(m){lmode=m;$('lNorm').setAttribute('aria-pressed',m==='norm');$('lShort').setAttribute('aria-pressed',m==='short');calc();}
 $('lNorm').onclick=()=>setLMode('norm');$('lShort').onclick=()=>setLMode('short');
 const VB={norm:[76,90],short:[68,82]};const vbar=(m,w)=>VB[m][0]+(VB[m][1]-VB[m][0])*(Math.max(3000,Math.min(4513,w))-3000)/1500;
@@ -461,6 +544,102 @@ let oT=null;
 $('oId').addEventListener('input',()=>{clearTimeout(oT);oT=setTimeout(()=>lookupApt(false),250);});
 $('oRwy').addEventListener('change',pickRwy);
 
+// ---- Weight and balance (POH Sections 2 and 6) ----
+const WB={ramp:4773,mtow:4750,mlw:4513,taxi:23,ppg:6,bag:100,aft:94.6,arm:{front:85.5,center:119.1,rear:157.6,bf:22.5,ba:178.7,fuel:93.6}};
+const WBDEF={wbEw:'3417.1',wbEa:'88.89',wbZf:'4470',wbP1:'200',wbP2:'',wbC1:'',wbC2:'',wbR1:'',wbR2:'',wbBf:'',wbBa:'',wbFuel:'93',wbBurn:'30',wbCap:'93'};
+const wbIds=Object.keys(WBDEF);
+// Forward limit, straight line between the POH points (Section 2.13).
+const fwdLim=w=>w<=3400?82:w<=4250?82+(w-3400)*4.7/850:86.7+(w-4250)*3.9/500;
+function wbCalc(i){
+  const A=WB.arm, rows=[['Basic empty weight',i.ew,i.ea],['Pilot and front passenger',i.front,A.front],['Center seats',i.center,A.center],['Rear seats',i.rear,A.rear],['Forward baggage',i.bf,A.bf],['Aft baggage',i.ba,A.ba]];
+  const pt=(w,m)=>({w,m,cg:m/w});
+  let w=0,m=0;rows.forEach(r=>{w+=r[1];m+=r[1]*r[2];});
+  const zf=pt(w,m), ramp=pt(w+i.fuel,m+i.fuel*A.fuel), to=pt(ramp.w-WB.taxi,ramp.m-WB.taxi*A.fuel), ld=pt(to.w-i.burn,to.m-i.burn*A.fuel);
+  return {rows,zf,ramp,to,ld};
+}
+const inEnv=p=>p.cg>=fwdLim(p.w)-0.005&&p.cg<=WB.aft+0.005;
+const f1=n=>n.toFixed(1), fgal=lb=>Math.round(lb/WB.ppg*10)/10;
+let wbLast=null;
+function wbIn(){const g=k=>{const x=parseFloat($(k).value);return isNaN(x)?0:x;};
+  return {ew:g('wbEw'),ea:g('wbEa'),zfMax:g('wbZf')||4470,front:g('wbP1')+g('wbP2'),center:g('wbC1')+g('wbC2'),rear:g('wbR1')+g('wbR2'),bf:g('wbBf'),ba:g('wbBa'),fuel:g('wbFuel')*WB.ppg,burn:g('wbBurn')*WB.ppg,cap:+$('wbCap').value};}
+function wbRun(){
+  try{const s={};wbIds.forEach(k=>s[k]=$(k).value);localStorage.setItem('sen3wb',JSON.stringify(s));}catch(e){}
+  const i=wbIn();$('wbCapL').textContent=i.cap;
+  if(!i.ew||!i.ea){$('wbVerdict').innerHTML='<span class="pill warn">Incomplete</span> Enter the basic empty weight and CG.';return;}
+  const r=wbCalc(i);wbLast=r;const fl=[];
+  const over=(p,max,what,fix)=>{if(p.w>max+0.05)fl.push(`${what} is ${fmt(p.w)} lb, ${fmt(Math.ceil(p.w-max))} lb over the ${fmt(max)} lb maximum. ${fix(p.w-max)}`);};
+  over(r.ramp,WB.ramp,'Ramp weight',d=>`Take off ${Math.ceil(d/WB.ppg)} gal of fuel or ${fmt(Math.ceil(d))} lb of load.`);
+  over(r.to,WB.mtow,'Takeoff weight',d=>`Take off ${Math.ceil(d/WB.ppg)} gal of fuel or ${fmt(Math.ceil(d))} lb of load.`);
+  over(r.ld,WB.mlw,'Landing weight',d=>`Burn ${Math.ceil(d/WB.ppg)} gal more before landing, or start with less fuel.`);
+  over(r.zf,Math.min(i.zfMax,WB.mlw),'Zero fuel weight',d=>`Everything above it has to be fuel, so take ${fmt(Math.ceil(d))} lb out of the cabin or baggage.`);
+  [['Forward baggage',i.bf],['Aft baggage',i.ba]].forEach(([n,v])=>{if(v>WB.bag)fl.push(`${n} is ${fmt(v)} lb; the compartment limit is 100 lb.`);});
+  if(i.fuel>i.cap*WB.ppg+0.1)fl.push(`${f1(i.fuel/WB.ppg)} gal is more than the ${i.cap} gal usable capacity.`);
+  if(i.burn>i.fuel-WB.taxi+0.1)fl.push('The trip burn is more than the fuel on board after taxi.');
+  const cgMsg=(p,n)=>{if(inEnv(p))return;const f=fwdLim(p.w);fl.push(p.cg<f?`${n} CG ${f1(p.cg)} in is forward of the ${f1(f)} in limit at ${fmt(p.w)} lb.`:`${n} CG ${f1(p.cg)} in is aft of the 94.6 in limit.`);};
+  cgMsg(r.to,'Takeoff');cgMsg(r.ld,'Landing');cgMsg(r.zf,'Zero fuel');
+  // Burn line between takeoff and landing: the forward limit moves with weight, so check along the way.
+  if(inEnv(r.to)&&inEnv(r.ld)){for(let b=50;b<i.burn;b+=50){const p={w:r.to.w-b,m:r.to.m-b*WB.arm.fuel};p.cg=p.m/p.w;if(!inEnv(p)){fl.push(`The CG leaves the envelope in flight, around ${fmt(p.w)} lb (${f1(p.cg)} in).`);break;}}}
+  const sub=p=>`CG ${p.cg.toFixed(2)} in`;
+  $('wbVTo').innerHTML=`${fmt(r.to.w)}<small>lb</small>`;$('wbSTo').textContent=sub(r.to);
+  $('wbVLd').innerHTML=`${fmt(r.ld.w)}<small>lb</small>`;$('wbSLd').textContent=sub(r.ld);
+  $('wbVZf').innerHTML=`${fmt(r.zf.w)}<small>lb</small>`;$('wbSZf').textContent=sub(r.zf);
+  [['wbVTo',r.to,WB.mtow],['wbVLd',r.ld,WB.mlw],['wbVZf',r.zf,Math.min(i.zfMax,WB.mlw)]].forEach(([k,p,mx])=>{$(k).style.color=(p.w>mx+0.05||!inEnv(p))?'var(--bad)':'';});
+  const ok=!fl.length;
+  $('wbVerdict').innerHTML=ok?`<span class="pill ok">Within limits</span> Useful load left at takeoff: ${fmt(WB.mtow-r.to.w)} lb.`:`<span class="pill bad">Out of limits</span> ${fl.length===1?'One item needs fixing.':fl.length+' items need fixing.'}`;
+  $('wbFlags').innerHTML=fl.map(t=>`<li>${t}</li>`).join('');
+  $('wbFOut').innerHTML=`<span>Fuel <b>${fmt(i.fuel)} lb</b></span><span>Taxi <b>−23 lb</b></span><span>At landing <b>${f1(Math.max(0,i.fuel-WB.taxi-i.burn)/WB.ppg)} gal</b></span>`;
+  $('wbUseTo').textContent=`Use ${fmt(r.to.w)} lb for takeoff`;$('wbUseLd').textContent=`Use ${fmt(r.ld.w)} lb for landing`;
+  const tr=(n,w,a,m,cls)=>`<tr${cls?` class="${cls}"`:''}><td>${n}</td><td class="n">${w?fmt(w):'–'}</td><td class="n">${w?a.toFixed(1):'–'}</td><td class="n">${w?fmt(m):'–'}</td></tr>`;
+  const ptRow=(n,p,mx)=>`<tr class="sum"><td>${n}</td><td class="n${p.w>mx+0.05?' bad':''}">${fmt(p.w)}</td><td class="n${inEnv(p)?'':' bad'}">${p.cg.toFixed(2)}</td><td class="n">${fmt(p.m)}</td></tr>`;
+  $('wbTbl').innerHTML=r.rows.map(x=>tr(x[0],x[1],x[2],x[1]*x[2])).join('')+ptRow('Zero fuel weight',r.zf,Math.min(i.zfMax,WB.mlw))
+    +tr('Fuel ('+f1(i.fuel/WB.ppg)+' gal)',i.fuel,WB.arm.fuel,i.fuel*WB.arm.fuel)+ptRow('Ramp weight',r.ramp,WB.ramp)
+    +tr('Start, taxi and runup',-WB.taxi,WB.arm.fuel,-WB.taxi*WB.arm.fuel)+ptRow('Takeoff weight',r.to,WB.mtow)
+    +tr('Trip burn ('+f1(i.burn/WB.ppg)+' gal)',-i.burn,WB.arm.fuel,-i.burn*WB.arm.fuel)+ptRow('Landing weight',r.ld,WB.mlw);
+  drawEnv(r,Math.min(i.zfMax,WB.mlw));
+}
+function drawEnv(r,zfMax){
+  const W=($('env').clientWidth||600)<500?420:600;$('env').setAttribute('viewBox',`0 0 ${W} 380`);
+  const X0=80,X1=96,Y0=2200,Y1=4800,L=60,R=W-12,T=12,B=334;
+  const x=c=>L+(R-L)*(Math.max(X0,Math.min(X1,c))-X0)/(X1-X0), y=w=>B-(B-T)*(Math.max(Y0,Math.min(Y1,w))-Y0)/(Y1-Y0);
+  const tx=(a,b,s,o)=>`<text x="${a}" y="${b}" ${o||''} style="fill:var(--muted);font-family:var(--f-mono)" font-size="13">${s}</text>`;
+  let s='';
+  for(let c=80;c<=96;c+=(W<500?4:2))s+=`<line x1="${x(c)}" y1="${T}" x2="${x(c)}" y2="${B}" style="stroke:var(--line)"/>`+tx(x(c),B+17,c,'text-anchor="middle"');
+  for(let w=2200;w<=4800;w+=200)s+=`<line x1="${L}" y1="${y(w)}" x2="${R}" y2="${y(w)}" style="stroke:var(--line)"/>`+tx(L-6,y(w)+4,fmt(w),'text-anchor="end"');
+  s+=tx((L+R)/2,B+36,'CG, inches aft of datum','text-anchor="middle"');
+  const env=[[82,2200],[82,3400],[86.7,4250],[90.6,4750],[94.6,4750],[94.6,2200]];
+  s+=`<polygon points="${env.map(p=>x(p[0])+','+y(p[1])).join(' ')}" style="fill:var(--soft);stroke:var(--accent)" stroke-width="2"/>`;
+  [[WB.mlw,'Max landing 4,513'],[zfMax,'Max zero fuel '+fmt(zfMax)]].forEach(([w,n],k)=>{s+=`<line x1="${x(fwdLim(w))}" y1="${y(w)}" x2="${x(94.6)}" y2="${y(w)}" style="stroke:var(--accent)" stroke-dasharray="5 3"/><line x1="${L}" y1="${y(w)}" x2="${x(fwdLim(w))}" y2="${y(w)}" style="stroke:var(--line)" stroke-dasharray="2 3"/>`+tx(L+6,y(w)+(k?14:-3),n);});
+  s+=`<line x1="${L}" y1="${y(4750)}" x2="${x(fwdLim(4750))}" y2="${y(4750)}" style="stroke:var(--line)" stroke-dasharray="2 3"/>`+tx(L+6,y(4750)-3,'Max takeoff 4,750');
+  // Burn path: takeoff to landing (solid), landing to zero fuel (dotted).
+  const seg=(a,b,d)=>`<line x1="${x(a.cg)}" y1="${y(a.w)}" x2="${x(b.cg)}" y2="${y(b.w)}" style="stroke:var(--ink)" stroke-width="1.6" ${d?'stroke-dasharray="2 3"':''}/>`;
+  s+=seg(r.ld,r.zf,1)+seg(r.to,r.ld,0);
+  const ly={};[[r.to,'to'],[r.ld,'ld'],[r.zf,'zf']].reduce((prev,[p,k])=>{let v=y(p.w)+5;if(prev!=null&&v<prev+17)v=prev+17;ly[k]=v;return v;},null);
+  const dot=(p,n,shape,k)=>{const bad=!inEnv(p),c=bad?'var(--bad)':'var(--ink)',X=x(p.cg),Y=y(p.w);
+    const m=shape==='sq'?`<rect x="${X-5}" y="${Y-5}" width="10" height="10" style="fill:var(--card);stroke:${c}" stroke-width="2"/>`:`<circle cx="${X}" cy="${Y}" r="5.5" style="fill:${shape==='fill'?c:'var(--card)'};stroke:${c}" stroke-width="2"/>`;
+    const right=X<R-(W<500?150:170);return m+`<text x="${right?X+11:X-11}" y="${ly[k]}" ${right?'':'text-anchor="end"'} font-size="14" font-weight="600" style="fill:${c};font-family:var(--f-body);paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round">${n} ${fmt(p.w)} · ${f1(p.cg)}</text>`;};
+  s+=dot(r.zf,'Zero fuel','sq','zf')+dot(r.ld,'Landing','open','ld')+dot(r.to,'Takeoff','fill','to');
+  $('env').innerHTML=s;
+}
+function wbNote(t,cls){const n=$('wbNote');n.hidden=false;n.className='wxstat '+(cls||'');n.textContent=t;}
+wbIds.forEach(k=>$(k).addEventListener('input',()=>{$('wbNote').hidden=true;wbRun();}));
+$('wbCap').addEventListener('change',wbRun);
+let wbRz=0;addEventListener('resize',()=>{clearTimeout(wbRz);wbRz=setTimeout(()=>{if(ph==='wb')wbRun();},150);});
+$('wbf').addEventListener('submit',e=>e.preventDefault());
+$('wbFull').onclick=()=>{$('wbFuel').value=$('wbCap').value;wbRun();wbNote('Set to full usable fuel.');};
+$('wbMaxF').onclick=()=>{const i=wbIn();const z=wbCalc({...i,fuel:0,burn:0}).zf.w;
+  const lb=Math.min(i.cap*WB.ppg,WB.ramp-z,WB.mtow+WB.taxi-z);const g=Math.floor(lb/WB.ppg);
+  if(g<=0){wbNote('No room for fuel: the airplane is at maximum weight before fuel. Take load out first.','warn');return;}
+  $('wbFuel').value=g;wbRun();wbNote(g>=i.cap?`Full fuel fits (${i.cap} gal).`:`${g} gal is the most that keeps takeoff weight at or under 4,750 lb.`,'ok');};
+$('wbDef').onclick=()=>{['wbEw','wbEa','wbZf'].forEach(k=>$(k).value=WBDEF[k]);wbRun();};
+$('wbUseTo').onclick=()=>{if(!wbLast)return;$('wt').value=Math.round(wbLast.to.w);setPh('to');noteW(`Takeoff weight ${fmt(wbLast.to.w)} lb from the weight and balance page.`,'ok');};
+$('wbUseLd').onclick=()=>{if(!wbLast)return;$('lwt').value=Math.round(wbLast.ld.w);setPh('ld');noteW(`Landing weight ${fmt(wbLast.ld.w)} lb from the weight and balance page.`,'ok');};
+try{const s=JSON.parse(localStorage.getItem('sen3wb')||'null');if(s)wbIds.forEach(k=>{if(s[k]!=null)$(k).value=s[k];});}catch(e){}
+(function wbCheck(){
+  const r=wbCalc({ew:3212,ea:88.5,front:340,center:236,rear:340,bf:100,ba:0,fuel:545,burn:450});
+  const ex=[['Zero fuel weight',r.zf,4228,94.0],['Ramp weight',r.ramp,4773,93.9],['Takeoff weight',r.to,4750,93.9],['Landing weight',r.ld,4300,93.9]];
+  $('wbChk').innerHTML=ex.map(([n,p,w,c])=>`<tr><td>${n}</td><td class="n">${fmt(w)} lb · ${c.toFixed(1)}</td><td class="n">${fmt(p.w)} lb · ${p.cg.toFixed(2)}</td></tr>`).join('');
+})();
+
 // ---- Weight buttons ----
 function noteW(t,cls){const n=$('wNote');n.hidden=false;n.className='wxstat '+(cls||'');n.textContent=t;}
 $('wMax').onclick=()=>{if(ph==='ld'){$('lwt').value=4513;calc();noteW('Set to the 4,513 lb maximum landing weight.');return;}$('wt').value=4750;calc();noteW('Set to the 4,750 lb maximum takeoff weight.');};
@@ -488,7 +667,7 @@ $('wt').addEventListener('input',()=>{$('wNote').hidden=true;});$('lwt').addEven
 
 $('metar').addEventListener('input',()=>{const o=parseMetar($('metar').value);if(o&&(o.alt!=null||o.oat!=null||o.wspd!=null))applyWx(o,'Pasted METAR');});
 $('stn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();getWx();}});
-document.body.dataset.ph=ph;setLMode(lmode);setMode(mode);setPh(ph);setSite(site);
+document.body.dataset.ph=ph;setLMode(lmode);setMode(mode);setPh(ph);setSite(site);wbRun();
 if($('oId').value)lookupApt(true);
 if(site==='home'&&navigator.onLine!==false)getWx();
 </script>
