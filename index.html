@@ -217,6 +217,7 @@ details[open] summary{margin-bottom:10px}
 </div>
 <div class="grid wb">
 <form class="panel" id="wbf" autocomplete="off">
+  <button type="button" class="btn ghost" id="wbClr">Clear seats, baggage and fuel</button>
   <fieldset>
     <legend>Occupants (lb)</legend>
     <label for="wbP1">Pilot<input id="wbP1" type="number" inputmode="numeric" step="5" value="200"></label>
@@ -553,8 +554,8 @@ function wbCalc(i){
   const A=WB.arm, rows=[['Basic empty weight',i.ew,i.ea],['Pilot and front passenger',i.front,A.front],['Center seats',i.center,A.center],['Rear seats',i.rear,A.rear],['Forward baggage',i.bf,A.bf],['Aft baggage',i.ba,A.ba]];
   const pt=(w,m)=>({w,m,cg:m/w});
   let w=0,m=0;rows.forEach(r=>{w+=r[1];m+=r[1]*r[2];});
-  const zf=pt(w,m), ramp=pt(w+i.fuel,m+i.fuel*A.fuel), to=pt(ramp.w-WB.taxi,ramp.m-WB.taxi*A.fuel), ld=pt(to.w-i.burn,to.m-i.burn*A.fuel);
-  return {rows,zf,ramp,to,ld};
+  const zf=pt(w,m), ramp=pt(w+i.fuel,m+i.fuel*A.fuel), tx=Math.min(WB.taxi,i.fuel), to=pt(ramp.w-tx,ramp.m-tx*A.fuel), ld=pt(to.w-i.burn,to.m-i.burn*A.fuel);
+  return {rows,zf,ramp,to,ld,tx};
 }
 const inEnv=p=>p.cg>=fwdLim(p.w)-0.005&&p.cg<=WB.aft+0.005;
 const f1=n=>n.toFixed(1), fgal=lb=>Math.round(lb/WB.ppg*10)/10;
@@ -573,7 +574,7 @@ function wbRun(){
   over(r.zf,Math.min(i.zfMax,WB.mlw),'Zero fuel weight',d=>`Everything above it has to be fuel, so take ${fmt(Math.ceil(d))} lb out of the cabin or baggage.`);
   [['Forward baggage',i.bf],['Aft baggage',i.ba]].forEach(([n,v])=>{if(v>WB.bag)fl.push(`${n} is ${fmt(v)} lb; the compartment limit is 100 lb.`);});
   if(i.fuel>i.cap*WB.ppg+0.1)fl.push(`${f1(i.fuel/WB.ppg)} gal is more than the ${i.cap} gal usable capacity.`);
-  if(i.burn>i.fuel-WB.taxi+0.1)fl.push('The trip burn is more than the fuel on board after taxi.');
+  if(i.burn>0&&i.burn>i.fuel-WB.taxi+0.1)fl.push('The trip burn is more than the fuel on board after taxi.');
   const cgMsg=(p,n)=>{if(inEnv(p))return;const f=fwdLim(p.w);fl.push(p.cg<f?`${n} CG ${f1(p.cg)} in is forward of the ${f1(f)} in limit at ${fmt(p.w)} lb.`:`${n} CG ${f1(p.cg)} in is aft of the 94.6 in limit.`);};
   cgMsg(r.to,'Takeoff');cgMsg(r.ld,'Landing');cgMsg(r.zf,'Zero fuel');
   // Burn line between takeoff and landing: the forward limit moves with weight, so check along the way.
@@ -586,13 +587,13 @@ function wbRun(){
   const ok=!fl.length;
   $('wbVerdict').innerHTML=ok?`<span class="pill ok">Within limits</span> Useful load left at takeoff: ${fmt(WB.mtow-r.to.w)} lb.`:`<span class="pill bad">Out of limits</span> ${fl.length===1?'One item needs fixing.':fl.length+' items need fixing.'}`;
   $('wbFlags').innerHTML=fl.map(t=>`<li>${t}</li>`).join('');
-  $('wbFOut').innerHTML=`<span>Fuel <b>${fmt(i.fuel)} lb</b></span><span>Taxi <b>−23 lb</b></span><span>At landing <b>${f1(Math.max(0,i.fuel-WB.taxi-i.burn)/WB.ppg)} gal</b></span>`;
+  $('wbFOut').innerHTML=`<span>Fuel <b>${fmt(i.fuel)} lb</b></span><span>Taxi <b>−${fmt(r.tx)} lb</b></span><span>At landing <b>${f1(Math.max(0,i.fuel-WB.taxi-i.burn)/WB.ppg)} gal</b></span>`;
   $('wbUseTo').textContent=`Use ${fmt(r.to.w)} lb for takeoff`;$('wbUseLd').textContent=`Use ${fmt(r.ld.w)} lb for landing`;
   const tr=(n,w,a,m,cls)=>`<tr${cls?` class="${cls}"`:''}><td>${n}</td><td class="n">${w?fmt(w):'–'}</td><td class="n">${w?a.toFixed(1):'–'}</td><td class="n">${w?fmt(m):'–'}</td></tr>`;
   const ptRow=(n,p,mx)=>`<tr class="sum"><td>${n}</td><td class="n${p.w>mx+0.05?' bad':''}">${fmt(p.w)}</td><td class="n${inEnv(p)?'':' bad'}">${p.cg.toFixed(2)}</td><td class="n">${fmt(p.m)}</td></tr>`;
   $('wbTbl').innerHTML=r.rows.map(x=>tr(x[0],x[1],x[2],x[1]*x[2])).join('')+ptRow('Zero fuel weight',r.zf,Math.min(i.zfMax,WB.mlw))
     +tr('Fuel ('+f1(i.fuel/WB.ppg)+' gal)',i.fuel,WB.arm.fuel,i.fuel*WB.arm.fuel)+ptRow('Ramp weight',r.ramp,WB.ramp)
-    +tr('Start, taxi and runup',-WB.taxi,WB.arm.fuel,-WB.taxi*WB.arm.fuel)+ptRow('Takeoff weight',r.to,WB.mtow)
+    +tr('Start, taxi and runup',-r.tx,WB.arm.fuel,-r.tx*WB.arm.fuel)+ptRow('Takeoff weight',r.to,WB.mtow)
     +tr('Trip burn ('+f1(i.burn/WB.ppg)+' gal)',-i.burn,WB.arm.fuel,-i.burn*WB.arm.fuel)+ptRow('Landing weight',r.ld,WB.mlw);
   drawEnv(r,Math.min(i.zfMax,WB.mlw));
 }
@@ -628,6 +629,7 @@ $('wbMaxF').onclick=()=>{const i=wbIn();const z=wbCalc({...i,fuel:0,burn:0}).zf.
   const lb=Math.min(i.cap*WB.ppg,WB.ramp-z,WB.mtow+WB.taxi-z);const g=Math.floor(lb/WB.ppg);
   if(g<=0){wbNote('No room for fuel: the airplane is at maximum weight before fuel. Take load out first.','warn');return;}
   $('wbFuel').value=g;wbRun();wbNote(g>=i.cap?`Full fuel fits (${i.cap} gal).`:`${g} gal is the most that keeps takeoff weight at or under 4,750 lb.`,'ok');};
+$('wbClr').onclick=()=>{['wbP1','wbP2','wbC1','wbC2','wbR1','wbR2','wbBf','wbBa','wbFuel','wbBurn'].forEach(k=>$(k).value='');wbRun();$('wbP1').focus();};
 $('wbDef').onclick=()=>{['wbEw','wbEa','wbZf'].forEach(k=>$(k).value=WBDEF[k]);wbRun();};
 $('wbUseTo').onclick=()=>{if(!wbLast)return;$('wt').value=Math.round(wbLast.to.w);setPh('to');noteW(`Takeoff weight ${fmt(wbLast.to.w)} lb from the weight and balance page.`,'ok');};
 $('wbUseLd').onclick=()=>{if(!wbLast)return;$('lwt').value=Math.round(wbLast.ld.w);setPh('ld');noteW(`Landing weight ${fmt(wbLast.ld.w)} lb from the weight and balance page.`,'ok');};
