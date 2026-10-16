@@ -626,10 +626,15 @@ let wbRz=0;addEventListener('resize',()=>{clearTimeout(wbRz);wbRz=setTimeout(()=
 $('wbf').addEventListener('submit',e=>e.preventDefault());
 $('wbFull').onclick=()=>{$('wbFuel').value=WB.cap;wbRun();wbNote('Set to full usable fuel.');};
 $('wbMaxF').onclick=()=>{const i=wbIn();const z=wbCalc({...i,fuel:0,burn:0}).zf.w;
-  const lb=Math.min(i.cap*WB.ppg,WB.ramp-z,WB.mtow+WB.taxi-z);const g=Math.floor(lb/WB.ppg);
-  if(g<=0){wbNote('No room for fuel: the airplane is at maximum weight before fuel. Take load out first.','warn');return;}
-  $('wbFuel').value=g;wbRun();wbNote(g>=i.cap?`Full fuel fits (${i.cap} gal).`:`${g} gal is the most that keeps takeoff weight at or under 4,750 lb.`,'ok');};
-$('wbClr').onclick=()=>{['wbP1','wbP2','wbC1','wbC2','wbR1','wbR2','wbBf','wbBa','wbFuel','wbBurn'].forEach(k=>$(k).value='');wbRun();$('wbP1').focus();};
+  // Each limit as pounds of fuel at engine start; the smallest one wins.
+  const L=[['cap',i.cap*WB.ppg],['to',Math.min(WB.ramp,WB.mtow+WB.taxi)-z],['ld',WB.mlw-z+WB.taxi+i.burn]];
+  const [lim,lb]=L.reduce((a,b)=>b[1]<a[1]?b:a);const g=Math.floor(lb/WB.ppg+1e-6);
+  if(g<=0){wbNote(lim==='ld'?'No room for fuel: the landing weight is over 4,513 lb even with no fuel. Take load out first.':'No room for fuel: the airplane is at maximum weight before fuel. Take load out first.','warn');return;}
+  $('wbFuel').value=g;wbRun();
+  const tg=Math.floor(L[1][1]/WB.ppg+1e-6), lg=Math.floor(L[2][1]/WB.ppg+1e-6);
+  wbNote(lim==='cap'?`Full fuel fits (${i.cap} gal) within both takeoff and landing weight.`
+    :lim==='to'?`${g} gal, limited by the 4,750 lb maximum takeoff weight. Landing weight alone would allow ${Math.min(lg,i.cap)} gal.`
+    :`${g} gal, limited by the 4,513 lb maximum landing weight with a ${f1(i.burn/WB.ppg)} gal trip burn. Takeoff weight alone would allow ${Math.min(tg,i.cap)} gal.`,'ok');};
 $('wbDef').onclick=()=>{['wbEw','wbEa','wbZf'].forEach(k=>$(k).value=WBDEF[k]);wbRun();};
 $('wbUseTo').onclick=()=>{if(!wbLast)return;$('wt').value=Math.round(wbLast.to.w);setPh('to');noteW(`Takeoff weight ${fmt(wbLast.to.w)} lb from the weight and balance page.`,'ok');};
 $('wbUseLd').onclick=()=>{if(!wbLast)return;$('lwt').value=Math.round(wbLast.ld.w);setPh('ld');noteW(`Landing weight ${fmt(wbLast.ld.w)} lb from the weight and balance page.`,'ok');};
