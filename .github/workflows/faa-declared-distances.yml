@@ -1,7 +1,7 @@
 name: Runway database (FAA + OurAirports)
 on:
   schedule:
-    - cron: '17 9 * * 1'   # weekly; picks up each new 28-day FAA cycle
+    - cron: '2 9 * * 4'   # Thursdays 0902Z, one minute after a new 28-day FAA cycle takes effect (0901Z)
   workflow_dispatch:
   push:
     branches: [main]

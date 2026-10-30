@@ -1,12 +1,13 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Takeoff"><meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="N600NJ"><meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#1D4E89">
-<title>Seneca III Performance Card</title>
+<title>N600NJ Performance Card</title>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}</style>
 </head><body>
+
 <style>
 /* Layout: kneeboard card. Inputs column beside a results column; stacks to one column on a phone. All fonts are system fonts so the page works offline. */
 :root{
@@ -98,12 +99,13 @@ details[open] summary{margin-bottom:10px}
 @media (prefers-reduced-motion:no-preference){.res .v{transition:color .2s}}
 </style>
 
+<style>fieldset>label{justify-content:space-between}</style>
 <div class="wrap">
 <header>
-  <div class="tag" id="tagl">PA-34-220T Seneca III · POH Report VB-1110 · Section 5</div>
-  <h1 id="h1">Seneca III Takeoff Card</h1>
-  <p class="note told">Test build. The four takeoff charts (Figures 5-11 to 5-17) and two landing charts (Figures 5-75 and 5-77) were digitized from the scanned POH and run here the same way you'd trace them by hand. It's a preview of what the Aerostar version will look like, not a substitute for the POH.</p>
-  <p class="note wb">Test build. Arms, limits and the envelope come from POH Sections 2 and 6 (Figure 6-15). It runs the same arithmetic as the POH loading form and plots the result on the envelope. A preview of the Aerostar version, not a substitute for the POH.</p>
+  <div class="tag" id="tagl">Aerostar 600 · N600NJ · S/N 60-0199-088 · Owner's Manual Section 7</div>
+  <h1 id="h1">N600NJ Takeoff Card</h1>
+  <p class="note told">The takeoff, accelerate-stop and landing charts from N600NJ's 1976 Owner's Manual (Figures 7-3, 7-4, 7-5 and 7-12) were digitized and are run here the way you'd trace them by hand. Weight limits come from N600NJ's gross weight supplement (AFMS ER94105, STC SA00266DE). Use it alongside the manual, not instead of it.</p>
+  <p class="note wb">Arms come from TCDS A17WE and the Owner's Manual Section 5. Limits come from TCDS A17WE and AFMS ER94105 (5,700 lb). Defaults are N600NJ's weight and balance of March 28, 2022. Use it alongside the manual, not instead of it.</p>
 </header>
 <div class="seg big three" role="group" aria-label="Page">
   <button type="button" id="phWb" aria-pressed="false">Weight &amp; balance</button>
@@ -113,15 +115,11 @@ details[open] summary{margin-bottom:10px}
 
 <div class="grid told">
 <form class="panel" id="f" autocomplete="off">
-  <div class="seg ld-only" role="group" aria-label="Landing procedure">
-    <button type="button" id="lNorm" aria-pressed="true">Normal<small>40° flaps · barrier speed by weight</small></button>
-    <button type="button" id="lShort" aria-pressed="false">Short field effort<small>40° flaps · slower barrier speed</small></button>
+  <div class="seg to-only" role="group" aria-label="Takeoff flaps">
+    <button type="button" id="mF0" aria-pressed="true">Flaps up<small>Fig 7-3 · 82 to 95 KIAS</small></button>
+    <button type="button" id="mF20" aria-pressed="false">Flaps 20°<small>Fig 7-4 · 80 to 83 KIAS</small></button>
   </div>
-  <div class="seg to-only" role="group" aria-label="Takeoff procedure">
-    <button type="button" id="mNorm" aria-pressed="true">Normal<small>0° flaps · 79 KIAS</small></button>
-    <button type="button" id="mMax" aria-pressed="false">Max effort<small>25° flaps · 64/66 KIAS</small></button>
-  </div>
-  <div class="seg" role="group" aria-label="Departure airport">
+  <div class="seg" role="group" aria-label="Airport">
     <button type="button" id="sHome" aria-pressed="true">KSPG<small>Albert Whitted · home</small></button>
     <button type="button" id="sOther" aria-pressed="false">Other field<small>any identifier</small></button>
   </div>
@@ -134,6 +132,7 @@ details[open] summary{margin-bottom:10px}
       <option value="36">Runway 36</option>
     </select></label>
     <div class="derived" id="spgOut"></div>
+    <div class="wxstat" id="spgData" style="grid-column:1/-1">FAA declared distances, cycle effective Oct 1, 2026 (built in).</div>
   </fieldset>
   <fieldset id="fsOther" hidden>
     <legend>Other field</legend>
@@ -143,9 +142,9 @@ details[open] summary{margin-bottom:10px}
     <div class="wxstat" id="oData" style="grid-column:1/-1"></div>
     <label for="elev">Field elevation (ft)<input id="elev" type="number" inputmode="numeric" step="10" value="2000"></label>
     <label for="hdg">Runway heading (°T)<input id="hdg" type="number" inputmode="numeric" step="10" value="360"></label>
-    <label for="rwy" class="to-only">Takeoff run available (ft)<input id="rwy" type="number" inputmode="numeric" step="50" value="7400"></label>
+    <label for="rwy" class="to-only">Takeoff run available (ft)<input id="rwy" type="number" inputmode="numeric" step="50" value="5000"></label>
     <label for="asda" class="to-only">Accel-stop available (ft)<input id="asda" type="number" inputmode="numeric" step="50" placeholder="same as runway"></label>
-    <label for="lda" class="ld-only">Landing distance available (ft)<input id="lda" type="number" inputmode="numeric" step="50" value="7400"></label>
+    <label for="lda" class="ld-only">Landing distance available (ft)<input id="lda" type="number" inputmode="numeric" step="50" value="5000"></label>
   </fieldset>
   <fieldset>
     <legend>Weather</legend>
@@ -154,7 +153,7 @@ details[open] summary{margin-bottom:10px}
       <button type="button" id="getWx" class="btn">Get current weather</button>
     </div>
     <div class="wxstat" id="wxStat" aria-live="polite">Enter values below, or fetch the latest METAR.</div>
-    <label for="metar" style="grid-column:1/-1">Or paste a METAR<input id="metar" type="text" spellcheck="false" autocapitalize="characters" placeholder="KSPG 131253Z 07009KT 10SM FEW030 27/21 A3001"></label>
+    <label for="metar" style="grid-column:1/-1">Or paste a METAR<input id="metar" type="text" spellcheck="false" autocapitalize="characters" placeholder="KSPG 171253Z 07009KT 10SM FEW030 27/21 A3001"></label>
     <label for="alt">Altimeter (in Hg)<input id="alt" type="number" inputmode="decimal" step="0.01" value="29.92"></label>
     <label for="oat">OAT (°C)<input id="oat" type="number" inputmode="decimal" step="1" value="21"></label>
     <label for="wdir">Wind from (°T)<input id="wdir" type="number" inputmode="numeric" step="10" value="360"></label>
@@ -164,10 +163,11 @@ details[open] summary{margin-bottom:10px}
   </fieldset>
   <fieldset>
     <legend>Airplane</legend>
-    <label for="wt" class="to-only">Takeoff weight (lb)<input id="wt" type="number" inputmode="numeric" step="10" value="3969"></label>
-    <label for="lwt" class="ld-only">Landing weight (lb)<input id="lwt" type="number" inputmode="numeric" step="10" value="3655"></label>
-    <div class="wbtns">
-      <button type="button" class="btn ghost" id="wMax">MAX <span class="to-only">4,750</span><span class="ld-only">4,513</span></button>
+    <label for="wt" class="to-only" style="grid-column:1/-1">Takeoff weight (lb)<input id="wt" type="number" inputmode="numeric" step="10" value="5500"></label>
+    <label for="lwt" class="ld-only" style="grid-column:1/-1">Landing weight (lb)<input id="lwt" type="number" inputmode="numeric" step="10" value="5200"></label>
+    <div class="wbtns" style="grid-column:1/-1;grid-template-columns:1fr 1fr 1fr">
+      <button type="button" class="btn ghost" id="wWb">From W&amp;B</button>
+      <button type="button" class="btn ghost" id="wMax">MAX 5,700</button>
       <button type="button" class="btn ghost" id="wFit">Max for runway</button>
     </div>
     <div class="wxstat" id="wNote" style="grid-column:1/-1" hidden></div>
@@ -177,7 +177,7 @@ details[open] summary{margin-bottom:10px}
 </form>
 
 <section class="panel" aria-live="polite">
-  <h2 id="resTitle">Normal takeoff</h2>
+  <h2 id="resTitle">Takeoff, flaps 20°</h2>
   <div class="results">
     <div class="res gr"><span class="k">Ground roll</span><span class="v" id="vGr">–</span><span class="s" id="sGr"></span></div>
     <div class="res o50"><span class="k">Over 50 ft obstacle</span><span class="v" id="v50">–</span><span class="s" id="s50"></span></div>
@@ -197,21 +197,22 @@ details[open] summary{margin-bottom:10px}
 
 <div class="cols2 told">
 <section class="panel">
-  <h2>Checked against the POH examples</h2>
-  <p class="note">Each chart prints a worked example. These are the calculator's answers for the same conditions. The landing examples are the one place the POH's own drawing strays from its guide lines: the example path is drawn shallower than the guide lines in the wind step, and steeper in the short field barrier step. The calculator follows the guide lines, so it reads 20 to 90 ft shorter than those printed examples. A safety margin covers the difference.</p>
-  <div class="tbl"><table><thead><tr><th>Chart</th><th class="n">POH</th><th class="n">Calculator</th><th class="n">Diff</th></tr></thead><tbody id="chk"></tbody></table></div>
+  <h2>Checked against the manual's examples</h2>
+  <p class="note">Each chart prints a worked example, with the zero-wind answer and the answer with a 20 kt headwind. These are the calculator's answers for the same conditions. The manual's own figures are read off the chart by eye, so 1 to 2% either way is the reading accuracy of the chart itself.</p>
+  <div class="tbl"><table><thead><tr><th>Chart</th><th class="n">Manual</th><th class="n">Calculator</th><th class="n">Diff</th></tr></thead><tbody id="chk"></tbody></table></div>
 </section>
 <section class="panel">
   <h2>Chart conditions and limits</h2>
   <ul class="note" style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px">
-    <li>Paved, level, dry runway. Cowl flaps ½ open, 2800 RPM, 40 in. MAP.</li>
-    <li>Sea level to 8,000 ft pressure altitude, ISA −15°C to ISA +30°C.</li>
-    <li>Takeoff 3,000 to 4,750 lb; landing 3,000 to 4,513 lb (maximum landing weight). Headwind to 15 kt, tailwind to 5 kt.</li>
-    <li>Landing charts assume both throttles closed, full-stall touchdown and maximum braking. Ground roll is the same for normal and short-field landings; the short-field technique only shortens the air distance, by crossing the 50 ft barrier slower (68 to 82 KIAS instead of 76 to 90).</li>
-    <li>Accelerate-stop includes a 3-second recognition time. The chart value is multiplied by 0.93 (0° flaps) or 0.87 (25° flaps), as the chart notes direct.</li>
-    <li>Off-station runways (airports with a paved runway of 2,800 ft or more; all their paved runways are listed): US airports come entirely from the FAA's 28-day airport data, refreshed weekly, including lengths, true headings, field elevations, displaced thresholds and declared distances (TORA, ASDA, LDA). Airports outside the US come from OurAirports (public domain). Where no declared distances are published, takeoff uses full runway length and landing uses length minus any displaced threshold. Headings and winds are true, matching METARs; ATIS winds are magnetic.</li>
-    <li>KSPG runway data uses the declared distances: takeoff run available (TORA) for the over-50 ft distance, accelerate-stop available (ASDA) for accelerate-stop and landing distance available (LDA) for landing over 50 ft. They come from the FAA's 28-day airport data (cycle effective October 1, 2026). Verify them against the current Chart Supplement and NOTAMs.</li>
-    <li>Charts are unfactored. The POH warns against using values extrapolated beyond the chart, so the card flags any input outside these limits.</li>
+    <li>Level, hard surface runway. Takeoff at maximum power. Landing with 45° flaps, power for a 3° approach and heavy braking after touchdown.</li>
+    <li>OAT 0 to 125°F (landing 0 to 120°F). Pressure altitude sea level to 10,000 ft (accelerate-stop to 8,000 ft). Headwind to 30 kt. Takeoff and landing charts show tailwind to 5 kt; the accelerate-stop chart shows none, so a tailwind there is applied with the flaps-up takeoff chart's tailwind ratio and flagged.</li>
+    <li>The charts give total distance over 50 ft. Ground roll is from the chart notes: 78% of total for flaps up, 80% at 4,000 lb to 72% at 5,500 lb for flaps 20°, and about 37% for landing.</li>
+    <li>Accelerate-stop is the flaps-up chart (engine failure at takeoff speed, heavy braking). The manual says the distance is shorter with 20° flaps, so it is used for both flap settings.</li>
+    <li>Charts cover 4,000 to 5,500 lb. AFMS ER94105 raises N600NJ's maximum takeoff and landing weight to 5,700 lb but gives no performance data, so from 5,500 to 5,700 lb the card extends the 5,000 and 5,500 lb lines and flags the result as extrapolated.</li>
+    <li>Speeds are the chart's mph IAS, interpolated by weight and converted to KIAS (rounded up), since N600NJ's airspeed indicator reads knots. Takeoff speed flaps up 94/97/102/107 mph (82/85/89/93 KIAS) and flaps 20° 92/93/94/94.5 mph (80/81/82/83 KIAS) at 4,000/4,500/5,000/5,500 lb; approach 94/100/105/110 mph (82/87/92/96 KIAS).</li>
+    <li>Off-station runways (airports with a paved runway of 2,800 ft or more): US airports come entirely from the FAA's 28-day airport data, refreshed weekly, including declared distances (TORA, ASDA, LDA). Airports outside the US come from OurAirports. Where no declared distances are published, takeoff uses full runway length and landing uses length minus any displaced threshold. Headings and winds are true, matching METARs; ATIS winds are magnetic.</li>
+    <li>KSPG uses the declared distances: TORA for the over-50 ft distance, ASDA for accelerate-stop, LDA for landing. FAA 28-day data, cycle effective <span id="spgEff">October 1, 2026</span>, updated from the runway database each cycle. Verify against the current Chart Supplement and NOTAMs.</li>
+    <li>Chart values are unfactored. The card flags any input outside the chart limits.</li>
   </ul>
 </section>
 </div>
@@ -221,38 +222,37 @@ details[open] summary{margin-bottom:10px}
   <fieldset>
     <legend>Occupants (lb)</legend>
     <label for="wbP1">Pilot<input id="wbP1" type="number" inputmode="numeric" step="5" value="200"></label>
-    <label for="wbP2">Front passenger<input id="wbP2" type="number" inputmode="numeric" step="5" placeholder="0"></label>
-    <label for="wbC1">Center seat, left<input id="wbC1" type="number" inputmode="numeric" step="5" placeholder="0"></label>
-    <label for="wbC2">Center seat, right<input id="wbC2" type="number" inputmode="numeric" step="5" placeholder="0"></label>
+    <label for="wbP2">Copilot<input id="wbP2" type="number" inputmode="numeric" step="5" placeholder="0"></label>
+    <label for="wbM1">Middle seat, left<input id="wbM1" type="number" inputmode="numeric" step="5" placeholder="0"></label>
+    <label for="wbM2">Middle seat, right<input id="wbM2" type="number" inputmode="numeric" step="5" placeholder="0"></label>
     <label for="wbR1">Rear seat, left<input id="wbR1" type="number" inputmode="numeric" step="5" placeholder="0"></label>
     <label for="wbR2">Rear seat, right<input id="wbR2" type="number" inputmode="numeric" step="5" placeholder="0"></label>
   </fieldset>
   <fieldset>
-    <legend>Baggage (lb) · 100 max each</legend>
-    <label for="wbBf">Forward (nose)<input id="wbBf" type="number" inputmode="numeric" step="5" placeholder="0"></label>
-    <label for="wbBa">Aft (cabin)<input id="wbBa" type="number" inputmode="numeric" step="5" placeholder="0"></label>
+    <legend>Baggage (lb) · 240 max</legend>
+    <label for="wbBag" style="grid-column:1/-1">Rear baggage compartment<input id="wbBag" type="number" inputmode="numeric" step="5" placeholder="0"></label>
   </fieldset>
   <fieldset>
-    <legend>Fuel · 123 gal usable · 6 lb/gal</legend>
-    <label for="wbFuel" style="grid-column:1/-1">Fuel at engine start (gal)<input id="wbFuel" type="number" inputmode="decimal" step="1" value="123"></label>
+    <legend>Fuel · wings 124 + fuselage 41.5 gal usable · 6 lb/gal</legend>
+    <label for="wbWing">Wing tanks (gal)<input id="wbWing" type="number" inputmode="decimal" step="1" value="0"></label>
+    <label for="wbFus">Fuselage tank (gal)<input id="wbFus" type="number" inputmode="decimal" step="0.5" value="41.5"></label>
     <div class="wbtns" style="grid-column:1/-1;grid-template-columns:1fr 1fr 1fr">
-      <button type="button" class="btn ghost" id="wbFull">FULL 123</button>
-      <button type="button" class="btn ghost" id="wbTabsB">TABS</button>
+      <button type="button" class="btn ghost" id="wbFusOnly">FUS 41.5</button>
+      <button type="button" class="btn ghost" id="wbFull">FULL 165.5</button>
       <button type="button" class="btn ghost" id="wbMaxF">Max fuel</button>
     </div>
-    <label for="wbBurn" style="grid-column:1/-1">Trip fuel burn (gal)<input id="wbBurn" type="number" inputmode="decimal" step="1" value="30"></label>
+    <label for="wbBurn" style="grid-column:1/-1">Trip fuel burn (gal)<input id="wbBurn" type="number" inputmode="decimal" step="1" value="20"></label>
     <div class="wxstat" id="wbNote" style="grid-column:1/-1" hidden></div>
     <div class="derived" id="wbFOut"></div>
   </fieldset>
   <details>
-    <summary>Empty weight and limits</summary>
+    <summary>Empty weight and oil</summary>
     <fieldset>
-      <label for="wbEw">Basic empty weight (lb)<input id="wbEw" type="number" inputmode="decimal" step="0.1" value="3417.1"></label>
-      <label for="wbEa">Empty weight CG (in)<input id="wbEa" type="number" inputmode="decimal" step="0.01" value="88.89"></label>
-      <label for="wbZf">Max zero fuel weight (lb)<input id="wbZf" type="number" inputmode="numeric" step="1" value="4470"></label>
-      <label for="wbTabs">Usable fuel at the tabs (gal)<input id="wbTabs" type="number" inputmode="decimal" step="1" placeholder="not set"></label>
+      <label for="wbEw">Empty weight (lb)<input id="wbEw" type="number" inputmode="decimal" step="0.1" value="3912.9"></label>
+      <label for="wbEa">Empty weight CG (in)<input id="wbEa" type="number" inputmode="decimal" step="0.01" value="165.62"></label>
+      <label for="wbOil" style="grid-column:1/-1">Oil not in the empty weight (lb)<input id="wbOil" type="number" inputmode="decimal" step="0.5" value="37.5"></label>
       <div class="wbtns"><button type="button" class="btn ghost" id="wbDef" style="grid-column:1/-1">Restore defaults</button></div>
-      <p class="wxstat">Defaults are N8467X's weight and balance of October 15, 2021 (3,417.1 lb at 88.89 in, moment 303,746). Replace them with the airplane's current Weight and Balance Record. The 4,470 lb zero fuel weight is the standard figure; options listed in POH 6.13 (o) can raise it, but never above 4,513 lb.</p>
+      <p class="wxstat">Defaults are N600NJ's weight and balance of March 28, 2022 (3,912.9 lb at 165.62 in, moment 648,045). The TCDS empty weight includes only 7.5 lb of undrainable oil, so the card adds the other 37.5 lb of the 24 quarts at 145 in. Set it to 0 if that weight and balance was done with full oil.</p>
     </fieldset>
   </details>
 </form>
@@ -265,7 +265,7 @@ details[open] summary{margin-bottom:10px}
     <div class="res as"><span class="k">Zero fuel</span><span class="v" id="wbVZf">–</span><span class="s" id="wbSZf"></span></div>
   </div>
   <div class="verdict" id="wbVerdict"></div>
-  <div class="env"><svg id="env" viewBox="0 0 600 380" role="img" aria-label="Weight and CG plotted on the POH envelope"></svg></div>
+  <div class="env"><svg id="env" viewBox="0 0 600 380" role="img" aria-label="Weight and CG plotted on the envelope"></svg></div>
   <ul class="flags" id="wbFlags"></ul>
   <div class="wbgo">
     <button type="button" class="btn" id="wbUseTo">Use for takeoff</button>
@@ -277,63 +277,80 @@ details[open] summary{margin-bottom:10px}
 
 <div class="cols2 wb">
 <section class="panel">
-  <h2>Checked against the POH sample</h2>
-  <p class="note">The sample loading problem in POH Figure 6-9: 3,212 lb empty at 88.5 in, 340 lb in front, 236 lb in the center seats, 340 lb in the rear, 100 lb in the nose, 545 lb of fuel and 450 lb burned. The POH prints CGs to one decimal, rounded on some lines and cut off on others, so they agree within 0.1 in.</p>
-  <div class="tbl"><table><thead><tr><th>Line</th><th class="n">POH</th><th class="n">Calculator</th></tr></thead><tbody id="wbChk"></tbody></table></div>
+  <h2>Checked against the manual's sample</h2>
+  <p class="note">The sample problem in Owner's Manual Section 5: 3,650 lb empty with a 596,800 in-lb moment, pilot and copilot 170 lb each, one middle passenger 170 lb, 200 lb of baggage, 45 lb of oil, 132.5 gal in the wings and 42 gal in the fuselage tank (that airplane's tanks; N600NJ's are 124 and 41.5). The sample uses the manual's 250 in baggage arm, so the check does too.</p>
+  <div class="tbl"><table><thead><tr><th>Line</th><th class="n">Manual</th><th class="n">Calculator</th></tr></thead><tbody id="wbChk"></tbody></table></div>
 </section>
 <section class="panel">
   <h2>Limits used</h2>
   <ul class="note" style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px">
-    <li>Maximum ramp 4,773 lb, takeoff 4,750 lb, landing 4,513 lb, zero fuel 4,470 lb standard (POH 2.11).</li>
-    <li>Forward CG limit 82.0 in at 3,400 lb and below, 86.7 in at 4,250 lb, 90.6 in at 4,750 lb, straight line between. Aft limit 94.6 in at all weights (POH 2.13, Figure 6-15).</li>
-    <li>Arms: front seats 85.5 in, center seats 119.1 in (aft facing; 118.1 forward facing), rear seats 157.6 in, forward baggage 22.5 in, aft baggage 178.7 in, fuel 93.6 in. Datum 78.4 in ahead of the wing leading edge at the inboard edge of the fuel tank.</li>
-    <li>Start, taxi and runup fuel: 23 lb (POH Figure 6-9). Takeoff weight is fuel at engine start less this allowance.</li>
-    <li>The burn line from takeoff to landing is checked every 50 lb, since the forward limit moves with weight. Gear retraction moves the moment by only −32 in-lb, which the POH calls insignificant.</li>
+    <li>Maximum ramp 5,725 lb, takeoff 5,700 lb, landing 5,700 lb (AFMS ER94105, STC SA00266DE). No zero fuel limit is published for the 600.</li>
+    <li>Forward CG limit 157.66 in up to 4,600 lb, 159.58 in at 5,500 lb, 160.03 in at 5,700 lb and 160.08 in at 5,725 lb, straight line between. Aft limit 167.88 in at all weights (TCDS A17WE, AFMS ER94105).</li>
+    <li>Arms: pilot and copilot 96 in, middle seats 132 in, rear seats 165 in (a rear bench takes three people up to 380 lb), baggage 245 in (TCDS; the 1976 manual's table uses 250), oil 145 in, wing fuel 170 in, fuselage fuel 213 in (from the manual's loading tables).</li>
+    <li>Start, taxi and runup: 25 lb, the gap between the ramp and takeoff limits.</li>
+    <li>Fuel burn follows the fuel system: all three tanks seek a common level, and the wings run dry with about 14 gal left in the fuselage tank (AOA training manual, 12 to 16 gal), after which the fuselage tank feeds alone. The burn line is checked every 50 lb, because the forward limit moves with weight.</li>
   </ul>
 </section>
 </div>
 <p class="note told"><a href="tab-data.pdf">Printable tab data (PDF, half-letter)</a>: the same charts as zero-wind tables by weight, pressure altitude and OAT, with wind factors.</p>
-<p class="note">Saved to your device, this page runs with no connection, because the chart and runway data are saved on the device. Inputs are remembered on this device only.</p>
+<p class="note">Saved to your device, this page works with no connection, because the chart and runway data are stored on the device. Inputs are remembered on this device only.</p>
 </div>
 
 <script>
-const CH={"as0":{"pa":[[[-30.0,3101.7],[-20.0,3264.3],[-10.0,3426.9],[0.0,3589.5],[10.0,3752.1],[20.0,3914.7],[30.0,4077.3],[40.0,4239.9],[50.0,4402.5]],[[-30.0,3400.9],[-20.0,3575.6],[-10.0,3750.3],[0.0,3925.0],[10.0,4099.7],[20.0,4274.4],[30.0,4449.1],[40.0,4623.8],[50.0,4798.5]],[[-30.0,3717.1],[-20.0,3909.3],[-10.0,4101.4],[0.0,4293.6],[10.0,4485.8],[20.0,4677.9],[30.0,4870.1],[40.0,5062.3],[50.0,5254.4]],[[-30.0,4085.7],[-20.0,4296.5],[-10.0,4507.3],[0.0,4718.1],[10.0,4928.9],[20.0,5139.7],[30.0,5350.5],[40.0,5561.3],[50.0,5772.1]],[[-30.0,4503.4],[-20.0,4732.3],[-10.0,4961.1],[0.0,5189.9],[10.0,5418.7],[20.0,5647.6],[30.0,5876.4],[40.0,6105.2],[50.0,6334.0]]],"wt":[[[4750.0,3359.3],[4625.0,3288.1],[4500.0,3216.9],[4375.0,3145.9],[4250.0,3074.9],[4125.0,3004.1],[4000.0,2933.4],[3875.0,2862.7],[3750.0,2792.2],[3625.0,2721.8],[3500.0,2651.5],[3375.0,2581.3],[3250.0,2511.2],[3125.0,2441.3],[3000.0,2371.4]],[[4750.0,3828.8],[4625.0,3742.3],[4500.0,3655.6],[4375.0,3568.6],[4250.0,3481.3],[4125.0,3393.6],[4000.0,3305.8],[3875.0,3217.6],[3750.0,3129.1],[3625.0,3040.3],[3500.0,2951.2],[3375.0,2861.9],[3250.0,2772.2],[3125.0,2682.3],[3000.0,2592.1]],[[4750.0,4308.2],[4625.0,4207.2],[4500.0,4106.0],[4375.0,4004.7],[4250.0,3903.3],[4125.0,3801.7],[4000.0,3700.0],[3875.0,3598.2],[3750.0,3496.3],[3625.0,3394.2],[3500.0,3292.1],[3375.0,3189.7],[3250.0,3087.3],[3125.0,2984.7],[3000.0,2882.1]],[[4750.0,4786.1],[4625.0,4668.2],[4500.0,4550.7],[4375.0,4433.4],[4250.0,4316.5],[4125.0,4199.9],[4000.0,4083.6],[3875.0,3967.6],[3750.0,3852.0],[3625.0,3736.7],[3500.0,3621.7],[3375.0,3507.0],[3250.0,3392.6],[3125.0,3278.6],[3000.0,3164.9]],[[4750.0,5268.5],[4625.0,5134.0],[4500.0,4999.7],[4375.0,4865.6],[4250.0,4731.7],[4125.0,4598.0],[4000.0,4464.6],[3875.0,4331.4],[3750.0,4198.5],[3625.0,4065.7],[3500.0,3933.2],[3375.0,3800.9],[3250.0,3668.9],[3125.0,3537.0],[3000.0,3405.4]],[[4750.0,5737.2],[4625.0,5590.1],[4500.0,5443.6],[4375.0,5297.6],[4250.0,5152.1],[4125.0,5007.1],[4000.0,4862.6],[3875.0,4718.6],[3750.0,4575.2],[3625.0,4432.3],[3500.0,4289.8],[3375.0,4147.9],[3250.0,4006.5],[3125.0,3865.7],[3000.0,3725.3]],[[4750.0,6257.0],[4625.0,6092.9],[4500.0,5929.5],[4375.0,5766.7],[4250.0,5604.6],[4125.0,5443.2],[4000.0,5282.5],[3875.0,5122.4],[3750.0,4963.0],[3625.0,4804.3],[3500.0,4646.3],[3375.0,4488.9],[3250.0,4332.3],[3125.0,4176.3],[3000.0,4021.0]]],"hw":[[[0.0,2844.5],[1.0,2815.3],[2.0,2786.2],[3.0,2757.1],[4.0,2728.1],[5.0,2699.2],[6.0,2670.3],[7.0,2641.4],[8.0,2612.6],[9.0,2583.9],[10.0,2555.2],[11.0,2526.6],[12.0,2498.0],[13.0,2469.4],[14.0,2441.0],[15.0,2412.5]],[[0.0,3365.7],[1.0,3328.4],[2.0,3291.2],[3.0,3253.9],[4.0,3216.8],[5.0,3179.6],[6.0,3142.5],[7.0,3105.4],[8.0,3068.3],[9.0,3031.3],[10.0,2994.3],[11.0,2957.4],[12.0,2920.4],[13.0,2883.5],[14.0,2846.7],[15.0,2809.9]],[[0.0,3825.4],[1.0,3787.9],[2.0,3750.3],[3.0,3712.6],[4.0,3674.8],[5.0,3636.9],[6.0,3598.9],[7.0,3560.7],[8.0,3522.5],[9.0,3484.2],[10.0,3445.8],[11.0,3407.3],[12.0,3368.7],[13.0,3329.9],[14.0,3291.1],[15.0,3252.2]],[[0.0,4353.5],[1.0,4310.5],[2.0,4267.7],[3.0,4224.9],[4.0,4182.3],[5.0,4139.8],[6.0,4097.4],[7.0,4055.1],[8.0,4012.9],[9.0,3970.9],[10.0,3928.9],[11.0,3887.1],[12.0,3845.4],[13.0,3803.8],[14.0,3762.3],[15.0,3720.9]],[[0.0,4799.7],[1.0,4755.4],[2.0,4710.9],[3.0,4666.3],[4.0,4621.6],[5.0,4576.9],[6.0,4532.0],[7.0,4487.0],[8.0,4441.9],[9.0,4396.6],[10.0,4351.3],[11.0,4305.9],[12.0,4260.4],[13.0,4214.7],[14.0,4169.0],[15.0,4123.1]],[[0.0,5231.0],[1.0,5185.7],[2.0,5140.1],[3.0,5094.4],[4.0,5048.5],[5.0,5002.4],[6.0,4956.2],[7.0,4909.7],[8.0,4863.1],[9.0,4816.3],[10.0,4769.2],[11.0,4722.1],[12.0,4674.7],[13.0,4627.1],[14.0,4579.4],[15.0,4531.4]],[[0.0,5716.5],[1.0,5667.4],[2.0,5618.3],[3.0,5569.4],[4.0,5520.5],[5.0,5471.8],[6.0,5423.2],[7.0,5374.7],[8.0,5326.3],[9.0,5278.0],[10.0,5229.9],[11.0,5181.8],[12.0,5133.9],[13.0,5086.1],[14.0,5038.4],[15.0,4990.8]],[[0.0,6199.2],[1.0,6147.3],[2.0,6095.6],[3.0,6044.2],[4.0,5993.1],[5.0,5942.2],[6.0,5891.6],[7.0,5841.2],[8.0,5791.1],[9.0,5741.3],[10.0,5691.7],[11.0,5642.4],[12.0,5593.3],[13.0,5544.5],[14.0,5495.9],[15.0,5447.6]]],"tw":[[[0.0,2844.5],[1.0,2957.8],[2.0,3071.1],[3.0,3184.4],[4.0,3297.8],[5.0,3411.1]],[[0.0,3365.7],[1.0,3477.7],[2.0,3589.8],[3.0,3701.8],[4.0,3813.8],[5.0,3925.8]],[[0.0,3825.4],[1.0,3942.6],[2.0,4059.9],[3.0,4177.1],[4.0,4294.3],[5.0,4411.6]],[[0.0,4353.5],[1.0,4466.8],[2.0,4580.1],[3.0,4693.5],[4.0,4806.8],[5.0,4920.1]],[[0.0,4799.7],[1.0,4944.3],[2.0,5088.9],[3.0,5233.5],[4.0,5378.1],[5.0,5522.6]],[[0.0,5231.0],[1.0,5386.0],[2.0,5541.0],[3.0,5696.0],[4.0,5851.0],[5.0,6006.0]],[[0.0,5716.5],[1.0,5874.2],[2.0,6031.8],[3.0,6189.4],[4.0,6347.0],[5.0,6504.6]],[[0.0,6199.2],[1.0,6356.8],[2.0,6514.4],[3.0,6672.0],[4.0,6829.6],[5.0,6987.2]]]},"as25":{"pa":[[[-30.0,1890.3],[-20.0,1998.4],[-10.0,2106.5],[0.0,2214.6],[10.0,2322.7],[20.0,2430.8],[30.0,2538.8],[40.0,2646.9],[50.0,2755.0]],[[-30.0,2095.4],[-20.0,2207.6],[-10.0,2319.9],[0.0,2432.2],[10.0,2544.4],[20.0,2656.7],[30.0,2769.0],[40.0,2881.2],[50.0,2993.5]],[[-30.0,2306.5],[-20.0,2426.8],[-10.0,2547.1],[0.0,2667.5],[10.0,2787.8],[20.0,2908.1],[30.0,3028.4],[40.0,3148.8],[50.0,3269.1]],[[-30.0,2486.0],[-20.0,2624.1],[-10.0,2762.2],[0.0,2900.3],[10.0,3038.4],[20.0,3176.5],[30.0,3314.7],[40.0,3452.8],[50.0,3590.9]],[[-30.0,2771.8],[-20.0,2920.0],[-10.0,3068.1],[0.0,3216.3],[10.0,3364.5],[20.0,3512.6],[30.0,3660.8],[40.0,3808.9],[50.0,3957.1]]],"wt":[[[4750.0,2079.8],[4625.0,2021.6],[4500.0,1963.8],[4375.0,1906.4],[4250.0,1849.3],[4125.0,1792.5],[4000.0,1736.1],[3875.0,1680.1],[3750.0,1624.4],[3625.0,1569.1],[3500.0,1514.1],[3375.0,1459.5],[3250.0,1405.2],[3125.0,1351.3],[3000.0,1297.7]],[[4750.0,2364.3],[4625.0,2299.1],[4500.0,2233.9],[4375.0,2168.8],[4250.0,2103.8],[4125.0,2038.9],[4000.0,1974.1],[3875.0,1909.3],[3750.0,1844.7],[3625.0,1780.1],[3500.0,1715.6],[3375.0,1651.2],[3250.0,1586.8],[3125.0,1522.6],[3000.0,1458.4]],[[4750.0,2650.0],[4625.0,2580.3],[4500.0,2510.2],[4375.0,2439.9],[4250.0,2369.3],[4125.0,2298.5],[4000.0,2227.4],[3875.0,2156.0],[3750.0,2084.3],[3625.0,2012.4],[3500.0,1940.2],[3375.0,1867.8],[3250.0,1795.0],[3125.0,1722.0],[3000.0,1648.8]],[[4750.0,2953.0],[4625.0,2875.3],[4500.0,2797.5],[4375.0,2719.5],[4250.0,2641.4],[4125.0,2563.2],[4000.0,2484.8],[3875.0,2406.2],[3750.0,2327.6],[3625.0,2248.7],[3500.0,2169.8],[3375.0,2090.7],[3250.0,2011.5],[3125.0,1932.1],[3000.0,1852.6]],[[4750.0,3252.4],[4625.0,3170.3],[4500.0,3088.2],[4375.0,3006.1],[4250.0,2924.1],[4125.0,2842.1],[4000.0,2760.1],[3875.0,2678.1],[3750.0,2596.1],[3625.0,2514.2],[3500.0,2432.3],[3375.0,2350.4],[3250.0,2268.5],[3125.0,2186.6],[3000.0,2104.8]],[[4750.0,3557.2],[4625.0,3468.2],[4500.0,3379.2],[4375.0,3290.2],[4250.0,3201.1],[4125.0,3111.9],[4000.0,3022.7],[3875.0,2933.5],[3750.0,2844.2],[3625.0,2754.9],[3500.0,2665.6],[3375.0,2576.2],[3250.0,2486.7],[3125.0,2397.2],[3000.0,2307.7]],[[4750.0,3848.8],[4625.0,3750.5],[4500.0,3652.3],[4375.0,3554.1],[4250.0,3456.0],[4125.0,3357.9],[4000.0,3259.9],[3875.0,3161.9],[3750.0,3063.9],[3625.0,2966.0],[3500.0,2868.2],[3375.0,2770.4],[3250.0,2672.6],[3125.0,2574.9],[3000.0,2477.2]]],"hw":[[[0.0,1755.3],[1.0,1731.5],[2.0,1707.7],[3.0,1684.0],[4.0,1660.4],[5.0,1636.9],[6.0,1613.5],[7.0,1590.2],[8.0,1567.0],[9.0,1543.9],[10.0,1520.8],[11.0,1497.9],[12.0,1475.0],[13.0,1452.2],[14.0,1429.6],[15.0,1407.0]],[[0.0,2039.2],[1.0,2012.8],[2.0,1986.4],[3.0,1960.3],[4.0,1934.2],[5.0,1908.4],[6.0,1882.6],[7.0,1857.1],[8.0,1831.6],[9.0,1806.4],[10.0,1781.2],[11.0,1756.2],[12.0,1731.4],[13.0,1706.7],[14.0,1682.2],[15.0,1657.8]],[[0.0,2298.7],[1.0,2272.8],[2.0,2246.9],[3.0,2221.2],[4.0,2195.5],[5.0,2169.9],[6.0,2144.4],[7.0,2119.0],[8.0,2093.6],[9.0,2068.3],[10.0,2043.0],[11.0,2017.9],[12.0,1992.8],[13.0,1967.8],[14.0,1942.8],[15.0,1918.0]],[[0.0,2649.3],[1.0,2619.0],[2.0,2588.8],[3.0,2558.8],[4.0,2528.9],[5.0,2499.1],[6.0,2469.5],[7.0,2440.0],[8.0,2410.7],[9.0,2381.5],[10.0,2352.5],[11.0,2323.6],[12.0,2294.9],[13.0,2266.3],[14.0,2237.8],[15.0,2209.5]],[[0.0,2974.4],[1.0,2938.7],[2.0,2902.9],[3.0,2867.2],[4.0,2831.4],[5.0,2795.7],[6.0,2759.9],[7.0,2724.1],[8.0,2688.3],[9.0,2652.5],[10.0,2616.6],[11.0,2580.8],[12.0,2544.9],[13.0,2509.1],[14.0,2473.2],[15.0,2437.3]],[[0.0,3270.2],[1.0,3232.9],[2.0,3195.7],[3.0,3158.8],[4.0,3121.9],[5.0,3085.3],[6.0,3048.8],[7.0,3012.5],[8.0,2976.3],[9.0,2940.3],[10.0,2904.4],[11.0,2868.7],[12.0,2833.2],[13.0,2797.8],[14.0,2762.6],[15.0,2727.6]],[[0.0,3560.7],[1.0,3520.0],[2.0,3479.3],[3.0,3438.7],[4.0,3398.2],[5.0,3357.7],[6.0,3317.4],[7.0,3277.0],[8.0,3236.8],[9.0,3196.6],[10.0,3156.5],[11.0,3116.5],[12.0,3076.5],[13.0,3036.6],[14.0,2996.8],[15.0,2957.0]],[[0.0,3862.9],[1.0,3820.8],[2.0,3778.8],[3.0,3736.8],[4.0,3694.9],[5.0,3653.1],[6.0,3611.3],[7.0,3569.6],[8.0,3527.9],[9.0,3486.4],[10.0,3444.9],[11.0,3403.4],[12.0,3362.1],[13.0,3320.8],[14.0,3279.6],[15.0,3238.4]]],"tw":[[[0.0,1755.3],[1.0,1843.9],[2.0,1932.5],[3.0,2021.1],[4.0,2109.8],[5.0,2198.4]],[[0.0,2039.2],[1.0,2130.2],[2.0,2221.1],[3.0,2312.1],[4.0,2403.1],[5.0,2494.0]],[[0.0,2298.7],[1.0,2404.5],[2.0,2510.4],[3.0,2616.2],[4.0,2722.1],[5.0,2827.9]],[[0.0,2649.3],[1.0,2751.3],[2.0,2853.2],[3.0,2955.1],[4.0,3057.1],[5.0,3159.0]],[[0.0,2974.4],[1.0,3084.1],[2.0,3193.9],[3.0,3303.7],[4.0,3413.5],[5.0,3523.3]],[[0.0,3270.2],[1.0,3376.8],[2.0,3483.4],[3.0,3590.1],[4.0,3696.7],[5.0,3803.4]],[[0.0,3560.7],[1.0,3671.3],[2.0,3781.8],[3.0,3892.4],[4.0,4003.0],[5.0,4113.5]],[[0.0,3862.9],[1.0,3973.5],[2.0,4084.0],[3.0,4194.6],[4.0,4305.1],[5.0,4415.7]]]},"to0":{"pa":[[[-30.0,1137.5],[-20.0,1224.0],[-10.0,1310.6],[0.0,1397.1],[10.0,1483.7],[20.0,1570.2],[30.0,1656.8],[40.0,1743.3],[50.0,1829.9]],[[-30.0,1291.3],[-20.0,1387.1],[-10.0,1482.8],[0.0,1578.6],[10.0,1674.3],[20.0,1770.1],[30.0,1865.8],[40.0,1961.6],[50.0,2057.3]],[[-30.0,1453.9],[-20.0,1563.6],[-10.0,1673.3],[0.0,1783.1],[10.0,1892.8],[20.0,2002.6],[30.0,2112.3],[40.0,2222.1],[50.0,2331.8]],[[-30.0,1643.6],[-20.0,1768.4],[-10.0,1893.2],[0.0,2018.1],[10.0,2142.9],[20.0,2267.7],[30.0,2392.5],[40.0,2517.4],[50.0,2642.2]],[[-30.0,1867.6],[-20.0,2008.1],[-10.0,2148.5],[0.0,2289.0],[10.0,2429.4],[20.0,2569.9],[30.0,2710.4],[40.0,2850.8],[50.0,2991.3]]],"wt":[[[4750.0,1263.1],[4625.0,1233.3],[4500.0,1204.1],[4375.0,1175.3],[4250.0,1146.9],[4125.0,1119.0],[4000.0,1091.7],[3875.0,1064.7],[3750.0,1038.3],[3625.0,1012.3],[3500.0,986.8],[3375.0,961.8],[3250.0,937.2],[3125.0,913.2],[3000.0,889.6]],[[4750.0,1517.2],[4625.0,1477.6],[4500.0,1438.7],[4375.0,1400.5],[4250.0,1363.0],[4125.0,1326.3],[4000.0,1290.2],[3875.0,1254.8],[3750.0,1220.2],[3625.0,1186.3],[3500.0,1153.0],[3375.0,1120.5],[3250.0,1088.7],[3125.0,1057.6],[3000.0,1027.2]],[[4750.0,1775.2],[4625.0,1726.8],[4500.0,1679.2],[4375.0,1632.4],[4250.0,1586.4],[4125.0,1541.2],[4000.0,1496.7],[3875.0,1453.1],[3750.0,1410.2],[3625.0,1368.1],[3500.0,1326.8],[3375.0,1286.3],[3250.0,1246.6],[3125.0,1207.7],[3000.0,1169.5]],[[4750.0,2045.6],[4625.0,1983.5],[4500.0,1922.9],[4375.0,1863.6],[4250.0,1805.7],[4125.0,1749.2],[4000.0,1694.1],[3875.0,1640.4],[3750.0,1588.0],[3625.0,1537.1],[3500.0,1487.6],[3375.0,1439.4],[3250.0,1392.6],[3125.0,1347.3],[3000.0,1303.3]],[[4750.0,2299.8],[4625.0,2228.3],[4500.0,2158.3],[4375.0,2089.9],[4250.0,2023.2],[4125.0,1958.0],[4000.0,1894.4],[3875.0,1832.5],[3750.0,1772.1],[3625.0,1713.4],[3500.0,1656.2],[3375.0,1600.7],[3250.0,1546.7],[3125.0,1494.4],[3000.0,1443.6]],[[4750.0,2554.4],[4625.0,2471.8],[4500.0,2391.0],[4375.0,2312.0],[4250.0,2234.8],[4125.0,2159.3],[4000.0,2085.6],[3875.0,2013.6],[3750.0,1943.5],[3625.0,1875.1],[3500.0,1808.4],[3375.0,1743.6],[3250.0,1680.5],[3125.0,1619.2],[3000.0,1559.6]],[[4750.0,2832.1],[4625.0,2737.2],[4500.0,2644.3],[4375.0,2553.6],[4250.0,2465.1],[4125.0,2378.6],[4000.0,2294.2],[3875.0,2212.0],[3750.0,2131.9],[3625.0,2053.9],[3500.0,1978.0],[3375.0,1904.3],[3250.0,1832.6],[3125.0,1763.1],[3000.0,1695.7]]],"hw":[[[0.0,1009.9],[1.0,997.3],[2.0,984.6],[3.0,971.9],[4.0,959.1],[5.0,946.2],[6.0,933.3],[7.0,920.3],[8.0,907.2],[9.0,894.1],[10.0,880.9],[11.0,867.7],[12.0,854.4],[13.0,841.0],[14.0,827.5],[15.0,814.0]],[[0.0,1250.1],[1.0,1236.4],[2.0,1222.9],[3.0,1209.3],[4.0,1195.9],[5.0,1182.5],[6.0,1169.1],[7.0,1155.8],[8.0,1142.6],[9.0,1129.4],[10.0,1116.2],[11.0,1103.2],[12.0,1090.1],[13.0,1077.2],[14.0,1064.2],[15.0,1051.4]],[[0.0,1502.2],[1.0,1487.0],[2.0,1471.7],[3.0,1456.3],[4.0,1440.9],[5.0,1425.4],[6.0,1409.8],[7.0,1394.2],[8.0,1378.5],[9.0,1362.8],[10.0,1346.9],[11.0,1331.1],[12.0,1315.1],[13.0,1299.1],[14.0,1283.0],[15.0,1266.8]],[[0.0,1764.7],[1.0,1746.8],[2.0,1728.9],[3.0,1711.1],[4.0,1693.3],[5.0,1675.5],[6.0,1657.8],[7.0,1640.1],[8.0,1622.4],[9.0,1604.8],[10.0,1587.2],[11.0,1569.6],[12.0,1552.0],[13.0,1534.5],[14.0,1517.1],[15.0,1499.6]],[[0.0,2014.5],[1.0,1994.7],[2.0,1974.9],[3.0,1954.9],[4.0,1934.9],[5.0,1914.8],[6.0,1894.7],[7.0,1874.5],[8.0,1854.2],[9.0,1833.8],[10.0,1813.4],[11.0,1792.8],[12.0,1772.3],[13.0,1751.6],[14.0,1730.9],[15.0,1710.1]],[[0.0,2273.0],[1.0,2250.4],[2.0,2228.1],[3.0,2206.0],[4.0,2184.1],[5.0,2162.5],[6.0,2141.0],[7.0,2119.9],[8.0,2098.9],[9.0,2078.1],[10.0,2057.6],[11.0,2037.3],[12.0,2017.3],[13.0,1997.5],[14.0,1977.8],[15.0,1958.5]],[[0.0,2517.4],[1.0,2496.2],[2.0,2475.0],[3.0,2453.8],[4.0,2432.7],[5.0,2411.6],[6.0,2390.6],[7.0,2369.6],[8.0,2348.6],[9.0,2327.7],[10.0,2306.8],[11.0,2286.0],[12.0,2265.2],[13.0,2244.5],[14.0,2223.7],[15.0,2203.1]],[[0.0,2782.4],[1.0,2757.2],[2.0,2732.1],[3.0,2707.0],[4.0,2682.0],[5.0,2657.1],[6.0,2632.3],[7.0,2607.5],[8.0,2582.8],[9.0,2558.1],[10.0,2533.6],[11.0,2509.0],[12.0,2484.6],[13.0,2460.2],[14.0,2435.9],[15.0,2411.7]]],"tw":[[[0.0,1009.9],[1.0,1056.3],[2.0,1102.7],[3.0,1149.1],[4.0,1195.5],[5.0,1242.0]],[[0.0,1250.1],[1.0,1311.5],[2.0,1372.9],[3.0,1434.4],[4.0,1495.8],[5.0,1557.2]],[[0.0,1502.2],[1.0,1563.6],[2.0,1625.1],[3.0,1686.5],[4.0,1747.9],[5.0,1809.4]],[[0.0,1764.7],[1.0,1826.8],[2.0,1888.9],[3.0,1951.1],[4.0,2013.2],[5.0,2075.3]],[[0.0,2014.5],[1.0,2084.2],[2.0,2153.8],[3.0,2223.4],[4.0,2293.0],[5.0,2362.7]],[[0.0,2273.0],[1.0,2350.1],[2.0,2427.2],[3.0,2504.4],[4.0,2581.5],[5.0,2658.6]],[[0.0,2517.4],[1.0,2611.0],[2.0,2704.5],[3.0,2798.0],[4.0,2891.5],[5.0,2985.0]],[[0.0,2782.4],[1.0,2875.9],[2.0,2969.4],[3.0,3063.0],[4.0,3156.5],[5.0,3250.0]]],"gr":[[[0.0,825.8],[0.2,868.2],[0.4,910.7],[0.6,953.1],[0.8,995.6],[1.0,1038.0]],[[0.0,994.0],[0.2,1050.0],[0.4,1106.0],[0.6,1162.0],[0.8,1218.0],[1.0,1273.9]],[[0.0,1196.3],[0.2,1256.0],[0.4,1315.7],[0.6,1375.3],[0.8,1435.0],[1.0,1494.7]],[[0.0,1395.9],[0.2,1457.5],[0.4,1519.2],[0.6,1580.8],[0.8,1642.4],[1.0,1704.1]],[[0.0,1594.8],[0.2,1662.3],[0.4,1729.7],[0.6,1797.1],[0.8,1864.5],[1.0,1931.9]],[[0.0,1792.0],[0.2,1863.7],[0.4,1935.4],[0.6,2007.0],[0.8,2078.7],[1.0,2150.4]],[[0.0,1991.1],[0.2,2066.5],[0.4,2141.9],[0.6,2217.2],[0.8,2292.6],[1.0,2368.0]],[[0.0,2191.7],[0.2,2267.8],[0.4,2344.0],[0.6,2420.1],[0.8,2496.3],[1.0,2572.5]],[[0.0,2381.9],[0.2,2468.4],[0.4,2554.9],[0.6,2641.4],[0.8,2727.9],[1.0,2814.4]],[[0.0,2584.7],[0.2,2674.0],[0.4,2763.4],[0.6,2852.7],[0.8,2942.1],[1.0,3031.5]],[[0.0,2780.6],[0.2,2877.2],[0.4,2973.9],[0.6,3070.6],[0.8,3167.3],[1.0,3263.9]]]},"to25":{"pa":[[[-30.0,658.0],[-20.0,716.4],[-10.0,774.7],[0.0,833.1],[10.0,891.5],[20.0,949.9],[30.0,1008.3],[40.0,1066.7],[50.0,1125.1]],[[-30.0,762.1],[-20.0,825.9],[-10.0,889.6],[0.0,953.4],[10.0,1017.2],[20.0,1080.9],[30.0,1144.7],[40.0,1208.5],[50.0,1272.2]],[[-30.0,873.6],[-20.0,944.2],[-10.0,1014.8],[0.0,1085.3],[10.0,1155.9],[20.0,1226.5],[30.0,1297.0],[40.0,1367.6],[50.0,1438.2]],[[-30.0,999.5],[-20.0,1081.6],[-10.0,1163.6],[0.0,1245.6],[10.0,1327.6],[20.0,1409.6],[30.0,1491.6],[40.0,1573.6],[50.0,1655.7]],[[-30.0,1138.4],[-20.0,1232.8],[-10.0,1327.2],[0.0,1421.6],[10.0,1516.0],[20.0,1610.4],[30.0,1704.9],[40.0,1799.3],[50.0,1893.7]]],"wt":[[[4750.0,757.9],[4625.0,727.4],[4500.0,697.5],[4375.0,668.0],[4250.0,639.0],[4125.0,610.6],[4000.0,582.6],[3875.0,555.2],[3750.0,528.3],[3625.0,501.9],[3500.0,475.9],[3375.0,450.5],[3250.0,425.6],[3125.0,401.2],[3000.0,377.4]],[[4750.0,922.0],[4625.0,885.7],[4500.0,850.0],[4375.0,815.1],[4250.0,780.8],[4125.0,747.3],[4000.0,714.4],[3875.0,682.3],[3750.0,650.8],[3625.0,620.1],[3500.0,590.0],[3375.0,560.6],[3250.0,531.9],[3125.0,504.0],[3000.0,476.7]],[[4750.0,1095.0],[4625.0,1054.1],[4500.0,1013.8],[4375.0,974.1],[4250.0,935.0],[4125.0,896.5],[4000.0,858.6],[3875.0,821.3],[3750.0,784.7],[3625.0,748.6],[3500.0,713.1],[3375.0,678.2],[3250.0,643.9],[3125.0,610.2],[3000.0,577.1]],[[4750.0,1261.1],[4625.0,1216.8],[4500.0,1173.3],[4375.0,1130.5],[4250.0,1088.5],[4125.0,1047.1],[4000.0,1006.5],[3875.0,966.5],[3750.0,927.3],[3625.0,888.8],[3500.0,851.0],[3375.0,814.0],[3250.0,777.6],[3125.0,742.0],[3000.0,707.1]],[[4750.0,1432.2],[4625.0,1382.9],[4500.0,1334.4],[4375.0,1286.8],[4250.0,1240.0],[4125.0,1194.0],[4000.0,1148.9],[3875.0,1104.6],[3750.0,1061.1],[3625.0,1018.4],[3500.0,976.6],[3375.0,935.6],[3250.0,895.4],[3125.0,856.0],[3000.0,817.5]],[[4750.0,1613.6],[4625.0,1559.7],[4500.0,1506.6],[4375.0,1454.3],[4250.0,1402.7],[4125.0,1351.9],[4000.0,1301.8],[3875.0,1252.5],[3750.0,1204.0],[3625.0,1156.2],[3500.0,1109.2],[3375.0,1062.9],[3250.0,1017.5],[3125.0,972.7],[3000.0,928.8]],[[4750.0,1775.3],[4625.0,1716.8],[4500.0,1659.4],[4375.0,1603.2],[4250.0,1548.0],[4125.0,1494.0],[4000.0,1441.2],[3875.0,1389.5],[3750.0,1338.9],[3625.0,1289.4],[3500.0,1241.1],[3375.0,1193.8],[3250.0,1147.8],[3125.0,1102.8],[3000.0,1059.0]]],"hw":[[[0.0,579.0],[1.0,571.9],[2.0,564.9],[3.0,558.1],[4.0,551.5],[5.0,545.0],[6.0,538.7],[7.0,532.6],[8.0,526.6],[9.0,520.8],[10.0,515.1],[11.0,509.7],[12.0,504.3],[13.0,499.2],[14.0,494.2],[15.0,489.4]],[[0.0,755.5],[1.0,744.0],[2.0,732.7],[3.0,721.6],[4.0,710.7],[5.0,699.9],[6.0,689.3],[7.0,678.9],[8.0,668.7],[9.0,658.6],[10.0,648.8],[11.0,639.1],[12.0,629.6],[13.0,620.2],[14.0,611.1],[15.0,602.1]],[[0.0,921.7],[1.0,910.1],[2.0,898.5],[3.0,887.0],[4.0,875.5],[5.0,864.1],[6.0,852.7],[7.0,841.3],[8.0,829.9],[9.0,818.6],[10.0,807.3],[11.0,796.0],[12.0,784.8],[13.0,773.6],[14.0,762.4],[15.0,751.3]],[[0.0,1087.7],[1.0,1073.5],[2.0,1059.2],[3.0,1045.0],[4.0,1030.7],[5.0,1016.5],[6.0,1002.4],[7.0,988.2],[8.0,974.0],[9.0,959.9],[10.0,945.8],[11.0,931.6],[12.0,917.6],[13.0,903.5],[14.0,889.4],[15.0,875.4]],[[0.0,1246.2],[1.0,1231.4],[2.0,1216.6],[3.0,1201.9],[4.0,1187.1],[5.0,1172.4],[6.0,1157.7],[7.0,1143.0],[8.0,1128.2],[9.0,1113.5],[10.0,1098.9],[11.0,1084.2],[12.0,1069.5],[13.0,1054.9],[14.0,1040.2],[15.0,1025.6]],[[0.0,1414.8],[1.0,1399.2],[2.0,1383.6],[3.0,1367.9],[4.0,1352.1],[5.0,1336.3],[6.0,1320.3],[7.0,1304.3],[8.0,1288.3],[9.0,1272.1],[10.0,1255.9],[11.0,1239.6],[12.0,1223.2],[13.0,1206.8],[14.0,1190.3],[15.0,1173.7]],[[0.0,1597.8],[1.0,1578.3],[2.0,1558.9],[3.0,1539.5],[4.0,1520.1],[5.0,1500.7],[6.0,1481.4],[7.0,1462.2],[8.0,1442.9],[9.0,1423.8],[10.0,1404.6],[11.0,1385.5],[12.0,1366.4],[13.0,1347.4],[14.0,1328.4],[15.0,1309.4]],[[0.0,1763.3],[1.0,1738.9],[2.0,1714.6],[3.0,1690.2],[4.0,1665.8],[5.0,1641.5]]],"tw":[[[0.0,579.0],[1.0,616.0],[2.0,653.0],[3.0,690.0],[4.0,727.0],[5.0,764.0]],[[0.0,755.5],[1.0,794.3],[2.0,833.1],[3.0,872.0],[4.0,910.8],[5.0,949.6]],[[0.0,921.7],[1.0,967.3],[2.0,1013.0],[3.0,1058.7],[4.0,1104.4],[5.0,1150.0]],[[0.0,1087.7],[1.0,1138.9],[2.0,1190.1],[3.0,1241.2],[4.0,1292.4],[5.0,1343.5]],[[0.0,1246.2],[1.0,1304.2],[2.0,1362.2],[3.0,1420.2],[4.0,1478.2],[5.0,1536.2]],[[0.0,1414.8],[1.0,1476.4],[2.0,1538.1],[3.0,1599.8],[4.0,1661.4],[5.0,1723.1]],[[0.0,1597.8],[1.0,1667.7],[2.0,1737.6],[3.0,1807.5],[4.0,1877.4],[5.0,1947.2]]],"gr":[[[0.0,500.9],[0.2,523.4],[0.4,545.9],[0.6,568.4],[0.8,590.9],[1.0,613.4]],[[0.0,733.5],[0.2,769.1],[0.4,804.7],[0.6,840.2],[0.8,875.8],[1.0,911.4]],[[0.0,941.7],[0.2,995.4],[0.4,1049.0],[0.6,1102.7],[0.8,1156.3],[1.0,1210.0]],[[0.0,1174.4],[0.2,1240.5],[0.4,1306.6],[0.6,1372.7],[0.8,1438.9],[1.0,1505.0]],[[0.0,1406.4],[0.2,1485.9],[0.4,1565.4],[0.6,1644.9],[0.8,1724.4],[1.0,1803.9]]]},"ln":{"pa":[[[-30.0,1156.9],[-20.0,1211.6],[-10.0,1266.3],[-0.0,1321.1],[10.0,1375.8],[20.0,1430.6],[30.0,1485.3],[40.0,1540.0],[50.0,1594.8]],[[-30.0,1272.0],[-20.0,1325.5],[-10.0,1379.0],[-0.0,1432.5],[10.0,1486.0],[20.0,1539.5],[30.0,1593.1],[40.0,1646.6],[50.0,1700.1]],[[-30.0,1365.5],[-20.0,1423.7],[-10.0,1481.9],[-0.0,1540.1],[10.0,1598.3],[20.0,1656.5],[30.0,1714.7],[40.0,1772.9],[50.0,1831.1]],[[-30.0,1461.8],[-20.0,1526.2],[-10.0,1590.6],[-0.0,1655.0],[10.0,1719.4],[20.0,1783.8],[30.0,1848.2],[40.0,1912.6],[50.0,1977.0]],[[-30.0,1575.4],[-20.0,1645.2],[-10.0,1714.9],[-0.0,1784.7],[10.0,1854.4],[20.0,1924.2],[30.0,1993.9],[40.0,2063.6],[50.0,2133.4]]],"wt":[[[4513.0,1259.0],[3000.0,833.6]],[[4513.0,1421.9],[3000.0,938.6]],[[4513.0,1602.9],[3000.0,1041.3]],[[4513.0,1761.0],[3000.0,1151.4]],[[4513.0,1925.6],[3000.0,1270.9]],[[4513.0,2085.0],[3000.0,1399.7]]],"hw":[[[0.0,1074.5],[15.0,815.1]],[[0.0,1249.1],[15.0,968.0]],[[0.0,1419.5],[15.0,1117.7]],[[0.0,1566.3],[15.0,1260.3]],[[0.0,1737.8],[15.0,1404.7]],[[0.0,1908.2],[15.0,1554.7]],[[0.0,2070.7],[15.0,1706.9]],[[0.0,2250.0],[15.0,1845.3]]],"tw":[[[0.0,1074.5],[5.0,1378.6]],[[0.0,1249.1],[5.0,1567.8]],[[0.0,1419.5],[5.0,1752.5]],[[0.0,1566.3],[5.0,1911.6]],[[0.0,1737.8],[5.0,2097.5]],[[0.0,1908.2],[5.0,2282.1]],[[0.0,2070.7],[5.0,2458.2]],[[0.0,2250.0],[5.0,2652.5]]],"gr":[[[0.0,820.4],[1.0,1799.8]],[[0.0,1119.4],[1.0,2253.3]],[[0.0,1463.1],[1.0,2809.9]],[[0.0,1838.5],[1.0,3370.3]]],"wref":4513},"ls":{"pa":[[[-30.0,1164.6],[-20.0,1217.9],[-10.0,1271.3],[-0.0,1324.7],[10.0,1378.1],[20.0,1431.5],[30.0,1484.8],[40.0,1538.2],[50.0,1591.6]],[[-30.0,1277.2],[-20.0,1330.0],[-10.0,1382.8],[-0.0,1435.6],[10.0,1488.4],[20.0,1541.3],[30.0,1594.1],[40.0,1646.9],[50.0,1699.7]],[[-30.0,1372.3],[-20.0,1429.3],[-10.0,1486.3],[-0.0,1543.3],[10.0,1600.3],[20.0,1657.3],[30.0,1714.3],[40.0,1771.3],[50.0,1828.3]],[[-30.0,1471.6],[-20.0,1534.0],[-10.0,1596.3],[-0.0,1658.7],[10.0,1721.0],[20.0,1783.4],[30.0,1845.7],[40.0,1908.1],[50.0,1970.4]],[[-30.0,1583.6],[-20.0,1651.7],[-10.0,1719.7],[-0.0,1787.7],[10.0,1855.8],[20.0,1923.8],[30.0,1991.9],[40.0,2059.9],[50.0,2127.9]]],"wt":[[[4513.0,1255.8],[3000.0,829.9]],[[4513.0,1418.3],[3000.0,932.5]],[[4513.0,1605.7],[3000.0,1035.5]],[[4513.0,1759.2],[3000.0,1141.2]],[[4513.0,1923.9],[3000.0,1263.0]],[[4513.0,2082.4],[3000.0,1392.5]]],"hw":[[[0.0,1069.1],[15.0,801.4]],[[0.0,1241.7],[15.0,956.2]],[[0.0,1411.6],[15.0,1105.8]],[[0.0,1561.2],[15.0,1246.9]],[[0.0,1730.1],[15.0,1393.3]],[[0.0,1903.2],[15.0,1541.7]],[[0.0,2065.1],[15.0,1694.9]],[[0.0,2244.3],[15.0,1837.9]]],"tw":[[[0.0,1069.1],[5.0,1374.6]],[[0.0,1241.7],[5.0,1559.1]],[[0.0,1411.6],[5.0,1740.7]],[[0.0,1561.2],[5.0,1900.7]],[[0.0,1730.1],[5.0,2081.2]],[[0.0,1903.2],[5.0,2266.2]],[[0.0,2065.1],[5.0,2439.3]],[[0.0,2244.3],[5.0,2630.8]]],"gr":[[[0.0,831.6],[1.0,1458.7]],[[0.0,1077.6],[1.0,1773.0]],[[0.0,1305.4],[1.0,2050.9]],[[0.0,1544.5],[1.0,2341.2]],[[0.0,1779.5],[1.0,2591.7]],[[0.0,2024.2],[1.0,2866.8]],[[0.0,2260.5],[1.0,3151.9]]],"wref":4513}};
-const POH={as0:.93,as25:.87};
-function at(line,x){const n=line.length;let i=0;while(i<n-2&&x>line[i+1][0])i++;const[x0,y0]=line[i],[x1,y1]=line[i+1];return y0+(y1-y0)*(x-x0)/(x1-x0);}
-function asc(line){return line[0][0]<=line[line.length-1][0]?line:line.slice().reverse();}
-for(const k in CH)for(const f in CH[k])if(Array.isArray(CH[k][f]))CH[k][f]=CH[k][f].map(asc);
-function follow(G,xIn,v,xOut){const s=G.map(g=>at(g,xIn));let k=0;const out=v<s[0]-5||v>s[s.length-1]+5;while(k<s.length-2&&v>s[k+1])k++;const t=(v-s[k])/(s[k+1]-s[k]);return{v:at(G[k],xOut)+t*(at(G[k+1],xOut)-at(G[k],xOut)),out};}
-const isa=pa=>15-1.98*pa/1000;
-function run(ch,i){
-  const fl=new Set();const pas=[0,2000,4000,6000,8000];let j=0;
-  const pa=Math.max(-1000,Math.min(9000,i.pa));while(j<3&&pa>pas[j+1])j++;
-  const a=at(ch.pa[j],i.oat),b=at(ch.pa[j+1],i.oat);const ref=a+(b-a)*(pa-pas[j])/2000;
-  const WR=ch.wref||4750;const w=follow(ch.wt,WR,ref,Math.max(3000,Math.min(WR,i.wt)));if(w.out)fl.add('ext');
-  let wd;if(i.wind>=0){const r=follow(ch.hw,0,w.v,Math.min(15,i.wind));wd=r.v;if(r.out)fl.add('ext');}
-  else{const r=follow(ch.tw,0,w.v,Math.min(5,-i.wind));wd=r.v;if(r.out)fl.add('ext');}
-  const o={ref,afterWt:w.v,afterWind:wd,fl};
-  if(ch.gr){const g=follow(ch.gr,0,wd,1);o.gr=wd;o.o50=g.v;if(g.out)fl.add('ext');}
-  return o;
+const CH={"to0":{"oat_max":125,"pa_v":[0,2000,4000,6000,8000,10000],"pa":[[767.99,532.84],[664.18,429.96],[551.76,319.29],[439.21,202.44],[314.76,83.12],[209.03,-25.17]],"wt_v":[4000,4500,5000,5500],"wt":[[[798.1,741.8],[799.4,738.0],[800.8,734.0],[803.1,730.0],[806.3,726.0],[809.5,722.0],[812.8,718.0],[816.2,714.0],[819.7,710.0],[822.8,706.0],[826.7,702.0],[830.3,698.0],[835.0,694.0],[838.7,690.0],[842.4,686.0],[845.8,682.0],[849.7,678.0],[853.5,674.0],[857.3,670.0],[862.1,666.0],[866.2,662.0],[870.6,658.0],[873.8,654.0],[877.8,650.0],[882.4,646.0],[886.9,642.0],[891.5,638.0],[895.9,634.0],[900.2,630.0],[903.4,626.0],[906.5,622.0],[909.7,618.0],[912.6,614.0],[916.1,610.0],[919.8,606.0],[923.7,602.0],[928.1,598.0],[932.8,594.0],[937.4,590.0],[941.9,586.0],[946.9,582.0],[952.5,578.0],[959.9,574.0],[968.4,570.0],[976.8,566.0],[983.5,562.0],[988.4,558.0],[991.7,554.0],[993.9,550.0],[996.1,546.0],[998.8,542.0],[1001.8,538.0],[1004.6,534.0],[1008.0,530.0],[1011.0,526.0],[1014.4,522.0],[1018.5,518.0],[1022.7,514.0],[1029.1,510.0],[1035.5,506.0],[1042.8,502.0],[1048.6,498.0],[1055.8,494.0],[1061.4,490.0],[1066.9,486.0],[1072.3,482.0],[1078.8,478.0],[1085.1,474.0],[1091.1,470.0],[1096.4,466.0],[1100.7,462.0],[1104.4,458.0],[1108.0,454.0],[1112.2,450.0],[1117.8,446.0],[1124.4,442.0],[1131.1,438.0],[1137.1,434.0],[1143.4,430.0],[1149.2,426.0],[1155.5,422.0],[1161.9,418.0],[1168.7,414.0],[1176.2,410.0],[1183.6,406.0],[1190.2,402.0],[1196.3,398.0],[1202.0,394.0],[1206.6,390.0],[1211.3,386.0],[1218.1,382.0],[1225.3,378.0],[1233.1,374.0],[1241.4,370.0],[1251.5,366.0],[1260.8,362.0],[1270.0,358.0],[1277.2,354.0],[1283.0,350.0],[1288.5,346.0],[1293.6,342.0],[1300.5,338.0],[1306.8,334.0],[1314.0,330.0],[1321.7,326.0],[1329.8,322.0],[1338.4,318.0],[1347.7,314.0],[1357.2,310.0],[1366.0,306.0],[1375.4,302.0],[1383.2,298.0],[1391.5,294.0],[1398.4,290.0],[1406.0,286.0],[1412.5,282.0],[1419.8,278.0],[1429.0,274.0],[1437.7,270.0],[1448.4,266.0],[1457.3,262.0],[1468.2,258.0],[1477.1,254.0],[1486.2,250.0],[1493.0,246.0],[1498.6,242.0],[1505.6,238.0],[1514.0,234.0],[1525.3,230.0],[1536.8,226.0],[1549.9,222.0],[1560.7,218.0],[1572.8,214.0],[1583.7,210.0],[1594.7,206.0],[1603.4,202.0],[1612.8,198.0],[1621.6,194.0],[1632.2,190.0],[1643.3,186.0],[1656.0,182.0],[1669.1,178.0],[1679.9,174.0],[1689.4,170.0],[1697.9,166.0],[1705.9,162.0],[1714.5,158.0],[1723.8,154.0],[1733.5,150.0],[1743.7,146.0],[1754.6,142.0],[1765.7,138.0],[1777.4,134.0],[1788.8,130.0],[1799.3,126.0],[1810.9,122.0],[1822.1,118.0],[1834.0,114.0],[1845.2,110.0],[1856.6,106.0],[1867.7,102.0],[1878.8,98.0],[1891.7,94.0],[1902.8,90.0],[1915.1,86.0],[1924.1,82.0],[1936.2,78.0],[1948.6,74.0],[1963.5,70.0],[1978.2,66.0],[1988.9,62.0],[1999.6,58.0],[2011.0,54.0],[2025.7,50.0],[2042.2,46.0],[2058.9,42.0],[2074.2,38.0],[2089.7,34.0],[2104.3,30.0],[2118.6,26.0],[2136.5,22.0],[2153.1,18.0],[2172.4,14.0],[2188.1,10.0],[2199.4,6.0],[2207.2,2.0]],[[1062.2,741.3],[1063.9,738.0],[1067.0,734.0],[1072.4,730.0],[1078.5,726.0],[1086.0,722.0],[1092.3,718.0],[1099.2,714.0],[1103.9,710.0],[1108.5,706.0],[1112.8,702.0],[1118.1,698.0],[1124.0,694.0],[1130.4,690.0],[1137.5,686.0],[1144.5,682.0],[1151.0,678.0],[1157.4,674.0],[1163.6,670.0],[1170.3,666.0],[1177.1,662.0],[1184.3,658.0],[1190.4,654.0],[1196.9,650.0],[1202.9,646.0],[1208.7,642.0],[1215.0,638.0],[1222.0,634.0],[1229.2,630.0],[1236.2,626.0],[1243.6,622.0],[1250.8,618.0],[1258.2,614.0],[1265.1,610.0],[1272.3,606.0],[1279.4,602.0],[1286.5,598.0],[1293.5,594.0],[1300.3,590.0],[1306.8,586.0],[1312.7,582.0],[1319.2,578.0],[1326.3,574.0],[1333.4,570.0],[1341.0,566.0],[1347.1,562.0],[1354.6,558.0],[1362.4,554.0],[1371.3,550.0],[1380.7,546.0],[1389.9,542.0],[1397.7,538.0],[1403.6,534.0],[1409.7,530.0],[1416.2,526.0],[1423.3,522.0],[1430.9,518.0],[1438.3,514.0],[1446.2,510.0],[1454.6,506.0],[1463.7,502.0],[1472.8,498.0],[1480.3,494.0],[1486.9,490.0],[1492.7,486.0],[1497.7,482.0],[1503.3,478.0],[1510.9,474.0],[1519.4,470.0],[1529.3,466.0],[1538.7,462.0],[1550.2,458.0],[1560.8,454.0],[1572.0,450.0],[1581.9,446.0],[1591.5,442.0],[1600.3,438.0],[1607.6,434.0],[1616.3,430.0],[1625.2,426.0],[1635.2,422.0],[1645.8,418.0],[1656.6,414.0],[1668.1,410.0],[1677.5,406.0],[1687.7,402.0],[1695.7,398.0],[1703.9,394.0],[1712.3,390.0],[1721.0,386.0],[1731.3,382.0],[1741.8,378.0],[1753.1,374.0],[1764.6,370.0],[1776.3,366.0],[1787.7,362.0],[1798.5,358.0],[1809.7,354.0],[1820.6,350.0],[1832.2,346.0],[1843.4,342.0],[1855.2,338.0],[1866.5,334.0],[1878.1,330.0],[1889.0,326.0],[1899.8,322.0],[1909.9,318.0],[1920.4,314.0],[1933.2,310.0],[1947.1,306.0],[1964.4,302.0],[1979.9,298.0],[1990.8,294.0],[1998.8,290.0],[2008.8,286.0],[2019.0,282.0],[2033.4,278.0],[2049.3,274.0],[2065.4,270.0],[2083.8,266.0],[2094.5,262.0],[2106.6,258.0],[2117.7,254.0],[2133.1,250.0],[2148.4,246.0],[2164.4,242.0],[2180.5,238.0],[2195.5,234.0],[2209.6,230.0],[2223.9,226.0],[2238.8,222.0],[2255.1,218.0],[2273.1,214.0],[2290.3,210.0],[2305.3,206.0],[2320.0,202.0],[2336.5,198.0],[2354.0,194.0],[2370.7,190.0],[2388.7,186.0],[2403.8,182.0],[2426.3,178.0],[2440.6,174.0],[2458.9,170.0],[2476.9,166.0],[2492.9,162.0],[2504.7,158.0],[2515.3,154.0],[2531.0,150.0],[2558.2,146.0],[2588.8,142.0],[2609.3,138.0],[2629.1,134.0],[2648.5,130.0],[2668.7,126.0],[2693.4,122.0],[2710.5,118.0],[2730.8,114.0],[2753.2,110.0],[2777.4,106.0],[2797.7,102.0],[2818.3,98.0],[2840.9,94.0],[2863.8,90.0],[2891.9,86.0],[2911.1,82.0],[2933.8,78.0],[2957.7,74.0],[2987.1,70.0],[3006.2,66.0],[3033.7,62.0],[3062.3,58.0],[3091.7,54.0],[3121.6,50.0],[3147.2,46.0],[3175.5,42.0],[3199.1,38.0],[3232.6,34.0],[3264.3,30.0],[3297.5,26.0],[3326.8,22.0],[3358.5,18.0],[3398.1,14.0],[3427.8,10.0],[3452.3,6.0],[3507.0,2.0]],[[1325.9,740.4],[1327.3,738.0],[1330.0,734.0],[1335.7,730.0],[1342.1,726.0],[1350.3,722.0],[1357.2,718.0],[1365.3,714.0],[1372.8,710.0],[1380.6,706.0],[1388.1,702.0],[1395.4,698.0],[1402.1,694.0],[1407.9,690.0],[1414.3,686.0],[1421.6,682.0],[1429.4,678.0],[1437.3,674.0],[1445.6,670.0],[1455.1,666.0],[1465.5,662.0],[1476.6,658.0],[1485.1,654.0],[1491.6,650.0],[1496.5,646.0],[1500.9,642.0],[1507.5,638.0],[1515.1,634.0],[1524.2,630.0],[1533.8,626.0],[1543.4,622.0],[1552.6,618.0],[1561.8,614.0],[1572.0,610.0],[1582.4,606.0],[1593.1,602.0],[1602.5,598.0],[1611.1,594.0],[1619.9,590.0],[1629.2,586.0],[1639.3,582.0],[1649.7,578.0],[1659.7,574.0],[1670.2,570.0],[1680.2,566.0],[1689.1,562.0],[1697.4,558.0],[1704.8,554.0],[1711.9,550.0],[1721.7,546.0],[1731.3,542.0],[1744.4,538.0],[1754.7,534.0],[1767.1,530.0],[1778.0,526.0],[1789.7,522.0],[1799.8,518.0],[1810.8,514.0],[1821.8,510.0],[1833.1,506.0],[1844.9,502.0],[1855.3,498.0],[1866.4,494.0],[1877.2,490.0],[1889.3,486.0],[1899.9,482.0],[1910.5,478.0],[1921.8,474.0],[1934.1,470.0],[1947.6,466.0],[1958.9,462.0],[1970.9,458.0],[1983.3,454.0],[1994.4,450.0],[2005.0,446.0],[2014.0,442.0],[2025.6,438.0],[2038.1,434.0],[2056.8,430.0],[2071.8,426.0],[2087.7,422.0],[2100.6,418.0],[2112.3,414.0],[2125.9,410.0],[2139.8,406.0],[2154.8,402.0],[2170.6,398.0],[2188.0,394.0],[2201.9,390.0],[2215.2,386.0],[2230.3,382.0],[2245.5,378.0],[2261.4,374.0],[2276.1,370.0],[2292.8,366.0],[2307.2,362.0],[2329.4,358.0],[2342.6,354.0],[2358.2,350.0],[2373.6,346.0],[2391.1,342.0],[2406.8,338.0],[2422.2,334.0],[2439.4,330.0],[2458.0,326.0],[2482.9,322.0],[2495.8,318.0],[2506.1,314.0],[2518.8,310.0],[2533.3,306.0],[2563.9,302.0],[2587.0,298.0],[2603.7,294.0],[2619.4,290.0],[2651.1,286.0],[2665.7,282.0],[2681.5,278.0],[2702.5,274.0],[2720.9,270.0],[2750.3,266.0],[2773.7,262.0],[2794.2,258.0],[2813.8,254.0],[2838.2,250.0],[2859.5,246.0],[2883.7,242.0],[2903.8,238.0],[2925.0,234.0],[2951.9,230.0],[2984.3,226.0],[2997.5,222.0],[3013.4,218.0],[3044.0,214.0],[3073.0,210.0],[3095.3,206.0],[3118.8,202.0],[3144.9,198.0],[3171.9,194.0],[3198.0,190.0],[3222.8,186.0],[3250.1,182.0],[3290.0,178.0],[3312.0,174.0],[3338.0,170.0],[3368.3,166.0],[3396.8,162.0],[3430.5,158.0],[3458.9,154.0],[3492.9,150.0],[3513.9,146.0],[3566.9,142.0],[3597.3,138.0],[3635.7,134.0],[3669.6,130.0],[3701.9,126.0],[3749.6,122.0],[3788.8,118.0],[3828.3,114.0],[3874.9,110.0],[3922.1,106.0],[3966.7,102.0],[4004.0,98.0],[4051.4,94.0],[4096.6,90.0],[4162.9,86.0],[4202.5,82.0],[4240.1,78.0],[4287.5,74.0],[4339.2,70.0],[4392.4,66.0],[4438.3,62.0],[4486.9,58.0],[4535.6,54.0],[4593.4,50.0],[4645.5,46.0],[4704.5,42.0],[4753.6,38.0],[4827.2,34.0],[4883.9,30.0],[4942.6,26.0],[4996.2,22.0],[5080.8,18.0],[5166.2,14.0],[5219.6,10.0],[5263.8,6.0],[5355.9,2.0]],[[1663.9,739.4],[1664.3,739.0],[1667.7,735.0],[1673.8,731.0],[1682.3,727.0],[1691.9,723.0],[1700.7,719.0],[1708.3,715.0],[1716.7,711.0],[1725.0,707.0],[1735.4,703.0],[1745.5,699.0],[1756.1,695.0],[1766.1,691.0],[1776.8,687.0],[1787.8,683.0],[1798.3,679.0],[1807.9,675.0],[1818.0,671.0],[1828.6,667.0],[1838.8,663.0],[1844.4,659.0],[1856.9,655.0],[1869.7,651.0],[1881.8,647.0],[1893.8,643.0],[1904.4,639.0],[1914.8,635.0],[1924.9,631.0],[1936.6,627.0],[1949.6,623.0],[1964.3,619.0],[1979.6,615.0],[1990.6,611.0],[1998.6,607.0],[2006.5,603.0],[2016.3,599.0],[2028.3,595.0],[2043.7,591.0],[2056.9,587.0],[2070.9,583.0],[2083.1,579.0],[2096.4,575.0],[2108.0,571.0],[2121.0,567.0],[2136.7,563.0],[2158.0,559.0],[2173.1,555.0],[2181.1,551.0],[2189.5,547.0],[2198.8,543.0],[2211.8,539.0],[2225.6,535.0],[2240.6,531.0],[2253.7,527.0],[2268.5,523.0],[2284.1,519.0],[2298.4,515.0],[2311.3,511.0],[2325.1,507.0],[2342.2,503.0],[2355.9,499.0],[2371.5,495.0],[2386.8,491.0],[2401.5,487.0],[2416.5,483.0],[2431.3,479.0],[2447.0,475.0],[2464.1,471.0],[2485.1,467.0],[2498.4,463.0],[2508.9,459.0],[2522.5,455.0],[2538.7,451.0],[2572.5,447.0],[2588.1,443.0],[2600.6,439.0],[2614.2,435.0],[2634.0,431.0],[2652.7,427.0],[2671.0,423.0],[2691.3,419.0],[2707.8,415.0],[2730.1,411.0],[2748.0,407.0],[2768.8,403.0],[2788.8,399.0],[2809.9,395.0],[2829.0,391.0],[2850.0,387.0],[2870.3,383.0],[2892.8,379.0],[2913.1,375.0],[2934.5,371.0],[2954.5,367.0],[2976.4,363.0],[3001.3,359.0],[3027.1,355.0],[3049.6,351.0],[3076.7,347.0],[3100.9,343.0],[3127.9,339.0],[3153.1,335.0],[3180.9,331.0],[3204.0,327.0],[3236.8,323.0],[3262.3,319.0],[3291.4,315.0],[3314.9,311.0],[3344.0,307.0],[3378.1,303.0],[3403.9,299.0],[3432.3,295.0],[3462.9,291.0],[3501.2,287.0],[3517.2,283.0],[3552.4,279.0],[3580.8,275.0],[3611.2,271.0],[3669.6,267.0],[3699.1,263.0],[3722.8,259.0],[3753.8,255.0],[3792.9,251.0],[3828.8,247.0],[3863.0,243.0],[3899.1,239.0],[3936.7,235.0],[3991.6,231.0],[4016.1,227.0],[4057.5,223.0],[4101.2,219.0],[4146.6,215.0],[4195.5,211.0],[4233.2,207.0],[4285.9,203.0],[4326.7,199.0],[4390.8,195.0],[4428.9,191.0],[4479.8,187.0],[4505.9,183.0],[4584.5,179.0],[4657.7,175.0],[4694.7,171.0],[4750.2,167.0],[4798.0,163.0],[4879.0,159.0],[4924.7,155.0],[4983.4,151.0],[5029.7,147.0],[5123.4,143.0],[5185.1,139.0],[5254.2,135.0],[5322.4,131.0],[5400.0,127.0],[5500.1,123.0],[5553.0,119.0],[5627.7,115.0],[5720.2,111.0],[5823.3,107.0],[5899.5,103.0],[6009.5,99.0],[6088.4,95.0],[6218.4,91.0],[6362.4,87.0],[6444.1,83.0],[6524.3,79.0],[6654.7,75.0],[6809.9,71.0],[6922.8,67.0],[7033.3,63.0],[7151.4,59.0],[7296.3,55.0],[7435.6,51.0],[7529.2,47.0],[7698.1,43.0],[7820.8,39.0],[7961.0,35.0]]],"wl":[[1002.3,423.6],[1484.2,744.3],[2019.5,1054.8],[2506.4,1389.4],[3020.9,1729.0],[3538.9,2072.6],[4029.0,2385.5],[4517.8,2743.9],[5024.3,3064.5],[5524.2,3360.5],[6054.7,3672.2],[6578.7,4110.5],[6593.1,4123.9],[7066.5,4533.3]],"tw_max":5.07},"to20":{"oat_max":125,"pa_v":[0,2000,4000,6000,8000,10000],"pa":[[754.22,544.68],[650.39,442.31],[540.54,327.53],[413.49,201.41],[289.51,79.89],[152.29,-58.15]],"wt_v":[4000,4500,5000,5500],"wt":[[[821.7,725.2],[823.3,722.0],[826.5,718.0],[830.1,714.0],[834.8,710.0],[840.7,706.0],[845.9,702.0],[851.3,698.0],[856.4,694.0],[862.1,690.0],[866.2,686.0],[870.5,682.0],[875.7,678.0],[881.1,674.0],[886.5,670.0],[891.8,666.0],[897.3,662.0],[902.6,658.0],[906.4,654.0],[910.1,650.0],[913.9,646.0],[917.9,642.0],[922.2,638.0],[927.5,634.0],[933.7,630.0],[939.9,626.0],[945.3,622.0],[950.7,618.0],[955.8,614.0],[960.7,610.0],[965.5,606.0],[970.3,602.0],[975.9,598.0],[981.9,594.0],[987.8,590.0],[992.6,586.0],[997.3,582.0],[1001.3,578.0],[1004.8,574.0],[1008.1,570.0],[1011.3,566.0],[1013.9,562.0],[1017.9,558.0],[1023.3,554.0],[1030.2,550.0],[1038.5,546.0],[1047.2,542.0],[1054.6,538.0],[1060.5,534.0],[1066.3,530.0],[1071.6,526.0],[1077.3,522.0],[1083.2,518.0],[1088.7,514.0],[1094.5,510.0],[1101.3,506.0],[1106.9,502.0],[1112.5,498.0],[1117.7,494.0],[1123.7,490.0],[1128.9,486.0],[1134.9,482.0],[1141.5,478.0],[1147.4,474.0],[1153.4,470.0],[1159.4,466.0],[1166.0,462.0],[1173.3,458.0],[1180.3,454.0],[1187.1,450.0],[1193.4,446.0],[1199.0,442.0],[1203.8,438.0],[1208.6,434.0],[1214.4,430.0],[1221.2,426.0],[1228.7,422.0],[1236.9,418.0],[1244.3,414.0],[1251.1,410.0],[1257.8,406.0],[1264.2,402.0],[1271.7,398.0],[1278.5,394.0],[1285.6,390.0],[1292.0,386.0],[1298.1,382.0],[1303.9,378.0],[1310.1,374.0],[1317.0,370.0],[1324.6,366.0],[1332.1,362.0],[1340.1,358.0],[1346.9,354.0],[1353.8,350.0],[1360.9,346.0],[1368.6,342.0],[1376.6,338.0],[1384.2,334.0],[1391.2,330.0],[1397.7,326.0],[1403.9,322.0],[1410.8,318.0],[1418.3,314.0],[1425.5,310.0],[1433.2,306.0],[1440.4,302.0],[1447.8,298.0],[1455.8,294.0],[1464.8,290.0],[1473.9,286.0],[1482.2,282.0],[1490.1,278.0],[1496.2,274.0],[1501.4,270.0],[1506.6,266.0],[1513.0,262.0],[1520.5,258.0],[1529.2,254.0],[1538.0,250.0],[1546.4,246.0],[1554.2,242.0],[1562.1,238.0],[1570.8,234.0],[1579.0,230.0],[1587.5,226.0],[1594.6,222.0],[1601.6,218.0],[1608.9,214.0],[1616.5,210.0],[1625.9,206.0],[1635.8,202.0],[1646.4,198.0],[1655.8,194.0],[1665.0,190.0],[1674.3,186.0],[1683.4,182.0],[1692.2,178.0],[1700.2,174.0],[1708.6,170.0],[1717.4,166.0],[1728.3,162.0],[1739.2,158.0],[1750.2,154.0],[1760.7,150.0],[1771.6,146.0],[1782.4,142.0],[1792.2,138.0],[1801.6,134.0],[1811.4,130.0],[1821.8,126.0],[1833.6,122.0],[1845.4,118.0],[1857.4,114.0],[1868.8,110.0],[1880.6,106.0],[1891.1,102.0],[1902.7,98.0],[1913.6,94.0],[1925.8,90.0],[1937.5,86.0],[1951.2,82.0],[1966.1,78.0],[1983.5,74.0],[1993.0,70.0],[2001.6,66.0],[2009.2,62.0],[2019.1,58.0],[2032.7,54.0],[2056.1,50.0],[2075.9,46.0],[2092.9,42.0],[2107.2,38.0],[2121.1,34.0],[2136.2,30.0],[2152.3,26.0],[2168.4,22.0],[2184.9,18.0],[2201.5,14.0],[2215.9,10.0],[2229.5,6.0],[2239.2,2.0]],[[959.8,725.2],[961.4,722.0],[964.7,718.0],[968.9,714.0],[975.3,710.0],[982.7,706.0],[989.7,702.0],[995.5,698.0],[1000.1,694.0],[1004.3,690.0],[1007.3,686.0],[1010.6,682.0],[1015.5,678.0],[1021.2,674.0],[1026.7,670.0],[1033.0,666.0],[1039.6,662.0],[1046.5,658.0],[1052.1,654.0],[1058.1,650.0],[1063.1,646.0],[1068.9,642.0],[1074.8,638.0],[1081.7,634.0],[1088.6,630.0],[1095.7,626.0],[1101.2,622.0],[1106.3,618.0],[1110.9,614.0],[1116.1,610.0],[1122.0,606.0],[1128.2,602.0],[1135.0,598.0],[1141.3,594.0],[1147.8,590.0],[1153.7,586.0],[1160.4,582.0],[1166.7,578.0],[1173.4,574.0],[1180.0,570.0],[1186.7,566.0],[1194.6,562.0],[1203.6,558.0],[1210.4,554.0],[1215.7,550.0],[1219.8,546.0],[1224.9,542.0],[1229.3,538.0],[1235.7,534.0],[1243.9,530.0],[1251.5,526.0],[1258.1,522.0],[1265.1,518.0],[1272.0,514.0],[1278.7,510.0],[1286.6,506.0],[1293.3,502.0],[1300.8,498.0],[1306.2,494.0],[1312.8,490.0],[1318.7,486.0],[1325.0,482.0],[1332.4,478.0],[1339.9,474.0],[1347.4,470.0],[1355.1,466.0],[1363.5,462.0],[1372.4,458.0],[1380.6,454.0],[1388.4,450.0],[1395.2,446.0],[1401.2,442.0],[1407.6,438.0],[1414.2,434.0],[1421.9,430.0],[1429.8,426.0],[1437.9,422.0],[1446.1,418.0],[1453.4,414.0],[1461.1,410.0],[1469.8,406.0],[1478.6,402.0],[1487.3,398.0],[1494.1,394.0],[1500.3,390.0],[1505.3,386.0],[1509.8,382.0],[1516.2,378.0],[1523.8,374.0],[1532.7,370.0],[1542.3,366.0],[1552.1,362.0],[1560.7,358.0],[1569.5,354.0],[1578.3,350.0],[1587.1,346.0],[1594.9,342.0],[1602.3,338.0],[1609.8,334.0],[1617.8,330.0],[1627.2,326.0],[1636.3,322.0],[1646.3,318.0],[1655.0,314.0],[1663.6,310.0],[1672.5,306.0],[1681.2,302.0],[1690.8,298.0],[1699.4,294.0],[1708.9,290.0],[1717.8,286.0],[1728.1,282.0],[1737.9,278.0],[1748.0,274.0],[1757.4,270.0],[1768.0,266.0],[1778.0,262.0],[1789.4,258.0],[1798.2,254.0],[1808.7,250.0],[1818.3,246.0],[1830.1,242.0],[1841.8,238.0],[1853.4,234.0],[1864.7,230.0],[1875.4,226.0],[1886.4,222.0],[1896.9,218.0],[1907.7,214.0],[1918.9,210.0],[1931.8,206.0],[1946.5,202.0],[1965.2,198.0],[1984.7,194.0],[1993.3,190.0],[2000.4,186.0],[2008.7,182.0],[2018.4,178.0],[2032.4,174.0],[2047.4,170.0],[2062.2,166.0],[2075.9,162.0],[2090.8,158.0],[2103.4,154.0],[2118.9,150.0],[2133.3,146.0],[2147.5,142.0],[2163.1,138.0],[2179.5,134.0],[2195.6,130.0],[2210.8,126.0],[2226.9,122.0],[2246.3,118.0],[2263.6,114.0],[2281.7,110.0],[2297.8,106.0],[2313.3,102.0],[2344.1,98.0],[2366.8,94.0],[2386.1,90.0],[2401.8,86.0],[2417.4,82.0],[2441.9,78.0],[2466.5,74.0],[2490.8,70.0],[2502.8,66.0],[2517.5,62.0],[2536.0,58.0],[2578.3,54.0],[2601.7,50.0],[2628.1,46.0],[2655.6,42.0],[2685.9,38.0],[2711.0,34.0],[2740.0,30.0],[2769.3,26.0],[2801.4,22.0],[2846.3,18.0],[2878.5,14.0],[2911.2,10.0],[2941.9,6.0],[3001.3,2.0]],[[1103.3,725.2],[1104.0,722.0],[1106.0,718.0],[1108.8,714.0],[1113.1,710.0],[1119.9,706.0],[1126.7,702.0],[1134.2,698.0],[1141.1,694.0],[1148.3,690.0],[1154.1,686.0],[1160.3,682.0],[1167.0,678.0],[1174.3,674.0],[1181.5,670.0],[1188.9,666.0],[1195.6,662.0],[1202.5,658.0],[1209.0,654.0],[1216.2,650.0],[1223.0,646.0],[1229.7,642.0],[1236.0,638.0],[1242.5,634.0],[1249.1,630.0],[1256.3,626.0],[1263.6,622.0],[1271.4,618.0],[1278.5,614.0],[1286.8,610.0],[1295.6,606.0],[1304.0,602.0],[1311.7,598.0],[1317.1,594.0],[1323.1,590.0],[1329.3,586.0],[1336.2,582.0],[1345.1,578.0],[1352.7,574.0],[1360.6,570.0],[1368.5,566.0],[1375.7,562.0],[1384.3,558.0],[1391.3,554.0],[1399.5,550.0],[1406.3,546.0],[1414.4,542.0],[1421.6,538.0],[1429.7,534.0],[1437.4,530.0],[1445.6,526.0],[1454.6,522.0],[1465.3,518.0],[1477.0,514.0],[1486.7,510.0],[1494.6,506.0],[1500.5,502.0],[1505.4,498.0],[1510.7,494.0],[1516.8,490.0],[1523.9,486.0],[1532.0,482.0],[1542.1,478.0],[1551.5,474.0],[1561.2,470.0],[1570.7,466.0],[1580.0,462.0],[1589.4,458.0],[1597.2,454.0],[1604.8,450.0],[1612.9,446.0],[1621.7,442.0],[1632.2,438.0],[1641.6,434.0],[1651.3,430.0],[1661.1,426.0],[1671.1,422.0],[1682.0,418.0],[1690.8,414.0],[1698.6,410.0],[1706.6,406.0],[1714.7,402.0],[1724.8,398.0],[1734.8,394.0],[1745.9,390.0],[1756.4,386.0],[1767.8,382.0],[1780.0,378.0],[1790.3,374.0],[1798.9,370.0],[1808.3,366.0],[1817.5,362.0],[1829.1,358.0],[1840.5,354.0],[1851.8,350.0],[1863.3,346.0],[1874.9,342.0],[1887.8,338.0],[1898.5,334.0],[1909.4,330.0],[1920.1,326.0],[1932.1,322.0],[1944.5,318.0],[1957.3,314.0],[1969.8,310.0],[1984.1,306.0],[1994.6,302.0],[2007.1,298.0],[2016.8,294.0],[2030.6,290.0],[2044.8,286.0],[2060.2,282.0],[2074.2,278.0],[2088.4,274.0],[2101.1,270.0],[2114.4,266.0],[2127.7,262.0],[2142.6,258.0],[2157.3,254.0],[2172.7,250.0],[2188.1,246.0],[2201.8,242.0],[2216.1,238.0],[2232.0,234.0],[2247.0,230.0],[2262.4,226.0],[2277.3,222.0],[2294.0,218.0],[2307.9,214.0],[2325.2,210.0],[2342.6,206.0],[2357.6,202.0],[2385.3,198.0],[2402.2,194.0],[2416.8,190.0],[2432.1,186.0],[2451.6,182.0],[2473.6,178.0],[2493.6,174.0],[2503.3,170.0],[2516.6,166.0],[2528.7,162.0],[2564.8,158.0],[2588.3,154.0],[2608.1,150.0],[2630.3,146.0],[2652.3,142.0],[2678.3,138.0],[2698.9,134.0],[2721.5,130.0],[2745.9,126.0],[2770.3,122.0],[2797.3,118.0],[2822.0,114.0],[2849.7,110.0],[2875.9,106.0],[2898.9,102.0],[2942.6,98.0],[2975.2,94.0],[2998.0,90.0],[3017.7,86.0],[3052.0,82.0],[3091.2,78.0],[3117.6,74.0],[3150.5,70.0],[3188.2,66.0],[3215.2,62.0],[3258.3,58.0],[3292.2,54.0],[3327.0,50.0],[3368.7,46.0],[3408.3,42.0],[3455.3,38.0],[3502.2,34.0],[3540.4,30.0],[3592.6,26.0],[3635.0,22.0],[3699.5,18.0],[3758.7,14.0],[3824.4,10.0],[3861.7,6.0],[3987.7,2.0]],[[1257.2,725.3],[1258.6,723.0],[1261.9,719.0],[1267.7,715.0],[1275.2,711.0],[1283.7,707.0],[1291.0,703.0],[1298.3,699.0],[1304.5,695.0],[1311.4,691.0],[1318.9,687.0],[1327.4,683.0],[1335.8,679.0],[1344.2,675.0],[1352.1,671.0],[1360.4,667.0],[1369.2,663.0],[1378.8,659.0],[1387.8,655.0],[1396.2,651.0],[1403.7,647.0],[1411.5,643.0],[1419.3,639.0],[1428.1,635.0],[1436.7,631.0],[1446.0,627.0],[1455.4,623.0],[1467.2,619.0],[1478.5,615.0],[1488.4,611.0],[1495.6,607.0],[1501.4,603.0],[1507.5,599.0],[1514.9,595.0],[1524.3,591.0],[1535.1,587.0],[1544.7,583.0],[1556.0,579.0],[1565.0,575.0],[1575.7,571.0],[1586.6,567.0],[1598.7,563.0],[1610.1,559.0],[1618.8,555.0],[1626.4,551.0],[1634.2,547.0],[1642.4,543.0],[1651.9,539.0],[1661.0,535.0],[1670.9,531.0],[1680.4,527.0],[1690.7,523.0],[1699.7,519.0],[1708.9,515.0],[1717.5,511.0],[1728.6,507.0],[1740.4,503.0],[1755.4,499.0],[1768.4,495.0],[1776.9,491.0],[1786.3,487.0],[1794.2,483.0],[1803.8,479.0],[1814.0,475.0],[1825.5,471.0],[1837.7,467.0],[1849.7,463.0],[1862.7,459.0],[1874.3,455.0],[1886.6,451.0],[1897.0,447.0],[1907.7,443.0],[1918.6,439.0],[1930.7,435.0],[1942.8,431.0],[1955.8,427.0],[1969.4,423.0],[1983.9,419.0],[1994.7,415.0],[2003.3,411.0],[2012.6,407.0],[2023.9,403.0],[2040.5,399.0],[2058.2,395.0],[2073.6,391.0],[2088.1,387.0],[2099.7,383.0],[2112.1,379.0],[2124.9,375.0],[2138.9,371.0],[2153.9,367.0],[2169.0,363.0],[2184.6,359.0],[2197.1,355.0],[2209.0,351.0],[2223.4,347.0],[2238.0,343.0],[2255.2,339.0],[2270.1,335.0],[2285.7,331.0],[2298.5,327.0],[2313.1,323.0],[2329.3,319.0],[2346.8,315.0],[2364.6,311.0],[2380.5,307.0],[2397.3,303.0],[2414.4,299.0],[2433.0,295.0],[2448.6,291.0],[2466.7,287.0],[2487.4,283.0],[2505.8,279.0],[2523.9,275.0],[2541.8,271.0],[2561.8,267.0],[2580.5,263.0],[2600.1,259.0],[2622.3,255.0],[2644.0,251.0],[2665.3,247.0],[2688.3,243.0],[2709.3,239.0],[2732.7,235.0],[2754.1,231.0],[2776.1,227.0],[2798.6,223.0],[2823.6,219.0],[2848.2,215.0],[2872.3,211.0],[2895.9,207.0],[2912.8,203.0],[2954.9,199.0],[2993.8,195.0],[3007.1,191.0],[3028.5,187.0],[3057.9,183.0],[3090.2,179.0],[3116.8,175.0],[3147.1,171.0],[3178.3,167.0],[3204.1,163.0],[3244.0,159.0],[3278.8,155.0],[3310.4,151.0],[3347.5,147.0],[3384.4,143.0],[3427.6,139.0],[3469.9,135.0],[3508.2,131.0],[3548.0,127.0],[3588.7,123.0],[3652.0,119.0],[3697.6,115.0],[3754.2,111.0],[3807.7,107.0],[3863.8,103.0],[3966.2,99.0],[4048.3,95.0],[4171.8,91.0],[4286.2,87.0],[4403.7,83.0],[4549.9,79.0],[4706.4,75.0],[4848.2,71.0],[5032.8,67.0],[5319.9,63.0],[5543.7,59.0]]],"wl":[[1004.5,380.8],[1514.1,705.1],[1998.3,1029.2],[2504.2,1350.8],[3003.3,1699.9],[3524.5,2048.5],[4010.1,2354.7],[4574.7,2711.5],[5132.9,3056.7],[5600.0,3347.4]],"tw_max":5.13},"as":{"oat_max":125,"pa_v":[0,2000,4000,6000,8000],"pa":[[755.59,490.87],[651.65,390.7],[531.99,267.0],[398.16,139.53],[275.55,16.38]],"wt_v":[4000,4500,5000,5500],"wt":[[[1613.9,752.5],[1614.0,752.0],[1615.4,748.0],[1618.0,744.0],[1621.9,740.0],[1627.5,736.0],[1633.4,732.0],[1639.4,728.0],[1645.3,724.0],[1650.8,720.0],[1656.1,716.0],[1662.9,712.0],[1668.6,708.0],[1675.2,704.0],[1681.0,700.0],[1687.3,696.0],[1692.1,692.0],[1697.2,688.0],[1702.8,684.0],[1707.5,680.0],[1712.0,676.0],[1716.9,672.0],[1722.4,668.0],[1728.3,664.0],[1735.0,660.0],[1741.6,656.0],[1748.2,652.0],[1754.0,648.0],[1759.9,644.0],[1765.8,640.0],[1771.9,636.0],[1778.4,632.0],[1785.2,628.0],[1791.6,624.0],[1797.9,620.0],[1802.8,616.0],[1807.2,612.0],[1811.7,608.0],[1817.0,604.0],[1823.2,600.0],[1829.9,596.0],[1837.3,592.0],[1844.0,588.0],[1850.2,584.0],[1856.7,580.0],[1863.1,576.0],[1870.3,572.0],[1877.8,568.0],[1885.2,564.0],[1892.0,560.0],[1898.0,556.0],[1903.4,552.0],[1908.0,548.0],[1913.0,544.0],[1919.1,540.0],[1924.1,536.0],[1928.9,532.0],[1934.8,528.0],[1941.1,524.0],[1947.8,520.0],[1955.3,516.0],[1963.8,512.0],[1972.3,508.0],[1980.7,504.0],[1988.9,500.0],[1994.7,496.0],[1999.5,492.0],[2002.9,488.0],[2006.3,484.0],[2011.8,480.0],[2018.3,476.0],[2025.5,472.0],[2033.0,468.0],[2040.7,464.0],[2047.9,460.0],[2055.0,456.0],[2062.4,452.0],[2070.5,448.0],[2078.4,444.0],[2086.3,440.0],[2093.4,436.0],[2099.8,432.0],[2105.9,428.0],[2112.4,424.0],[2119.6,420.0],[2127.5,416.0],[2135.3,412.0],[2144.5,408.0],[2153.0,404.0],[2161.7,400.0],[2169.2,396.0],[2176.7,392.0],[2183.9,388.0],[2191.1,384.0],[2198.4,380.0],[2204.5,376.0],[2210.6,372.0],[2217.3,368.0],[2225.0,364.0],[2232.8,360.0],[2240.7,356.0],[2247.8,352.0],[2254.8,348.0],[2261.8,344.0],[2269.8,340.0],[2277.3,336.0],[2285.1,332.0],[2291.8,328.0],[2298.0,324.0],[2304.8,320.0],[2312.2,316.0],[2320.5,312.0],[2329.7,308.0],[2340.7,304.0],[2350.4,300.0],[2360.1,296.0],[2366.6,292.0],[2374.8,288.0],[2382.0,284.0],[2390.0,280.0],[2397.9,276.0],[2405.5,272.0],[2413.1,268.0],[2421.8,264.0],[2430.2,260.0],[2439.0,256.0],[2447.4,252.0],[2456.4,248.0],[2466.4,244.0],[2476.2,240.0],[2485.0,236.0],[2491.6,232.0],[2497.5,228.0],[2503.5,224.0],[2511.4,220.0],[2521.0,216.0],[2531.7,212.0],[2542.2,208.0],[2553.4,204.0],[2562.9,200.0],[2573.8,196.0],[2580.3,192.0],[2588.9,188.0],[2595.5,184.0],[2603.9,180.0],[2612.5,176.0],[2622.0,172.0],[2631.5,168.0],[2641.7,164.0],[2651.1,160.0],[2661.7,156.0],[2671.6,152.0],[2681.6,148.0],[2690.1,144.0],[2698.3,140.0],[2706.9,136.0],[2715.7,132.0],[2725.2,128.0],[2734.7,124.0],[2743.7,120.0],[2753.2,116.0],[2762.8,112.0],[2773.0,108.0],[2783.7,104.0],[2792.7,100.0],[2802.4,96.0],[2810.3,92.0],[2819.9,88.0],[2829.6,84.0],[2840.0,80.0],[2850.6,76.0],[2861.2,72.0],[2871.7,68.0],[2882.4,64.0],[2891.6,60.0],[2900.9,56.0],[2909.4,52.0],[2918.6,48.0],[2928.7,44.0],[2938.9,40.0],[2950.0,36.0],[2960.8,32.0],[2969.9,28.0]],[[1886.7,754.0],[1889.8,750.0],[1893.4,746.0],[1898.7,742.0],[1904.6,738.0],[1910.7,734.0],[1916.6,730.0],[1923.3,726.0],[1931.0,722.0],[1938.5,718.0],[1947.6,714.0],[1957.3,710.0],[1966.3,706.0],[1974.8,702.0],[1982.5,698.0],[1989.1,694.0],[1994.5,690.0],[2000.3,686.0],[2005.8,682.0],[2010.5,678.0],[2016.6,674.0],[2023.9,670.0],[2032.2,666.0],[2041.1,662.0],[2049.8,658.0],[2057.6,654.0],[2065.3,650.0],[2073.4,646.0],[2082.0,642.0],[2090.5,638.0],[2098.6,634.0],[2106.0,630.0],[2113.3,626.0],[2121.0,622.0],[2129.4,618.0],[2136.2,614.0],[2143.8,610.0],[2151.3,606.0],[2159.5,602.0],[2169.4,598.0],[2180.1,594.0],[2190.4,590.0],[2198.7,586.0],[2205.6,582.0],[2212.3,578.0],[2218.9,574.0],[2226.3,570.0],[2234.1,566.0],[2242.7,562.0],[2250.6,558.0],[2258.6,554.0],[2266.9,550.0],[2275.6,546.0],[2284.2,542.0],[2291.4,538.0],[2296.5,534.0],[2303.2,530.0],[2310.3,526.0],[2319.7,522.0],[2329.7,518.0],[2340.6,514.0],[2350.2,510.0],[2361.0,506.0],[2372.4,502.0],[2383.6,498.0],[2390.8,494.0],[2398.1,490.0],[2403.6,486.0],[2410.9,482.0],[2418.6,478.0],[2427.7,474.0],[2436.7,470.0],[2446.8,466.0],[2456.4,462.0],[2467.5,458.0],[2477.6,454.0],[2487.4,450.0],[2494.7,446.0],[2501.6,442.0],[2507.9,438.0],[2515.7,434.0],[2524.4,430.0],[2535.0,426.0],[2545.5,422.0],[2556.5,418.0],[2565.2,414.0],[2574.0,410.0],[2583.2,406.0],[2591.9,402.0],[2601.6,398.0],[2610.2,394.0],[2619.3,390.0],[2628.7,386.0],[2637.9,382.0],[2648.8,378.0],[2658.1,374.0],[2668.7,370.0],[2678.3,366.0],[2688.6,362.0],[2697.2,358.0],[2706.3,354.0],[2714.8,350.0],[2725.0,346.0],[2734.4,342.0],[2745.1,338.0],[2754.4,334.0],[2764.6,330.0],[2774.5,326.0],[2784.7,322.0],[2794.1,318.0],[2802.7,314.0],[2810.3,310.0],[2820.1,306.0],[2830.9,302.0],[2846.2,298.0],[2858.7,294.0],[2869.6,290.0],[2879.8,286.0],[2889.6,282.0],[2899.5,278.0],[2909.4,274.0],[2919.5,270.0],[2930.6,266.0],[2941.5,262.0],[2953.5,258.0],[2965.4,254.0],[2978.2,250.0],[2989.2,246.0],[2997.8,242.0],[3007.3,238.0],[3017.1,234.0],[3029.6,230.0],[3042.7,226.0],[3054.7,222.0],[3067.5,218.0],[3078.8,214.0],[3089.5,210.0],[3100.0,206.0],[3111.1,202.0],[3125.3,198.0],[3138.0,194.0],[3152.3,190.0],[3165.1,186.0],[3178.9,182.0],[3191.8,178.0],[3203.1,174.0],[3214.9,170.0],[3228.8,166.0],[3242.3,162.0],[3257.2,158.0],[3271.3,154.0],[3285.8,150.0],[3298.4,146.0],[3311.1,142.0],[3326.2,138.0],[3340.2,134.0],[3355.1,130.0],[3369.3,126.0],[3383.7,122.0],[3398.0,118.0],[3411.0,114.0],[3425.8,110.0],[3441.1,106.0],[3458.5,102.0],[3479.9,98.0],[3490.6,94.0],[3498.9,90.0],[3507.6,86.0],[3518.9,82.0],[3535.8,78.0],[3562.2,74.0],[3582.6,70.0],[3596.5,66.0],[3610.4,62.0],[3629.9,58.0],[3647.6,54.0],[3666.4,50.0],[3685.1,46.0],[3699.7,42.0],[3717.3,38.0],[3734.2,34.0],[3751.6,30.0],[3763.7,26.0]],[[2219.0,753.9],[2220.8,751.0],[2224.6,747.0],[2230.5,743.0],[2238.3,739.0],[2246.8,735.0],[2256.2,731.0],[2264.3,727.0],[2273.3,723.0],[2280.7,719.0],[2288.6,715.0],[2295.9,711.0],[2302.7,707.0],[2310.8,703.0],[2318.1,699.0],[2327.3,695.0],[2335.7,691.0],[2345.6,687.0],[2355.0,683.0],[2364.6,679.0],[2374.6,675.0],[2384.1,671.0],[2393.2,667.0],[2401.2,663.0],[2409.3,659.0],[2417.2,655.0],[2426.0,651.0],[2435.1,647.0],[2444.6,643.0],[2454.2,639.0],[2464.0,635.0],[2474.5,631.0],[2485.0,627.0],[2494.3,623.0],[2502.1,619.0],[2508.1,615.0],[2513.0,611.0],[2518.2,607.0],[2524.5,603.0],[2534.0,599.0],[2545.5,595.0],[2560.7,591.0],[2573.0,587.0],[2584.4,583.0],[2594.7,579.0],[2603.8,575.0],[2612.9,571.0],[2621.9,567.0],[2631.4,563.0],[2641.2,559.0],[2651.1,555.0],[2660.8,551.0],[2671.2,547.0],[2681.4,543.0],[2691.7,539.0],[2698.5,535.0],[2705.9,531.0],[2713.3,527.0],[2722.8,523.0],[2735.3,519.0],[2747.4,515.0],[2757.0,511.0],[2767.2,507.0],[2777.8,503.0],[2792.2,499.0],[2801.8,495.0],[2810.7,491.0],[2819.9,487.0],[2829.2,483.0],[2840.8,479.0],[2850.3,475.0],[2860.5,471.0],[2870.7,467.0],[2881.0,463.0],[2892.2,459.0],[2901.1,455.0],[2910.9,451.0],[2920.0,447.0],[2931.0,443.0],[2942.3,439.0],[2954.4,435.0],[2967.2,431.0],[2981.9,427.0],[2990.8,423.0],[2998.2,419.0],[3004.1,415.0],[3009.5,411.0],[3015.9,407.0],[3025.4,403.0],[3037.6,399.0],[3055.9,395.0],[3071.4,391.0],[3085.7,387.0],[3095.7,383.0],[3108.0,379.0],[3119.0,375.0],[3132.2,371.0],[3144.8,367.0],[3157.6,363.0],[3170.3,359.0],[3183.1,355.0],[3194.4,351.0],[3206.4,347.0],[3218.0,343.0],[3231.8,339.0],[3244.1,335.0],[3257.2,331.0],[3270.5,327.0],[3283.8,323.0],[3296.1,319.0],[3306.8,315.0],[3318.0,311.0],[3331.5,307.0],[3347.0,303.0],[3366.7,299.0],[3380.9,295.0],[3390.9,291.0],[3402.1,287.0],[3413.3,283.0],[3427.1,279.0],[3439.7,275.0],[3453.3,271.0],[3467.1,267.0],[3482.5,263.0],[3495.2,259.0],[3506.1,255.0],[3518.7,251.0],[3533.7,247.0],[3548.7,243.0],[3563.4,239.0],[3578.4,235.0],[3593.3,231.0],[3606.4,227.0],[3621.4,223.0],[3638.0,219.0],[3653.1,215.0],[3668.8,211.0],[3686.1,207.0],[3699.7,203.0],[3717.7,199.0],[3737.4,195.0],[3750.9,191.0],[3766.4,187.0],[3783.6,183.0],[3799.7,179.0],[3814.7,175.0],[3832.2,171.0],[3848.6,167.0],[3866.8,163.0],[3885.6,159.0],[3901.8,155.0],[3918.8,151.0],[3935.5,147.0],[3954.8,143.0],[3975.7,139.0],[3991.8,135.0],[4005.7,131.0],[4025.4,127.0],[4045.8,123.0],[4067.7,119.0],[4088.7,115.0],[4105.8,111.0],[4125.7,107.0],[4147.5,103.0],[4182.2,99.0],[4208.5,95.0],[4220.2,91.0],[4234.8,87.0],[4254.7,83.0],[4281.7,79.0],[4301.6,75.0],[4324.1,71.0],[4347.3,67.0],[4374.1,63.0],[4399.6,59.0],[4424.2,55.0],[4450.4,51.0],[4486.6,47.0],[4498.8,43.0],[4542.4,39.0],[4585.1,35.0],[4618.4,31.0],[4639.2,27.0]],[[2578.3,754.7],[2582.4,751.0],[2588.1,747.0],[2596.7,743.0],[2605.1,739.0],[2614.5,735.0],[2623.7,731.0],[2634.7,727.0],[2647.0,723.0],[2658.1,719.0],[2669.1,715.0],[2679.4,711.0],[2689.0,707.0],[2699.6,703.0],[2709.8,699.0],[2721.8,695.0],[2733.5,691.0],[2745.3,687.0],[2757.2,683.0],[2769.6,679.0],[2782.4,675.0],[2794.5,671.0],[2804.3,667.0],[2814.9,663.0],[2825.6,659.0],[2837.9,655.0],[2849.9,651.0],[2861.7,647.0],[2874.0,643.0],[2886.4,639.0],[2898.4,635.0],[2908.7,631.0],[2919.4,627.0],[2931.1,623.0],[2943.4,619.0],[2956.2,615.0],[2970.1,611.0],[2985.2,607.0],[2996.8,603.0],[3006.3,599.0],[3014.6,595.0],[3024.2,591.0],[3036.4,587.0],[3050.1,583.0],[3063.8,579.0],[3076.6,575.0],[3088.5,571.0],[3099.5,567.0],[3110.5,563.0],[3123.6,559.0],[3136.6,555.0],[3149.4,551.0],[3162.6,547.0],[3176.8,543.0],[3197.6,539.0],[3216.3,535.0],[3225.4,531.0],[3233.2,527.0],[3241.4,523.0],[3253.0,519.0],[3266.9,515.0],[3280.8,511.0],[3294.4,507.0],[3305.7,503.0],[3319.4,499.0],[3331.4,495.0],[3344.7,491.0],[3358.1,487.0],[3371.4,483.0],[3386.1,479.0],[3398.6,475.0],[3409.8,471.0],[3422.9,467.0],[3434.3,463.0],[3451.3,459.0],[3466.3,455.0],[3483.5,451.0],[3495.0,447.0],[3503.0,443.0],[3510.4,439.0],[3517.5,435.0],[3528.6,431.0],[3543.3,427.0],[3566.8,423.0],[3585.8,419.0],[3598.6,415.0],[3611.1,411.0],[3625.9,407.0],[3642.4,403.0],[3663.4,399.0],[3677.1,395.0],[3687.8,391.0],[3699.7,387.0],[3712.3,383.0],[3728.5,379.0],[3743.0,375.0],[3757.3,371.0],[3772.4,367.0],[3787.6,363.0],[3802.1,359.0],[3816.1,355.0],[3831.6,351.0],[3846.4,347.0],[3861.7,343.0],[3877.2,339.0],[3891.9,335.0],[3905.9,331.0],[3920.5,327.0],[3936.8,323.0],[3955.9,319.0],[3975.0,315.0],[3989.1,311.0],[3999.3,307.0],[4011.5,303.0],[4033.6,299.0],[4057.1,295.0],[4070.6,291.0],[4087.3,287.0],[4101.5,283.0],[4118.7,279.0],[4132.8,275.0],[4148.8,271.0],[4164.9,267.0],[4181.1,263.0],[4198.0,259.0],[4214.5,255.0],[4232.0,251.0],[4250.7,247.0],[4269.6,243.0],[4290.3,239.0],[4305.0,235.0],[4323.7,231.0],[4343.6,227.0],[4363.1,223.0],[4385.6,219.0],[4401.1,215.0],[4421.0,211.0],[4439.6,207.0],[4459.4,203.0],[4485.4,199.0],[4500.3,195.0],[4521.1,191.0],[4560.0,187.0],[4592.5,183.0],[4618.8,179.0],[4637.4,175.0],[4660.5,171.0],[4683.5,167.0],[4707.6,163.0],[4732.6,159.0],[4755.0,155.0],[4778.9,151.0],[4804.9,147.0],[4827.0,143.0],[4855.1,139.0],[4880.6,135.0],[4906.6,131.0],[4931.1,127.0],[4958.8,123.0],[4991.5,119.0],[5019.7,115.0],[5040.4,111.0],[5071.2,107.0],[5095.5,103.0],[5149.1,99.0],[5171.1,95.0],[5202.8,91.0],[5237.0,87.0],[5269.2,83.0],[5319.4,79.0],[5348.4,75.0],[5392.3,71.0],[5436.2,67.0],[5479.6,63.0],[5546.7,59.0],[5568.6,55.0],[5616.3,51.0],[5662.0,47.0],[5715.2,43.0],[5784.3,39.0],[5828.0,35.0],[5894.2,31.0]]],"wl":[[1497.6,711.0],[2003.4,1019.9],[2496.8,1352.1],[2996.9,1699.9],[3213.3,1875.5],[3500.8,2026.5],[4018.3,2338.8],[4558.6,2710.7],[5084.3,3021.1],[5593.2,3348.3],[6133.9,3706.8]],"tw_max":0.0},"ld":{"oat_max":120,"pa_v":[0,4000,8000,10000],"pa":[[451.81,283.83],[349.07,179.61],[244.42,67.86],[186.57,29.08]],"wt_v":[4000,4500,5000,5500],"wt":[[[1646.5,421.9],[1646.8,421.0],[1648.5,417.0],[1651.4,413.0],[1655.5,409.0],[1661.0,405.0],[1666.3,401.0],[1672.2,397.0],[1677.3,393.0],[1682.0,389.0],[1686.6,385.0],[1692.2,381.0],[1698.2,377.0],[1704.0,373.0],[1709.8,369.0],[1715.8,365.0],[1721.4,361.0],[1727.0,357.0],[1732.8,353.0],[1738.6,349.0],[1744.7,345.0],[1750.7,341.0],[1757.0,337.0],[1762.6,333.0],[1768.4,329.0],[1774.9,325.0],[1781.7,321.0],[1789.4,317.0],[1795.4,313.0],[1800.3,309.0],[1804.5,305.0],[1809.5,301.0],[1818.2,297.0],[1825.8,293.0],[1833.0,289.0],[1840.0,285.0],[1846.3,281.0],[1853.7,277.0],[1860.2,273.0],[1867.2,269.0],[1874.9,265.0],[1881.3,261.0],[1889.3,257.0],[1896.2,253.0],[1903.7,249.0],[1911.3,245.0],[1919.3,241.0],[1925.6,237.0],[1933.0,233.0],[1952.4,229.0],[1958.7,225.0],[1961.7,221.0],[1967.1,217.0],[1973.7,213.0],[1981.9,209.0],[1990.2,205.0],[1999.3,201.0],[2008.5,197.0],[2016.9,193.0],[2025.3,189.0],[2035.1,185.0],[2042.6,181.0],[2052.9,177.0],[2061.4,173.0],[2071.3,169.0],[2080.1,165.0],[2089.5,161.0],[2102.5,157.0],[2111.1,153.0],[2121.0,149.0],[2130.2,145.0],[2140.1,141.0],[2152.2,137.0],[2161.5,133.0],[2171.2,129.0],[2181.8,125.0],[2194.9,121.0],[2202.9,117.0],[2214.0,113.0],[2226.1,109.0],[2237.0,105.0],[2246.9,101.0],[2262.4,97.0],[2271.5,93.0],[2282.3,89.0],[2293.8,85.0],[2305.6,81.0],[2319.0,77.0],[2330.5,73.0],[2342.5,69.0],[2357.3,65.0],[2372.2,61.0],[2394.5,57.0],[2411.3,53.0],[2424.7,49.0],[2440.7,45.0],[2456.0,41.0],[2474.8,37.0],[2490.9,33.0],[2506.8,29.0],[2525.6,25.0],[2537.6,21.0]],[[1868.5,421.1],[1869.5,419.0],[1871.7,415.0],[1875.7,411.0],[1880.6,407.0],[1885.8,403.0],[1892.5,399.0],[1898.7,395.0],[1905.3,391.0],[1911.8,387.0],[1918.5,383.0],[1924.6,379.0],[1930.6,375.0],[1937.2,371.0],[1943.5,367.0],[1949.8,363.0],[1957.1,359.0],[1963.1,355.0],[1969.7,351.0],[1976.3,347.0],[1983.3,343.0],[1991.9,339.0],[1998.5,335.0],[2002.8,331.0],[2009.0,327.0],[2017.0,323.0],[2025.8,319.0],[2034.4,315.0],[2041.1,311.0],[2047.6,307.0],[2054.3,303.0],[2066.9,299.0],[2076.6,295.0],[2080.4,291.0],[2086.2,287.0],[2092.6,283.0],[2103.6,279.0],[2112.2,275.0],[2120.5,271.0],[2128.6,267.0],[2136.9,263.0],[2146.3,259.0],[2154.7,255.0],[2162.4,251.0],[2171.1,247.0],[2179.4,243.0],[2187.4,239.0],[2197.3,235.0],[2215.8,231.0],[2230.6,227.0],[2235.3,223.0],[2239.0,219.0],[2245.3,215.0],[2253.7,211.0],[2262.6,207.0],[2270.7,203.0],[2284.6,199.0],[2292.8,195.0],[2301.9,191.0],[2311.7,187.0],[2321.5,183.0],[2333.9,179.0],[2343.2,175.0],[2353.8,171.0],[2364.9,167.0],[2379.4,163.0],[2397.4,159.0],[2409.7,155.0],[2418.2,151.0],[2430.3,147.0],[2441.5,143.0],[2455.2,139.0],[2466.4,135.0],[2477.6,131.0],[2490.6,127.0],[2501.9,123.0],[2515.5,119.0],[2528.3,115.0],[2540.9,111.0],[2554.2,107.0],[2566.1,103.0],[2586.5,99.0],[2597.5,95.0],[2610.8,91.0],[2619.2,87.0],[2633.7,83.0],[2648.4,79.0],[2663.3,75.0],[2677.2,71.0],[2690.3,67.0],[2704.4,63.0],[2721.6,59.0],[2737.4,55.0],[2755.1,51.0],[2772.5,47.0],[2789.5,43.0],[2814.6,39.0],[2829.9,35.0]],[[2083.8,421.9],[2085.8,418.0],[2089.1,414.0],[2095.0,410.0],[2101.5,406.0],[2111.0,402.0],[2118.2,398.0],[2125.0,394.0],[2131.7,390.0],[2138.8,386.0],[2146.3,382.0],[2154.9,378.0],[2161.3,374.0],[2168.2,370.0],[2176.7,366.0],[2184.9,362.0],[2196.8,358.0],[2202.0,354.0],[2206.8,350.0],[2215.3,346.0],[2223.7,342.0],[2232.7,338.0],[2240.6,334.0],[2247.8,330.0],[2255.9,326.0],[2264.5,322.0],[2273.5,318.0],[2281.0,314.0],[2288.9,310.0],[2297.9,306.0],[2307.1,302.0],[2320.1,298.0],[2327.4,294.0],[2334.2,290.0],[2343.1,286.0],[2352.6,282.0],[2363.2,278.0],[2375.0,274.0],[2388.6,270.0],[2402.0,266.0],[2412.9,262.0],[2423.0,258.0],[2432.8,254.0],[2444.6,250.0],[2455.0,246.0],[2462.9,242.0],[2471.1,238.0],[2492.2,234.0],[2499.0,230.0],[2512.8,226.0],[2524.4,222.0],[2537.3,218.0],[2548.3,214.0],[2559.4,210.0],[2570.9,206.0],[2579.3,202.0],[2599.0,198.0],[2612.8,194.0],[2618.8,190.0],[2629.8,186.0],[2641.8,182.0],[2655.2,178.0],[2666.1,174.0],[2678.6,170.0],[2691.6,166.0],[2701.5,162.0],[2716.4,158.0],[2726.8,154.0],[2738.0,150.0],[2749.4,146.0],[2760.6,142.0],[2776.2,138.0],[2787.0,134.0],[2800.3,130.0],[2814.3,126.0],[2825.7,122.0],[2844.7,118.0],[2855.2,114.0],[2869.1,110.0],[2881.4,106.0],[2894.1,102.0],[2913.6,98.0],[2922.1,94.0],[2936.8,90.0],[2950.5,86.0],[2964.4,82.0],[2981.3,78.0],[2997.6,74.0],[3013.3,70.0],[3029.2,66.0],[3051.0,62.0],[3078.7,58.0],[3089.7,54.0],[3103.3,50.0],[3120.1,46.0],[3140.5,42.0],[3157.0,38.0]],[[2315.7,421.3],[2316.8,419.0],[2319.6,415.0],[2324.7,411.0],[2331.8,407.0],[2342.2,403.0],[2350.7,399.0],[2358.3,395.0],[2367.3,391.0],[2378.3,387.0],[2389.9,383.0],[2403.2,379.0],[2412.4,375.0],[2417.7,371.0],[2426.7,367.0],[2434.8,363.0],[2445.8,359.0],[2454.7,355.0],[2462.8,351.0],[2471.2,347.0],[2480.1,343.0],[2490.8,339.0],[2497.4,335.0],[2504.0,331.0],[2514.1,327.0],[2527.2,323.0],[2537.9,319.0],[2546.8,315.0],[2555.8,311.0],[2564.2,307.0],[2572.8,303.0],[2589.7,299.0],[2601.4,295.0],[2606.6,291.0],[2616.6,287.0],[2623.9,283.0],[2642.3,279.0],[2653.9,275.0],[2664.0,271.0],[2675.9,267.0],[2688.5,263.0],[2701.3,259.0],[2712.8,255.0],[2724.6,251.0],[2736.9,247.0],[2748.3,243.0],[2763.3,239.0],[2776.5,235.0],[2786.3,231.0],[2798.7,227.0],[2812.8,223.0],[2827.1,219.0],[2839.6,215.0],[2852.1,211.0],[2865.0,207.0],[2877.0,203.0],[2899.6,199.0],[2918.6,195.0],[2924.2,191.0],[2932.2,187.0],[2945.4,183.0],[2963.3,179.0],[2975.5,175.0],[2988.9,171.0],[3003.6,167.0],[3020.3,163.0],[3034.0,159.0],[3053.1,155.0],[3075.0,151.0],[3087.2,147.0],[3098.3,143.0],[3114.8,139.0],[3127.3,135.0],[3141.6,131.0],[3157.5,127.0],[3170.1,123.0],[3187.1,119.0],[3200.6,115.0],[3215.8,111.0],[3231.8,107.0],[3241.3,103.0],[3264.5,99.0],[3278.8,95.0],[3290.4,91.0],[3305.9,87.0],[3320.9,83.0],[3340.7,79.0],[3355.1,75.0],[3371.0,71.0],[3387.8,67.0],[3403.6,63.0],[3426.8,59.0]]],"wl":[[1715.4,942.4],[1903.9,1110.3],[2099.3,1286.1],[2286.2,1448.9],[2521.2,1613.7],[2733.2,1774.7],[3158.8,2137.7],[3361.3,2278.4]],"tw_max":5.21}};
+function li(xp,fp,x){let n=xp.length;if(xp[0]>xp[n-1]){xp=xp.slice().reverse();fp=fp.slice().reverse();}let i=0;while(i<n-2&&x>xp[i+1])i++;return fp[i]+(fp[i+1]-fp[i])*(x-xp[i])/(xp[i+1]-xp[i]);}
+// One cross-plot chart: OAT and PA give a reference line, the weight curves turn it into a zero-wind distance, the wind guide lines carry it to the wind.
+function run(m,i){
+  const fl=new Set();const oat=Math.max(-20,Math.min(m.oat_max+15,i.oatF));
+  const ref=li(m.pa_v,m.pa.map(p=>p[0]+(p[1]-p[0])*oat/m.oat_max),i.pa);
+  const W=m.wt_v;let j=0;while(j<W.length-2&&i.wt>W[j+1])j++;
+  const byW=m.wt.map(w=>li(w.map(q=>q[1]),w.map(q=>q[0]),ref));
+  [j,j+1].forEach(k=>{const w=m.wt[k];if(ref<w[w.length-1][1]-2||ref>w[0][1]+2)fl.add('ext');});
+  const d0=byW[j]+(byW[j+1]-byW[j])*(i.wt-W[j])/(W[j+1]-W[j]);
+  const a=m.wl.map(l=>l[0]);if(d0<a[0]-25||d0>a[a.length-1]+25)fl.add('ext');
+  let k=0;while(k<a.length-2&&d0>a[k+1])k++;const t=(d0-a[k])/(a[k+1]-a[k]);
+  let wind=Math.min(30,i.wind),tw=null;
+  if(wind<0&&m.tw_max<1){ // accel-stop has no tailwind lines: borrow the flaps-up takeoff ratio
+    const T=run(CH.to0,{...i,wind}),T0=run(CH.to0,{...i,wind:0});tw=T.dw/T0.dw;fl.add('astw');
+    return {ref,byW,j,d0,dw:d0*tw,fl};}
+  wind=Math.max(-m.tw_max,wind);
+  const at=l=>l[0]+(l[1]-l[0])*wind/30;
+  return {ref,byW,j,d0,dw:at(m.wl[k])+t*(at(m.wl[k+1])-at(m.wl[k])),fl};
 }
+const SPD={to0:[94,97,102,107],to20:[92,93,94,94.5],ld:[94,100,105,110]};
+const spd=(k,w)=>li([4000,4500,5000,5500],SPD[k],Math.max(4000,w));
+const kias=m=>Math.ceil(m/1.15078); // chart speeds are mph IAS; N600NJ's ASI reads knots
+const grf=(k,w)=>k==='to0'?0.78:k==='to20'?0.80-0.08*(Math.max(4000,Math.min(5500,w))-4000)/1500:0.37;
+const PAMAX={to0:10000,to20:10000,as:8000,ld:10000};
 const $=id=>document.getElementById(id);
 const ids=['stn','oId','oRwy','elev','alt','oat','rwy','asda','lda','hdg','wdir','wspd','wcred','wt','lwt','pad','spgRwy'];
 // KSPG declared distances (FAA NASR cycle 2026-10-01). Verify against the current Chart Supplement.
 const SPG={elev:7,rwy:{'7':{hdg:62,tora:3646,asda:3376,lda:2849},'25':{hdg:242,tora:3180,asda:3312,lda:3042},'18':{hdg:180,tora:2864,asda:2749,lda:2559},'36':{hdg:360,tora:2864,asda:2674,lda:2559}}};
-let mode='norm', site='home', ph='to', lmode='norm';
-try{const s=JSON.parse(localStorage.getItem('sen3to2')||'null');if(s){ids.forEach(k=>{if(s[k]!=null&&s[k]!=='')$(k).value=s[k]});if(s.mode)mode=s.mode;if(s.site)site=s.site;if(s.ph)ph=s.ph;if(s.lmode)lmode=s.lmode;window.__oR=s.oRwy;}}catch(e){}
+let mode='f0', site='home', ph='to';
+try{const s=JSON.parse(localStorage.getItem('n600to1')||'null');if(s){ids.forEach(k=>{if(s[k]!=null&&s[k]!=='')$(k).value=s[k]});if(s.site)site=s.site;if(s.ph)ph=s.ph;window.__oR=s.oRwy;}}catch(e){}
 function setSite(m){site=m;$('sHome').setAttribute('aria-pressed',m==='home');$('sOther').setAttribute('aria-pressed',m==='other');$('fsHome').hidden=m!=='home';$('fsOther').hidden=m==='home';$('stn').readOnly=true;$('stn').value=m==='home'?'KSPG':($('oId').value||'').toUpperCase();calc();}
 $('sHome').onclick=()=>setSite('home');$('sOther').onclick=()=>setSite('other');
 const fmt=n=>Math.round(n).toLocaleString('en-US');
 const up=n=>Math.ceil(n/10)*10;
-function setMode(m){mode=m;$('mNorm').setAttribute('aria-pressed',m==='norm');$('mMax').setAttribute('aria-pressed',m==='max');calc();}
-$('mNorm').onclick=()=>setMode('norm');$('mMax').onclick=()=>setMode('max');
-function setPh(p){ph=p;document.body.dataset.ph=p;['To','Ld','Wb'].forEach(k=>$('ph'+k).setAttribute('aria-pressed',p===k.toLowerCase()));$('h1').textContent={to:'Seneca III Takeoff Card',ld:'Seneca III Landing Card',wb:'Seneca III Weight & Balance'}[p];$('tagl').textContent='PA-34-220T Seneca III · POH Report VB-1110 · '+(p==='wb'?'Sections 2 and 6':'Section 5');$('wNote').hidden=true;if(p==='wb'){calc();wbRun();return;}if(site==='other'&&curApt)lookupApt(true);else calc();}
+const toF=c=>c*9/5+32;
+function setMode(m){mode=m;$('mF20').setAttribute('aria-pressed',m==='f20');$('mF0').setAttribute('aria-pressed',m==='f0');calc();}
+$('mF20').onclick=()=>setMode('f20');$('mF0').onclick=()=>setMode('f0');
+function setPh(p){ph=p;try{$('oRwy').blur();}catch(e){}document.body.dataset.ph=p;['To','Ld','Wb'].forEach(k=>$('ph'+k).setAttribute('aria-pressed',p===k.toLowerCase()));$('h1').textContent={to:'N600NJ Takeoff Card',ld:'N600NJ Landing Card',wb:'N600NJ Weight & Balance'}[p];$('tagl').textContent='Aerostar 600 · N600NJ · S/N 60-0199-088 · '+(p==='wb'?'TCDS A17WE and AFMS ER94105':'Owner’s Manual Section 7');$('wNote').hidden=true;if(p==='wb'){calc();wbRun();return;}if(site==='other'&&curApt)lookupApt(true);else calc();}
 $('phTo').onclick=()=>setPh('to');$('phLd').onclick=()=>setPh('ld');$('phWb').onclick=()=>setPh('wb');
-function setLMode(m){lmode=m;$('lNorm').setAttribute('aria-pressed',m==='norm');$('lShort').setAttribute('aria-pressed',m==='short');calc();}
-$('lNorm').onclick=()=>setLMode('norm');$('lShort').onclick=()=>setLMode('short');
-const VB={norm:[76,90],short:[68,82]};const vbar=(m,w)=>VB[m][0]+(VB[m][1]-VB[m][0])*(Math.max(3000,Math.min(4513,w))-3000)/1500;
 ids.forEach(k=>$(k).addEventListener('input',calc));
 $('f').addEventListener('submit',e=>e.preventDefault());
+function chartFlags(c,keys,wt,lim){
+  const f=[];const {pa,oatF,wind}=c;
+  if(oatF<-0.5)f.push(`OAT ${Math.round(oatF)}°F is below the charts’ 0°F edge.`);
+  const om=keys.includes('ld')?120:125;if(oatF>om+0.5)f.push(`OAT ${Math.round(oatF)}°F is above the chart’s ${om}°F edge.`);
+  const pm=Math.min(...keys.map(k=>PAMAX[k]));if(pa<-100||pa>pm)f.push(`Pressure altitude ${fmt(pa)} ft is outside the chart (sea level to ${fmt(pm)} ft).`);
+  if(wt>lim)f.push(`Weight is above N600NJ’s ${fmt(lim)} lb maximum ${keys.includes('ld')?'landing':'takeoff'} weight.`);
+  else if(wt>5500)f.push('Above 5,500 lb the manual has no chart data. The distance is extended from the 5,000 and 5,500 lb lines, so treat it as an estimate.');
+  if(wt<4000)f.push('Weight is below the charts’ 4,000 lb minimum.');
+  if(wind>30)f.push('Headwind credit is capped at the chart’s 30 kt.');
+  if(wind<-5)f.push('Tailwind is beyond the chart’s 5 kt limit.');
+  return f;
+}
 let ctx=null;
 function calc(){
   const v=k=>parseFloat($(k).value);
@@ -341,89 +358,71 @@ function calc(){
   if(site==='home'){const R=SPG.rwy[$('spgRwy').value];elev=SPG.elev;rwy=R.tora;asda=R.asda;lda=R.lda;hdg=R.hdg;$('spgOut').innerHTML=`<span>Heading <b>${String(R.hdg).padStart(3,'0')}°</b></span>`+(ph==='to'?`<span>TORA <b>${fmt(R.tora)}</b></span><span>ASDA <b>${fmt(R.asda)}</b></span>`:`<span>LDA <b>${fmt(R.lda)}</b></span>`);}
   else{elev=v('elev');rwy=v('rwy');hdg=v('hdg');asda=isNaN(v('asda'))?rwy:v('asda');lda=v('lda');}
   const alt=v('alt'),oat=v('oat'),wdir=v('wdir'),wspd=v('wspd')||0,wt=v(ph==='to'?'wt':'lwt'),pad=+$('pad').value;
-  try{const s={mode,site,ph,lmode};ids.forEach(k=>s[k]=$(k).value);localStorage.setItem('sen3to2',JSON.stringify(s));}catch(e){}
+  try{const s={mode,site,ph};ids.forEach(k=>s[k]=$(k).value);localStorage.setItem('n600to1',JSON.stringify(s));}catch(e){}
   if([elev,alt,oat,wt].some(isNaN)){$('verdict').innerHTML='<span class="pill warn">Incomplete</span> Enter elevation, altimeter, OAT and weight.';return;}
-  const pa=elev+(29.92-alt)*1000; const dev=oat-isa(pa);
+  const pa=elev+(29.92-alt)*1000, oatF=toF(oat), dev=oat-(15-1.98*pa/1000);
   const ang=((wdir-hdg)*Math.PI/180); const head=isNaN(ang)?0:wspd*Math.cos(ang); const cross=isNaN(ang)?0:wspd*Math.sin(ang);
   let wind=head; if($('wcred').value==='half') wind=head>=0?head*0.5:head*1.5;
   $('wdOut').innerHTML=`<span>${head>=0?'Headwind':'Tailwind'} <b>${Math.abs(head).toFixed(0)} kt</b></span><span>Crosswind <b>${Math.abs(cross).toFixed(0)} kt</b> ${cross>0.5?'from right':cross<-0.5?'from left':''}</span>${$('wcred').value==='half'?`<span>Used <b>${wind>=0?'+':''}${wind.toFixed(1)} kt</b></span>`:''}`;
-  $('paOut').innerHTML=`<span>Pressure alt <b>${fmt(pa)} ft</b></span><span>ISA <b>${dev>=0?'+':''}${dev.toFixed(0)}°C</b></span>`;
-  if(ph==='ld'){calcL({pa,oat,wt,wind,lda,pad,dev});return;}
+  $('paOut').innerHTML=`<span>Pressure alt <b>${fmt(pa)} ft</b></span><span>OAT <b>${Math.round(oatF)}°F</b></span><span>ISA <b>${dev>=0?'+':''}${dev.toFixed(0)}°C</b></span>`;
+  if(ph==='ld'){calcL({pa,oatF,wt,wind,lda,pad});return;}
   $('kAs').textContent='Accelerate-stop';$('stH1').textContent='Takeoff chart';$('stH2').textContent='Accel-stop chart';
-  const tk=mode==='norm'?'to0':'to25', ak=mode==='norm'?'as0':'as25';
-  const inp={pa,oat,wt,wind};
-  ctx={pa,oat,wind,rwy,asda,pad,tk,ak};
-  const T=run(CH[tk],inp), A=run(CH[ak],inp); const asd=A.afterWind*POH[ak];
-  const flags=[];
-  if(dev<-15.5||dev>30.5)flags.push(`OAT is ISA ${dev>=0?'+':''}${dev.toFixed(0)}°C. The charts cover ISA −15°C to ISA +30°C.`);
-  if(pa<-100||pa>8000)flags.push(`Pressure altitude ${fmt(pa)} ft is outside the charts (sea level to 8,000 ft).`);
-  if(wt>4750)flags.push('Weight is above the 4,750 lb maximum takeoff weight.');
-  if(wt<3000)flags.push('Weight is below the charts’ 3,000 lb minimum.');
-  if(wind>15)flags.push('Headwind credit is capped at the chart’s 15 kt.');
-  if(wind<-5)flags.push('Tailwind is beyond the chart’s 5 kt limit.');
-  if(T.fl.has('ext')||A.fl.has('ext'))flags.push('The result falls outside the chart’s guide lines, so it is extrapolated.');
+  const tk=mode==='f20'?'to20':'to0';
+  const inp={pa,oatF,wt,wind};
+  ctx={pa,oatF,wind,rwy,asda,pad,tk};
+  const T=run(CH[tk],inp), A=run(CH.as,inp);
+  const flags=chartFlags(inp,[tk,'as'],wt,5700);
+  if(A.fl.has('astw'))flags.push('The accelerate-stop chart has no tailwind lines, so the tailwind is applied with the flaps-up takeoff chart’s ratio.');
+  if(T.fl.has('ext')||A.fl.has('ext'))flags.push('The result falls outside the chart’s lines, so it is extrapolated.');
   $('flags').innerHTML=flags.map(f=>`<li>${f}</li>`).join('');
-  const k=1+pad, gr=up(T.gr*k), o50=up(T.o50*k), as=up(asd*k);
-  $('resTitle').textContent=(mode==='norm'?'Normal takeoff, 0° flaps':'Maximum effort takeoff, 25° flaps');
+  const g=grf(tk,wt), k=1+pad, gr=up(T.dw*g*k), o50=up(T.dw*k), as=up(A.dw*k), vs=spd(tk,wt);
+  $('resTitle').textContent=`Takeoff, ${mode==='f20'?'flaps 20°':'flaps up'} · T.O. speed ${kias(vs)} KIAS`;
   $('vGr').innerHTML=fmt(gr)+'<small>ft</small>'; $('v50').innerHTML=fmt(o50)+'<small>ft</small>'; $('vAs').innerHTML=fmt(as)+'<small>ft</small>';
   const ps=pad?` incl. +${pad*100}%`:'';
-  $('sGr').textContent=`chart ${fmt(T.gr)}${ps}`; $('s50').textContent=`chart ${fmt(T.o50)}${ps}`; $('sAs').textContent=`${fmt(A.afterWind)} × ${POH[ak]}${ps}`;
-  // runway verdict
-  // over-50 ft vs takeoff run available, accelerate-stop vs accelerate-stop available
+  $('sGr').textContent=`${Math.round(g*100)}% of chart total${ps}`; $('s50').textContent=`chart ${fmt(T.dw)}${ps}`; $('sAs').textContent=`chart ${fmt(A.dw)}${ps}`;
   const m50=rwy-o50, mAs=asda-as, tight=Math.min(m50/rwy,mAs/asda);
   let cls,txt;
   if(isNaN(rwy)){cls='warn';txt='Enter runway length to compare';}
-  else{
-    const parts=`Over 50 ft ${m50>=0?fmt(m50)+' ft to spare':'short by '+fmt(-m50)+' ft'} of ${fmt(rwy)}. Accel-stop ${mAs>=0?fmt(mAs)+' ft to spare':'short by '+fmt(-mAs)+' ft'} of ${fmt(asda)}.`;
-    cls=(m50<0||mAs<0)?'bad':tight<0.15?'warn':'ok'; txt=parts;
-  }
+  else{txt=`Over 50 ft ${m50>=0?fmt(m50)+' ft to spare':'short by '+fmt(-m50)+' ft'} of ${fmt(rwy)}. Accel-stop ${mAs>=0?fmt(mAs)+' ft to spare':'short by '+fmt(-mAs)+' ft'} of ${fmt(asda)}.`;
+    cls=(m50<0||mAs<0)?'bad':tight<0.15?'warn':'ok';}
   const where=site==='home'?`KSPG runway ${$('spgRwy').value}`:'This runway';
   $('verdict').innerHTML=`<span class="pill ${cls}">${cls==='ok'?'Fits':cls==='warn'?'Tight':'Does not fit'}</span><span>${where}: ${txt}</span>`;
   drawBar(isNaN(rwy)?0:rwy,gr,o50,as,asda);
+  const W=CH[tk].wt_v,j=T.j;
   $('steps').innerHTML=[
-    ['Temperature and altitude, at the max-weight line',T.ref,A.ref],
-    ['After weight correction ('+fmt(Math.min(4750,Math.max(3000,wt)))+' lb)',T.afterWt,A.afterWt],
-    ['After wind correction',T.afterWind,A.afterWind],
-    ['Ground roll',T.gr,null],['Over 50 ft obstacle',T.o50,null],
-    ['Accelerate-stop (× '+POH[ak]+')',null,asd]
+    [`Zero wind, ${fmt(W[j])} lb line`,T.byW[j],A.byW[j]],
+    [`Zero wind, ${fmt(W[j+1])} lb line`,T.byW[j+1],A.byW[j+1]],
+    [`Zero wind at ${fmt(wt)} lb`,T.d0,A.d0],
+    [`After wind (${wind>=0?'head':'tail'} ${Math.abs(Math.max(-5,Math.min(30,wind))).toFixed(0)} kt) = total over 50 ft`,T.dw,A.dw],
+    [`Ground roll (${Math.round(g*100)}% of total)`,T.dw*g,null]
   ].map(r=>`<tr><td>${r[0]}</td><td class="n">${r[1]==null?'':fmt(r[1])}</td><td class="n">${r[2]==null?'':fmt(r[2])}</td></tr>`).join('');
 }
 function calcL(c){
-  const {pa,oat,wt,wind,lda,pad,dev}=c; const lk=lmode==='norm'?'ln':'ls', ok2=lmode==='norm'?'ls':'ln';
-  const inp={pa,oat,wt,wind}; const L=run(CH[lk],inp), O=run(CH[ok2],inp);
-  ctx={pa,oat,wind,lda,pad,lk,ph:'ld'};
-  const flags=[];
-  if(dev<-15.5||dev>30.5)flags.push(`OAT is ISA ${dev>=0?'+':''}${dev.toFixed(0)}°C. The charts cover ISA −15°C to ISA +30°C.`);
-  if(pa<-100||pa>8000)flags.push(`Pressure altitude ${fmt(pa)} ft is outside the charts (sea level to 8,000 ft).`);
-  if(wt>4513)flags.push('Weight is above the 4,513 lb maximum landing weight.');
-  if(wt<3000)flags.push('Weight is below the charts’ 3,000 lb minimum.');
-  if(wind>15)flags.push('Headwind credit is capped at the chart’s 15 kt.');
-  if(wind<-5)flags.push('Tailwind is beyond the chart’s 5 kt limit.');
-  if(L.fl.has('ext'))flags.push('The result falls outside the chart’s guide lines, so it is extrapolated.');
+  const {pa,oatF,wt,wind,lda,pad}=c;
+  const inp={pa,oatF,wt,wind}; const L=run(CH.ld,inp);
+  ctx={pa,oatF,wind,lda,pad,ph:'ld'};
+  const flags=chartFlags(inp,['ld'],wt,5700);
+  if(L.fl.has('ext'))flags.push('The result falls outside the chart’s lines, so it is extrapolated.');
   $('flags').innerHTML=flags.map(f=>`<li>${f}</li>`).join('');
-  const k=1+pad, gr=up(L.gr*k), o50=up(L.o50*k), vb=vbar(lmode,wt);
-  $('resTitle').textContent=lmode==='norm'?'Normal landing, 40° flaps':'Short field effort landing, 40° flaps';
-  $('vGr').innerHTML=fmt(gr)+'<small>ft</small>'; $('v50').innerHTML=fmt(o50)+'<small>ft</small>'; $('vAs').innerHTML=Math.round(vb)+'<small>KIAS</small>';
-  $('kAs').textContent='Barrier speed';
+  const k=1+pad, gr=up(L.dw*0.37*k), o50=up(L.dw*k), va=spd('ld',wt);
+  $('resTitle').textContent='Normal landing, flaps 45°';
+  $('vGr').innerHTML=fmt(gr)+'<small>ft</small>'; $('v50').innerHTML=fmt(o50)+'<small>ft</small>'; $('vAs').innerHTML=kias(va)+'<small>KIAS</small>';
+  $('kAs').textContent='Approach speed';
   const ps=pad?` incl. +${pad*100}%`:'';
-  $('sGr').textContent=`chart ${fmt(L.gr)}${ps}`; $('s50').textContent=`chart ${fmt(L.o50)}${ps}`;
-  $('sAs').textContent=`at 50 ft, ${fmt(Math.max(3000,Math.min(4513,wt)))} lb`;
+  $('sGr').textContent=`about 37% of total${ps}`; $('s50').textContent=`chart ${fmt(L.dw)}${ps}`;
+  $('sAs').textContent=`at ${fmt(Math.max(4000,wt))} lb`;
   let cls,txt;
   if(isNaN(lda)){cls='warn';txt='Enter landing distance available to compare';}
-  else{const m=lda-o50;cls=m<0?'bad':m/lda<0.15?'warn':'ok';txt=`Over 50 ft ${m>=0?fmt(m)+' ft to spare':'short by '+fmt(-m)+' ft'} of ${fmt(lda)} available.`;
-    if(lmode==='norm'&&m<0&&lda-up(O.o50*k)>=0)txt+=' A short field effort landing fits.';}
+  else{const m=lda-o50;cls=m<0?'bad':m/lda<0.15?'warn':'ok';txt=`Over 50 ft ${m>=0?fmt(m)+' ft to spare':'short by '+fmt(-m)+' ft'} of ${fmt(lda)} available.`;}
   const where=site==='home'?`KSPG runway ${$('spgRwy').value}`:'This runway';
   $('verdict').innerHTML=`<span class="pill ${cls}">${cls==='ok'?'Fits':cls==='warn'?'Tight':'Does not fit'}</span><span>${where}: ${txt}</span>`;
   drawBarL(isNaN(lda)?0:lda,gr,o50);
-  const N=lmode==='norm'?L:O, S=lmode==='norm'?O:L;
-  $('stH1').textContent='Normal';$('stH2').textContent='Short field';
+  const W=CH.ld.wt_v,j=L.j;
+  $('stH1').textContent='Landing chart';$('stH2').textContent='';
   $('steps').innerHTML=[
-    ['Temperature and altitude, at the max-weight line',N.ref,S.ref],
-    ['After weight correction ('+fmt(Math.min(4513,Math.max(3000,wt)))+' lb)',N.afterWt,S.afterWt],
-    ['After wind correction = ground roll',N.gr,S.gr],
-    ['Over 50 ft barrier',N.o50,S.o50],
-    ['Barrier speed (KIAS)',Math.round(vbar('norm',wt)),Math.round(vbar('short',wt))]
-  ].map(r=>`<tr><td>${r[0]}</td><td class="n">${fmt(r[1])}</td><td class="n">${fmt(r[2])}</td></tr>`).join('');
+    [`Zero wind, ${fmt(W[j])} lb line`,L.byW[j]],[`Zero wind, ${fmt(W[j+1])} lb line`,L.byW[j+1]],[`Zero wind at ${fmt(wt)} lb`,L.d0],
+    [`After wind (${wind>=0?'head':'tail'} ${Math.abs(Math.max(-5,Math.min(30,wind))).toFixed(0)} kt) = total over 50 ft`,L.dw],['Ground roll (about 37%)',L.dw*0.37]
+  ].map(r=>`<tr><td>${r[0]}</td><td class="n">${fmt(r[1])}</td><td class="n"></td></tr>`).join('');
 }
 function drawBarL(lda,gr,o50){
   const svg=$('bar');const L=8,R=592;const max=Math.max(lda,o50)*1.05||1;const x=d=>L+(R-L)*d/max;
@@ -433,7 +432,7 @@ function drawBarL(lda,gr,o50){
   svg.innerHTML=s;
 }
 function drawBar(rwy,gr,o50,as,asda){
-  const svg=$('bar');const W=600,L=8,R=592;const max=Math.max(rwy,o50,as,asda||0)*1.05||1;const x=d=>L+(R-L)*d/max;
+  const svg=$('bar');const L=8,R=592;const max=Math.max(rwy,o50,as,asda||0)*1.05||1;const x=d=>L+(R-L)*d/max;
   const rows=[['Ground roll',gr,'var(--bar-gr)'],['Over 50 ft',o50,'var(--bar-50)'],['Accel-stop',as,'var(--bar-as)']];
   let s='';
   if(rwy){s+=`<rect x="${L}" y="2" width="${x(rwy)-L}" height="80" rx="3" style="fill:var(--soft)"/><line x1="${x(rwy)}" y1="0" x2="${x(rwy)}" y2="84" style="stroke:var(--ink)" stroke-width="2"/><text x="${Math.min(x(rwy)-4,R)}" y="91" text-anchor="end" font-size="10.5" style="fill:var(--muted);font-family:var(--f-mono)">Runway ${fmt(rwy)} ft</text>`;}
@@ -442,12 +441,12 @@ function drawBar(rwy,gr,o50,as,asda){
   svg.innerHTML=s;
 }
 (function check(){
-  const ex=[['Normal takeoff, ground roll','to0',{pa:2000,oat:21,wt:3969,wind:9},'gr',1350],['Normal takeoff, over 50 ft','to0',{pa:2000,oat:21,wt:3969,wind:9},'o50',1650],
-    ['Max effort, ground roll','to25',{pa:2000,oat:21,wt:4250,wind:9},'gr',820],['Max effort, over 50 ft','to25',{pa:2000,oat:21,wt:4250,wind:9},'o50',1040],
-    ['Accel-stop, 0° flaps','as0',{pa:2000,oat:21,wt:3969,wind:9},'as',3032],['Accel-stop, 25° flaps','as25',{pa:3000,oat:22,wt:4000,wind:10},'as',1827],
-    ['Landing, ground roll','ln',{pa:3000,oat:22,wt:3655,wind:10},'gr',1120],['Normal landing, over 50 ft','ln',{pa:3000,oat:22,wt:3655,wind:10},'o50',2260],
-    ['Short field landing, over 50 ft','ls',{pa:3000,oat:22,wt:3655,wind:10},'o50',1880]];
-  $('chk').innerHTML=ex.map(([n,k,i,f,p])=>{const r=run(CH[k],i);const v=f==='as'?r.afterWind*POH[k]:r[f];const d=(v-p)/p*100;return `<tr><td>${n}</td><td class="n">${fmt(p)}</td><td class="n">${fmt(v)}</td><td class="n">${d>=0?'+':''}${d.toFixed(1)}%</td></tr>`}).join('');
+  const T={oatF:60,pa:2000,wt:5500},Ld={oatF:80,pa:4000,wt:5000};
+  const ex=[['Flaps up takeoff (7-3), zero wind','to0',T,0,2175],['Flaps up takeoff, 20 kt headwind','to0',T,20,1500],
+    ['Flaps 20° takeoff (7-4), zero wind','to20',T,0,1630],['Flaps 20° takeoff, 20 kt headwind','to20',T,20,1050],
+    ['Accelerate-stop (7-5), zero wind','as',T,0,3220],['Accelerate-stop, 20 kt headwind','as',T,20,2300],
+    ['Landing (7-12), zero wind','ld',Ld,0,2480],['Landing, 20 kt headwind','ld',Ld,20,1880]];
+  $('chk').innerHTML=ex.map(([n,k,i,w,p])=>{const v=run(CH[k],{...i,wind:w}).dw;const d=(v-p)/p*100;return `<tr><td>${n}</td><td class="n">${fmt(p)}</td><td class="n">${fmt(v)}</td><td class="n">${d>=0?'+':''}${d.toFixed(1)}%</td></tr>`}).join('');
 })();
 
 // ---- Weather: live fetch (NWS api.weather.gov, CORS-enabled) with METAR paste and manual fallback ----
@@ -468,7 +467,7 @@ function applyWx(o,src){
   if(o.wdir!=null) set('wdir',o.wdir);
   const bits=[];if(o.vrb)bits.push('variable wind, enter a direction to test the worst case');if(o.gust)bits.push(`gusting ${o.gust} kt`);
   const st=$('wxStat');st.className='wxstat ok';
-  st.innerHTML=`${src}${o.time?' · '+o.time:''}: <code>${o.raw.replace(/</g,'&lt;')}</code>${bits.length?'<br>'+bits.join(', ')+'.':''}<br>METAR winds are true; runway headings are magnetic.`;
+  st.innerHTML=`${src}${o.time?' · '+o.time:''}: <code>${o.raw.replace(/</g,'&lt;')}</code>${bits.length?'<br>'+bits.join(', ')+'.':''}<br>METAR winds are true, and so are the runway headings here.`;
   calc();
 }
 async function getWx(){
@@ -483,6 +482,7 @@ async function getWx(){
     if(!r.ok) throw new Error('http');
     const j=await r.json();const p=j.properties||{};
     const o=parseMetar(p.rawMessage)||{raw:'(no raw METAR in report)'};
+    if(p.rawMessage){$('metar').placeholder=p.rawMessage;try{localStorage.setItem('n600wx1',p.rawMessage);}catch(e){}}
     if(o.oat==null&&p.temperature&&p.temperature.value!=null)o.oat=Math.round(p.temperature.value);
     if(o.wspd==null&&p.windSpeed&&p.windSpeed.value!=null)o.wspd=Math.round(p.windSpeed.value/1.852);
     if(o.wdir==null&&p.windDirection&&p.windDirection.value!=null)o.wdir=p.windDirection.value;
@@ -496,9 +496,18 @@ async function getWx(){
   }finally{b.disabled=false;b.textContent='Get current weather';}
 }
 $('getWx').onclick=getWx;
-// ---- Built-in runway database (OurAirports, public domain) ----
+try{const m=localStorage.getItem('n600wx1');if(m)$('metar').placeholder=m;}catch(e){}
+// ---- Built-in runway database (FAA NASR for the US, OurAirports elsewhere) ----
 let RDB=null,curApt=null;
-const rdbReady=fetch('runways.json').then(r=>r.ok?r.json():null).then(j=>{RDB=j;dataNote();return j;}).catch(()=>null);
+const rdbReady=fetch("runways.json").then(r=>r.ok?r.json():null).then(j=>{RDB=j;spgFromDb();dataNote();return j;}).catch(()=>null);
+// KSPG figures come from the same FAA database when it loads, so they follow each 28-day cycle; the table above is the offline fallback.
+function spgFromDb(){try{const a=RDB&&RDB.a&&RDB.a.KSPG;if(!a)return;SPG.elev=a[1];
+  a[2].forEach(([le,he,len,w,h1,h2,d1,d2,dd])=>{const n=s=>String(+s);
+    SPG.rwy[n(le)]={hdg:h1,tora:dd?dd[0]:len,asda:dd?dd[1]:len,lda:dd?dd[4]:len-d1};SPG.rwy[n(he)]={hdg:h2,tora:dd?dd[2]:len,asda:dd?dd[3]:len,lda:dd?dd[5]:len-d2};});
+  if(RDB.ddEff){const eff=new Date(RDB.ddEff+'T12:00:00Z'),f=o=>d=>d.toLocaleDateString('en-US',Object.assign({day:'numeric',year:'numeric',timeZone:'UTC'},o)),next=new Date(+eff+28*864e5),stale=Date.now()>+next+7*864e5,el=$('spgData');
+    $('spgEff').textContent=f({month:'long'})(eff);el.className='wxstat '+(stale?'warn':'ok');
+    el.textContent=stale?`KSPG FAA data is out of date: cycle effective ${f({month:'short'})(eff)}, and a newer cycle began ${f({month:'short'})(next)}. Connect to update.`:`KSPG FAA declared distances current as of ${f({month:'short'})(eff)}. Next cycle ${f({month:'short'})(next)}.`;}
+  calc();}catch(e){}}
 function dataNote(){
   const el=$('oData'); if(!RDB){el.textContent='';return;}
   const D=s=>new Date(s+'T12:00:00Z'), f=d=>d.toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
@@ -546,75 +555,92 @@ let oT=null;
 $('oId').addEventListener('input',()=>{clearTimeout(oT);oT=setTimeout(()=>lookupApt(false),250);});
 $('oRwy').addEventListener('change',pickRwy);
 
-// ---- Weight and balance (POH Sections 2 and 6) ----
-const WB={cap:123,ramp:4773,mtow:4750,mlw:4513,taxi:23,ppg:6,bag:100,aft:94.6,arm:{front:85.5,center:119.1,rear:157.6,bf:22.5,ba:178.7,fuel:93.6}};
-const WBDEF={wbEw:'3417.1',wbEa:'88.89',wbZf:'4470',wbP1:'200',wbP2:'',wbC1:'',wbC2:'',wbR1:'',wbR2:'',wbBf:'',wbBa:'',wbFuel:'123',wbBurn:'30',wbTabs:''};
+// ---- Weight and balance (TCDS A17WE, AFMS ER94105, Owner's Manual Section 5) ----
+const WB={wingCap:124,fusCap:41.5,ramp:5725,mtow:5700,mlw:5700,taxi:25,ppg:6,bag:240,aft:167.88,fusLow:14,arm:{crew:96,mid:132,rear:165,bag:245,oil:145,wing:170,fus:213}};
+const WBDEF={wbEw:'3912.9',wbEa:'165.62',wbOil:'37.5',wbP1:'200',wbP2:'',wbM1:'',wbM2:'',wbR1:'',wbR2:'',wbBag:'',wbWing:'0',wbFus:'41.5',wbBurn:'20'};
 const wbIds=Object.keys(WBDEF);
-// Forward limit, straight line between the POH points (Section 2.13).
-const fwdLim=w=>w<=3400?82:w<=4250?82+(w-3400)*4.7/850:86.7+(w-4250)*3.9/500;
+// Forward limit, straight line between the TCDS and AFMS points.
+const fwdLim=w=>w<=4600?157.66:w<=5500?157.66+(w-4600)*1.92/900:159.58+(w-5500)*0.45/200;
+// Fuel used from each tank (lb). The tanks seek a common level, so the fuselage tank and wings feed together
+// until the wings run dry with about 14 gal left in the fuselage tank; after that the fuselage tank feeds alone.
+function useFuel(t,b){
+  let fus=t.fus,wing=t.wing;const low=WB.fusLow*WB.ppg;
+  if(wing>0){
+    if(fus>low){const f=(fus-low)/(fus-low+wing),bb=Math.min(b,fus-low+wing);fus-=bb*f;wing-=bb*(1-f);b-=bb;}
+    else{const bb=Math.min(b,wing);wing-=bb;b-=bb;}
+  }
+  const bb=Math.min(b,fus);fus-=bb;
+  return {fus,wing};
+}
 function wbCalc(i){
-  const A=WB.arm, rows=[['Basic empty weight',i.ew,i.ea],['Pilot and front passenger',i.front,A.front],['Center seats',i.center,A.center],['Rear seats',i.rear,A.rear],['Forward baggage',i.bf,A.bf],['Aft baggage',i.ba,A.ba]];
-  const pt=(w,m)=>({w,m,cg:m/w});
+  const A={...WB.arm,...(i.arm||{})};
+  const rows=[['Empty weight',i.ew,i.ea],['Oil',i.oil,A.oil],['Pilot and copilot',i.crew,A.crew],['Middle seats',i.mid,A.mid],['Rear seats',i.rear,A.rear],['Baggage',i.bag,A.bag]];
   let w=0,m=0;rows.forEach(r=>{w+=r[1];m+=r[1]*r[2];});
-  const zf=pt(w,m), ramp=pt(w+i.fuel,m+i.fuel*A.fuel), tx=Math.min(WB.taxi,i.fuel), to=pt(ramp.w-tx,ramp.m-tx*A.fuel), ld=pt(to.w-i.burn,to.m-i.burn*A.fuel);
-  return {rows,zf,ramp,to,ld,tx};
+  const zf={w,m,cg:m/w};
+  const pt=t=>{const W=zf.w+t.fus+t.wing,M=zf.m+t.fus*A.fus+t.wing*A.wing;return {w:W,m:M,cg:M/W,t};};
+  const f0={fus:i.fus,wing:i.wing}, ramp=pt(f0), tx=Math.min(WB.taxi,i.fus+i.wing), to=pt(useFuel(f0,tx)), ld=pt(useFuel(to.t,i.burn));
+  const path=b=>pt(useFuel(to.t,b));
+  return {rows,zf,ramp,to,ld,tx,path,A};
 }
 const inEnv=p=>p.cg>=fwdLim(p.w)-0.005&&p.cg<=WB.aft+0.005;
-const f1=n=>n.toFixed(1), fgal=lb=>Math.round(lb/WB.ppg*10)/10;
+const f1=n=>n.toFixed(1), f2=n=>n.toFixed(2);
 let wbLast=null;
 function wbIn(){const g=k=>{const x=parseFloat($(k).value);return isNaN(x)?0:x;};
-  return {ew:g('wbEw'),ea:g('wbEa'),zfMax:g('wbZf')||4470,front:g('wbP1')+g('wbP2'),center:g('wbC1')+g('wbC2'),rear:g('wbR1')+g('wbR2'),bf:g('wbBf'),ba:g('wbBa'),fuel:g('wbFuel')*WB.ppg,burn:g('wbBurn')*WB.ppg,cap:WB.cap};}
+  return {ew:g('wbEw'),ea:g('wbEa'),oil:g('wbOil'),crew:g('wbP1')+g('wbP2'),mid:g('wbM1')+g('wbM2'),rear:g('wbR1')+g('wbR2'),bag:g('wbBag'),wing:g('wbWing')*WB.ppg,fus:g('wbFus')*WB.ppg,burn:g('wbBurn')*WB.ppg};}
 function wbRun(){
-  try{const s={};wbIds.forEach(k=>s[k]=$(k).value);localStorage.setItem('sen3wb',JSON.stringify(s));}catch(e){}
-  const i=wbIn();const tb=parseFloat($('wbTabs').value);$('wbTabsB').textContent=tb>0?'TABS '+tb:'TABS';
-  if(!i.ew||!i.ea){$('wbVerdict').innerHTML='<span class="pill warn">Incomplete</span> Enter the basic empty weight and CG.';return;}
+  try{const s={};wbIds.forEach(k=>s[k]=$(k).value);localStorage.setItem('n600wb1',JSON.stringify(s));}catch(e){}
+  const i=wbIn();
+  if(!i.ew||!i.ea){$('wbVerdict').innerHTML='<span class="pill warn">Incomplete</span> Enter the empty weight and CG.';return;}
   const r=wbCalc(i);wbLast=r;const fl=[];
   const over=(p,max,what,fix)=>{if(p.w>max+0.05)fl.push(`${what} is ${fmt(p.w)} lb, ${fmt(Math.ceil(p.w-max))} lb over the ${fmt(max)} lb maximum. ${fix(p.w-max)}`);};
   over(r.ramp,WB.ramp,'Ramp weight',d=>`Take off ${Math.ceil(d/WB.ppg)} gal of fuel or ${fmt(Math.ceil(d))} lb of load.`);
   over(r.to,WB.mtow,'Takeoff weight',d=>`Take off ${Math.ceil(d/WB.ppg)} gal of fuel or ${fmt(Math.ceil(d))} lb of load.`);
   over(r.ld,WB.mlw,'Landing weight',d=>`Burn ${Math.ceil(d/WB.ppg)} gal more before landing, or start with less fuel.`);
-  over(r.zf,Math.min(i.zfMax,WB.mlw),'Zero fuel weight',d=>`Everything above it has to be fuel, so take ${fmt(Math.ceil(d))} lb out of the cabin or baggage.`);
-  [['Forward baggage',i.bf],['Aft baggage',i.ba]].forEach(([n,v])=>{if(v>WB.bag)fl.push(`${n} is ${fmt(v)} lb; the compartment limit is 100 lb.`);});
-  if(i.fuel>i.cap*WB.ppg+0.1)fl.push(`${f1(i.fuel/WB.ppg)} gal is more than the ${i.cap} gal usable capacity.`);
-  if(i.burn>0&&i.burn>i.fuel-WB.taxi+0.1)fl.push('The trip burn is more than the fuel on board after taxi.');
-  const cgMsg=(p,n)=>{if(inEnv(p))return;const f=fwdLim(p.w);fl.push(p.cg<f?`${n} CG ${f1(p.cg)} in is forward of the ${f1(f)} in limit at ${fmt(p.w)} lb.`:`${n} CG ${f1(p.cg)} in is aft of the 94.6 in limit.`);};
-  cgMsg(r.to,'Takeoff');cgMsg(r.ld,'Landing');cgMsg(r.zf,'Zero fuel');
-  // Burn line between takeoff and landing: the forward limit moves with weight, so check along the way.
-  if(inEnv(r.to)&&inEnv(r.ld)){for(let b=50;b<i.burn;b+=50){const p={w:r.to.w-b,m:r.to.m-b*WB.arm.fuel};p.cg=p.m/p.w;if(!inEnv(p)){fl.push(`The CG leaves the envelope in flight, around ${fmt(p.w)} lb (${f1(p.cg)} in).`);break;}}}
+  if(i.bag>WB.bag)fl.push(`Baggage is ${fmt(i.bag)} lb; the compartment limit is 240 lb.`);
+  if(i.rear>380)fl.push(`Rear seats total ${fmt(i.rear)} lb; a rear bench is limited to 380 lb.`);
+  if(i.wing>WB.wingCap*WB.ppg+0.1)fl.push(`${f1(i.wing/WB.ppg)} gal is more than the wings’ 124 gal usable.`);
+  if(i.fus>WB.fusCap*WB.ppg+0.1)fl.push(`${f1(i.fus/WB.ppg)} gal is more than the fuselage tank’s 41.5 gal usable.`);
+  if(i.burn>0&&i.burn>i.wing+i.fus-WB.taxi+0.1)fl.push('The trip burn is more than the fuel on board after taxi.');
+  const cgMsg=(p,n)=>{if(inEnv(p))return;const f=fwdLim(p.w);fl.push(p.cg<f?`${n} CG ${f2(p.cg)} in is forward of the ${f2(f)} in limit at ${fmt(p.w)} lb.`:`${n} CG ${f2(p.cg)} in is aft of the 167.88 in limit.`);};
+  cgMsg(r.ramp,'Ramp');cgMsg(r.to,'Takeoff');cgMsg(r.ld,'Landing');cgMsg(r.zf,'Zero fuel');
+  if(inEnv(r.to)&&inEnv(r.ld)){for(let b=50;b<i.burn;b+=50){const p=r.path(b);if(!inEnv(p)){fl.push(`The CG leaves the envelope in flight, around ${fmt(p.w)} lb (${f2(p.cg)} in).`);break;}}}
   const sub=p=>`CG ${p.cg.toFixed(2)} in`;
   $('wbVTo').innerHTML=`${fmt(r.to.w)}<small>lb</small>`;$('wbSTo').textContent=sub(r.to);
   $('wbVLd').innerHTML=`${fmt(r.ld.w)}<small>lb</small>`;$('wbSLd').textContent=sub(r.ld);
   $('wbVZf').innerHTML=`${fmt(r.zf.w)}<small>lb</small>`;$('wbSZf').textContent=sub(r.zf);
-  [['wbVTo',r.to,WB.mtow],['wbVLd',r.ld,WB.mlw],['wbVZf',r.zf,Math.min(i.zfMax,WB.mlw)]].forEach(([k,p,mx])=>{$(k).style.color=(p.w>mx+0.05||!inEnv(p))?'var(--bad)':'';});
+  [['wbVTo',r.to,WB.mtow],['wbVLd',r.ld,WB.mlw],['wbVZf',r.zf,1e9]].forEach(([k,p,mx])=>{$(k).style.color=(p.w>mx+0.05||!inEnv(p))?'var(--bad)':'';});
   const ok=!fl.length;
   $('wbVerdict').innerHTML=ok?`<span class="pill ok">Within limits</span> Useful load left at takeoff: ${fmt(WB.mtow-r.to.w)} lb.`:`<span class="pill bad">Out of limits</span> ${fl.length===1?'One item needs fixing.':fl.length+' items need fixing.'}`;
   $('wbFlags').innerHTML=fl.map(t=>`<li>${t}</li>`).join('');
-  $('wbFOut').innerHTML=`<span>Fuel <b>${fmt(i.fuel)} lb</b></span><span>Taxi <b>−${fmt(r.tx)} lb</b></span><span>At landing <b>${f1(Math.max(0,i.fuel-WB.taxi-i.burn)/WB.ppg)} gal</b></span>`;
+  const lt=r.ld.t;
+  $('wbFOut').innerHTML=`<span>Fuel <b>${fmt(i.wing+i.fus)} lb</b></span><span>Taxi <b>−${fmt(r.tx)} lb</b></span><span>At landing <b>${f1(lt.wing/WB.ppg)} wing + ${f1(lt.fus/WB.ppg)} fus gal</b></span>`;
   $('wbUseTo').textContent=`Use ${fmt(r.to.w)} lb for takeoff`;$('wbUseLd').textContent=`Use ${fmt(r.ld.w)} lb for landing`;
-  const tr=(n,w,a,m,cls)=>`<tr${cls?` class="${cls}"`:''}><td>${n}</td><td class="n">${w?fmt(w):'–'}</td><td class="n">${w?a.toFixed(1):'–'}</td><td class="n">${w?fmt(m):'–'}</td></tr>`;
+  const tr=(n,w,a,m)=>`<tr><td>${n}</td><td class="n">${w?fmt(w):'–'}</td><td class="n">${w&&a!=null?a.toFixed(1):'–'}</td><td class="n">${w?fmt(m):'–'}</td></tr>`;
   const ptRow=(n,p,mx)=>`<tr class="sum"><td>${n}</td><td class="n${p.w>mx+0.05?' bad':''}">${fmt(p.w)}</td><td class="n${inEnv(p)?'':' bad'}">${p.cg.toFixed(2)}</td><td class="n">${fmt(p.m)}</td></tr>`;
-  $('wbTbl').innerHTML=r.rows.map(x=>tr(x[0],x[1],x[2],x[1]*x[2])).join('')+ptRow('Zero fuel weight',r.zf,Math.min(i.zfMax,WB.mlw))
-    +tr('Fuel ('+f1(i.fuel/WB.ppg)+' gal)',i.fuel,WB.arm.fuel,i.fuel*WB.arm.fuel)+ptRow('Ramp weight',r.ramp,WB.ramp)
-    +tr('Start, taxi and runup',-r.tx,WB.arm.fuel,-r.tx*WB.arm.fuel)+ptRow('Takeoff weight',r.to,WB.mtow)
-    +tr('Trip burn ('+f1(i.burn/WB.ppg)+' gal)',-i.burn,WB.arm.fuel,-i.burn*WB.arm.fuel)+ptRow('Landing weight',r.ld,WB.mlw);
-  drawEnv(r,Math.min(i.zfMax,WB.mlw));
+  const A=r.A, dW=(a,b)=>b.w-a.w, dM=(a,b)=>b.m-a.m;
+  $('wbTbl').innerHTML=r.rows.map(x=>tr(x[0],x[1],x[2],x[1]*x[2])).join('')+ptRow('Zero fuel weight',r.zf,1e9)
+    +tr('Wing fuel ('+f1(i.wing/WB.ppg)+' gal)',i.wing,A.wing,i.wing*A.wing)+tr('Fuselage fuel ('+f1(i.fus/WB.ppg)+' gal)',i.fus,A.fus,i.fus*A.fus)+ptRow('Ramp weight',r.ramp,WB.ramp)
+    +tr('Start, taxi and runup',dW(r.ramp,r.to),dM(r.ramp,r.to)/dW(r.ramp,r.to)||null,dM(r.ramp,r.to))+ptRow('Takeoff weight',r.to,WB.mtow)
+    +tr('Trip burn ('+f1(i.burn/WB.ppg)+' gal)',dW(r.to,r.ld),dM(r.to,r.ld)/dW(r.to,r.ld)||null,dM(r.to,r.ld))+ptRow('Landing weight',r.ld,WB.mlw);
+  drawEnv(r,i.burn);
 }
-function drawEnv(r,zfMax){
+function drawEnv(r,burn){
   const W=($('env').clientWidth||600)<500?420:600;$('env').setAttribute('viewBox',`0 0 ${W} 380`);
-  const X0=80,X1=96,Y0=2200,Y1=4800,L=60,R=W-12,T=12,B=334;
+  const X0=156,X1=169,Y0=3800,Y1=5800,L=60,R=W-12,T=12,B=334;
   const x=c=>L+(R-L)*(Math.max(X0,Math.min(X1,c))-X0)/(X1-X0), y=w=>B-(B-T)*(Math.max(Y0,Math.min(Y1,w))-Y0)/(Y1-Y0);
   const tx=(a,b,s,o)=>`<text x="${a}" y="${b}" ${o||''} style="fill:var(--muted);font-family:var(--f-mono)" font-size="13">${s}</text>`;
   let s='';
-  for(let c=80;c<=96;c+=(W<500?4:2))s+=`<line x1="${x(c)}" y1="${T}" x2="${x(c)}" y2="${B}" style="stroke:var(--line)"/>`+tx(x(c),B+17,c,'text-anchor="middle"');
-  for(let w=2200;w<=4800;w+=200)s+=`<line x1="${L}" y1="${y(w)}" x2="${R}" y2="${y(w)}" style="stroke:var(--line)"/>`+tx(L-6,y(w)+4,fmt(w),'text-anchor="end"');
+  for(let c=156;c<=169;c+=(W<500?2:1))s+=`<line x1="${x(c)}" y1="${T}" x2="${x(c)}" y2="${B}" style="stroke:var(--line)"/>`+tx(x(c),B+17,c,'text-anchor="middle"');
+  for(let w=3800;w<=5800;w+=200)s+=`<line x1="${L}" y1="${y(w)}" x2="${R}" y2="${y(w)}" style="stroke:var(--line)"/>`+tx(L-6,y(w)+4,fmt(w),'text-anchor="end"');
   s+=tx((L+R)/2,B+36,'CG, inches aft of datum','text-anchor="middle"');
-  const env=[[82,2200],[82,3400],[86.7,4250],[90.6,4750],[94.6,4750],[94.6,2200]];
+  const env=[[157.66,3800],[157.66,4600],[159.58,5500],[160.03,5700],[160.08,5725],[167.88,5725],[167.88,3800]];
   s+=`<polygon points="${env.map(p=>x(p[0])+','+y(p[1])).join(' ')}" style="fill:var(--soft);stroke:var(--accent)" stroke-width="2"/>`;
-  [[WB.mlw,'Max landing 4,513'],[zfMax,'Max zero fuel '+fmt(zfMax)]].forEach(([w,n],k)=>{s+=`<line x1="${x(fwdLim(w))}" y1="${y(w)}" x2="${x(94.6)}" y2="${y(w)}" style="stroke:var(--accent)" stroke-dasharray="5 3"/><line x1="${L}" y1="${y(w)}" x2="${x(fwdLim(w))}" y2="${y(w)}" style="stroke:var(--line)" stroke-dasharray="2 3"/>`+tx(L+6,y(w)+(k?14:-3),n);});
-  s+=`<line x1="${L}" y1="${y(4750)}" x2="${x(fwdLim(4750))}" y2="${y(4750)}" style="stroke:var(--line)" stroke-dasharray="2 3"/>`+tx(L+6,y(4750)-3,'Max takeoff 4,750');
-  // Burn path: takeoff to landing (solid), landing to zero fuel (dotted).
-  const seg=(a,b,d)=>`<line x1="${x(a.cg)}" y1="${y(a.w)}" x2="${x(b.cg)}" y2="${y(b.w)}" style="stroke:var(--ink)" stroke-width="1.6" ${d?'stroke-dasharray="2 3"':''}/>`;
-  s+=seg(r.ld,r.zf,1)+seg(r.to,r.ld,0);
+  s+=`<line x1="${x(fwdLim(5700))}" y1="${y(5700)}" x2="${x(167.88)}" y2="${y(5700)}" style="stroke:var(--accent)" stroke-dasharray="5 3"/>`+tx(x(160.5),y(5700)+15,'Max takeoff and landing 5,700');
+  s+=`<line x1="${L}" y1="${y(5500)}" x2="${x(fwdLim(5500))}" y2="${y(5500)}" style="stroke:var(--line)" stroke-dasharray="2 3"/>`+tx(L+6,y(5500)-3,'Charts end 5,500');
+  // Burn path: takeoff to landing (solid, sampled), landing to zero fuel (dotted).
+  let pth=[];for(let b=0;b<burn;b+=25)pth.push(r.path(b));pth.push(r.ld);
+  s+=`<polyline points="${pth.map(p=>x(p.cg)+','+y(p.w)).join(' ')}" style="fill:none;stroke:var(--ink)" stroke-width="1.6"/>`;
+  s+=`<line x1="${x(r.ld.cg)}" y1="${y(r.ld.w)}" x2="${x(r.zf.cg)}" y2="${y(r.zf.w)}" style="stroke:var(--ink)" stroke-width="1.6" stroke-dasharray="2 3"/>`;
   const ly={};[[r.to,'to'],[r.ld,'ld'],[r.zf,'zf']].reduce((prev,[p,k])=>{let v=y(p.w)+5;if(prev!=null&&v<prev+17)v=prev+17;ly[k]=v;return v;},null);
   const dot=(p,n,shape,k)=>{const bad=!inEnv(p),c=bad?'var(--bad)':'var(--ink)',X=x(p.cg),Y=y(p.w);
     const m=shape==='sq'?`<rect x="${X-5}" y="${Y-5}" width="10" height="10" style="fill:var(--card);stroke:${c}" stroke-width="2"/>`:`<circle cx="${X}" cy="${Y}" r="5.5" style="fill:${shape==='fill'?c:'var(--card)'};stroke:${c}" stroke-width="2"/>`;
@@ -626,51 +652,51 @@ function wbNote(t,cls){const n=$('wbNote');n.hidden=false;n.className='wxstat '+
 wbIds.forEach(k=>$(k).addEventListener('input',()=>{$('wbNote').hidden=true;wbRun();}));
 let wbRz=0;addEventListener('resize',()=>{clearTimeout(wbRz);wbRz=setTimeout(()=>{if(ph==='wb')wbRun();},150);});
 $('wbf').addEventListener('submit',e=>e.preventDefault());
-$('wbTabsB').onclick=()=>{const tb=parseFloat($('wbTabs').value);
-  if(!(tb>0)){const d=$('wbTabs').closest('details');d.open=true;$('wbTabs').focus();wbNote('Enter the usable fuel at the tabs once, under Empty weight and limits. The app remembers it.','warn');return;}
-  $('wbFuel').value=tb;wbRun();wbNote(`Set to the tabs (${tb} gal).`);};
-$('wbFull').onclick=()=>{$('wbFuel').value=WB.cap;wbRun();wbNote('Set to full usable fuel.');};
-$('wbMaxF').onclick=()=>{const i=wbIn();const z=wbCalc({...i,fuel:0,burn:0}).zf.w;
-  // Each limit as pounds of fuel at engine start; the smallest one wins.
-  const L=[['cap',i.cap*WB.ppg],['to',Math.min(WB.ramp,WB.mtow+WB.taxi)-z],['ld',WB.mlw-z+WB.taxi+i.burn]];
-  const [lim,lb]=L.reduce((a,b)=>b[1]<a[1]?b:a);const g=Math.floor(lb/WB.ppg+1e-6);
-  if(g<=0){wbNote(lim==='ld'?'No room for fuel: the landing weight is over 4,513 lb even with no fuel. Take load out first.':'No room for fuel: the airplane is at maximum weight before fuel. Take load out first.','warn');return;}
-  $('wbFuel').value=g;wbRun();
-  const tg=Math.floor(L[1][1]/WB.ppg+1e-6), lg=Math.floor(L[2][1]/WB.ppg+1e-6);
-  wbNote(lim==='cap'?`Full fuel fits (${i.cap} gal) within both takeoff and landing weight.`
-    :lim==='to'?`${g} gal, limited by the 4,750 lb maximum takeoff weight. Landing weight alone would allow ${Math.min(lg,i.cap)} gal.`
-    :`${g} gal, limited by the 4,513 lb maximum landing weight with a ${f1(i.burn/WB.ppg)} gal trip burn. Takeoff weight alone would allow ${Math.min(tg,i.cap)} gal.`,'ok');};
-$('wbClr').onclick=()=>{['wbP1','wbP2','wbC1','wbC2','wbR1','wbR2','wbBf','wbBa','wbFuel','wbBurn'].forEach(k=>$(k).value='');$('wbNote').hidden=true;wbRun();$('wbP1').focus();};
-$('wbDef').onclick=()=>{['wbEw','wbEa','wbZf'].forEach(k=>$(k).value=WBDEF[k]);wbRun();};
+$('wbFusOnly').onclick=()=>{$('wbWing').value=0;$('wbFus').value=WB.fusCap;wbRun();wbNote('Set to the fuselage tank full (41.5 gal) and the wings empty.');};
+$('wbFull').onclick=()=>{$('wbWing').value=WB.wingCap;$('wbFus').value=WB.fusCap;wbRun();wbNote('Set to full usable fuel: 124 gal in the wings and 41.5 gal in the fuselage tank.');};
+$('wbMaxF').onclick=()=>{const i=wbIn();const z=wbCalc({...i,wing:0,fus:0,burn:0}).zf.w;
+  // Each limit as pounds of fuel at engine start; the smallest one wins. Fuel goes in the fuselage tank first.
+  const cap=(WB.wingCap+WB.fusCap)*WB.ppg;
+  const L=[['cap',cap],['to',Math.min(WB.ramp,WB.mtow+WB.taxi)-z],['ld',WB.mlw-z+WB.taxi+i.burn]];
+  const [lim,lb]=L.reduce((a,b)=>b[1]<a[1]?b:a);const g=Math.floor(lb/WB.ppg*2+1e-6)/2;
+  if(g<=0){wbNote('No room for fuel: the airplane is at maximum weight before fuel. Take load out first.','warn');return;}
+  const fg=Math.min(WB.fusCap,g);$('wbFus').value=fg;$('wbWing').value=Math.round((g-fg)*2)/2;wbRun();
+  wbNote(lim==='cap'?'Full fuel fits (165.5 gal) within both takeoff and landing weight.'
+    :lim==='to'?`${g} gal, limited by the 5,700 lb maximum takeoff weight: the fuselage tank full and ${f1(g-fg)} gal in the wings.`
+    :`${g} gal, limited by the 5,700 lb maximum landing weight with a ${f1(i.burn/WB.ppg)} gal trip burn.`,'ok');};
+$('wbClr').onclick=()=>{['wbP1','wbP2','wbM1','wbM2','wbR1','wbR2','wbBag','wbWing','wbFus','wbBurn'].forEach(k=>$(k).value='');$('wbNote').hidden=true;wbRun();$('wbP1').focus();};
+$('wbDef').onclick=()=>{['wbEw','wbEa','wbOil'].forEach(k=>$(k).value=WBDEF[k]);wbRun();};
 $('wbUseTo').onclick=()=>{if(!wbLast)return;$('wt').value=Math.round(wbLast.to.w);setPh('to');noteW(`Takeoff weight ${fmt(wbLast.to.w)} lb from the weight and balance page.`,'ok');};
 $('wbUseLd').onclick=()=>{if(!wbLast)return;$('lwt').value=Math.round(wbLast.ld.w);setPh('ld');noteW(`Landing weight ${fmt(wbLast.ld.w)} lb from the weight and balance page.`,'ok');};
-try{const s=JSON.parse(localStorage.getItem('sen3wb')||'null');if(s)wbIds.forEach(k=>{if(s[k]!=null)$(k).value=s[k];});}catch(e){}
+try{const s=JSON.parse(localStorage.getItem('n600wb1')||'null');if(s)wbIds.forEach(k=>{if(s[k]!=null)$(k).value=s[k];});}catch(e){}
 (function wbCheck(){
-  const r=wbCalc({ew:3212,ea:88.5,front:340,center:236,rear:340,bf:100,ba:0,fuel:545,burn:450});
-  const ex=[['Zero fuel weight',r.zf,4228,94.0],['Ramp weight',r.ramp,4773,93.9],['Takeoff weight',r.to,4750,93.9],['Landing weight',r.ld,4300,93.9]];
-  $('wbChk').innerHTML=ex.map(([n,p,w,c])=>`<tr><td>${n}</td><td class="n">${fmt(w)} lb · ${c.toFixed(1)}</td><td class="n">${fmt(p.w)} lb · ${p.cg.toFixed(2)}</td></tr>`).join('');
+  const r=wbCalc({ew:3650,ea:596800/3650,oil:45,crew:340,mid:170,rear:0,bag:200,wing:795,fus:252,burn:0,arm:{bag:250}});
+  const ex=[['Empty weight + load, no fuel',r.zf,4405,708.41],['Point I, full fuel (takeoff)',r.ramp,5452,897.24]];
+  $('wbChk').innerHTML=ex.map(([n,p,w,mm])=>`<tr><td>${n}</td><td class="n">${fmt(w)} lb · ${(mm*1000/w).toFixed(2)}</td><td class="n">${fmt(p.w)} lb · ${p.cg.toFixed(2)}</td></tr>`).join('');
 })();
 
 // ---- Weight buttons ----
 function noteW(t,cls){const n=$('wNote');n.hidden=false;n.className='wxstat '+(cls||'');n.textContent=t;}
-$('wMax').onclick=()=>{if(ph==='ld'){$('lwt').value=4513;calc();noteW('Set to the 4,513 lb maximum landing weight.');return;}$('wt').value=4750;calc();noteW('Set to the 4,750 lb maximum takeoff weight.');};
+$('wWb').onclick=()=>{wbRun();if(!wbLast){noteW('Fill in the Weight & balance page first.','warn');return;}
+  const ld=ph==='ld',w=Math.round(ld?wbLast.ld.w:wbLast.to.w),bad=$('wbFlags').children.length;
+  $(ld?'lwt':'wt').value=w;calc();noteW(`${ld?'Landing':'Takeoff'} weight ${fmt(w)} lb from the weight and balance page`+(bad?', which is out of limits. Check the W&B page.':'.'),bad?'warn':'ok');};
+$('wMax').onclick=()=>{if(ph==='ld'){$('lwt').value=5700;calc();noteW('Set to the 5,700 lb maximum landing weight. The charts stop at 5,500 lb, so distances above that are extrapolated.');return;}$('wt').value=5700;calc();noteW('Set to the 5,700 lb maximum takeoff weight. The charts stop at 5,500 lb, so distances above that are extrapolated.');};
 $('wFit').onclick=()=>{
   calc();
   if(ph==='ld'){
     if(!ctx||isNaN(ctx.lda)){noteW('Enter the runway and weather first.','warn');return;}
-    const k=1+ctx.pad, fits=w=>up(run(CH[ctx.lk],{pa:ctx.pa,oat:ctx.oat,wt:w,wind:ctx.wind}).o50*k)<=ctx.lda;
-    if(fits(4513)){$('lwt').value=4513;calc();noteW('The runway is not limiting. Maximum landing weight of 4,513 lb fits.','ok');return;}
-    let w=4500;while(w>=3000&&!fits(w))w-=10;
-    if(w<3000){noteW('It doesn’t fit even at 3,000 lb, the lightest weight on the charts.'+(lmode==='norm'?' Try the short field effort chart.':''),'warn');return;}
+    const k=1+ctx.pad, fits=w=>up(run(CH.ld,{pa:ctx.pa,oatF:ctx.oatF,wt:w,wind:ctx.wind}).dw*k)<=ctx.lda;
+    if(fits(5700)){$('lwt').value=5700;calc();noteW('The runway is not limiting. The 5,700 lb maximum landing weight fits.','ok');return;}
+    let w=5690;while(w>=4000&&!fits(w))w-=10;
+    if(w<4000){noteW('It doesn’t fit even at 4,000 lb, the lightest weight on the chart.','warn');return;}
     $('lwt').value=w;calc();noteW(`Runway-limited landing weight is ${fmt(w)} lb${ctx.pad?' with your +'+ctx.pad*100+'% margin':''}.`,'ok');return;
   }
   if(!ctx||isNaN(ctx.rwy)){noteW('Enter the runway and weather first.','warn');return;}
   const k=1+ctx.pad;
-  const test=w=>{const i={pa:ctx.pa,oat:ctx.oat,wt:w,wind:ctx.wind};const T=run(CH[ctx.tk],i),A=run(CH[ctx.ak],i);
-    const o50=up(T.o50*k),as=up(A.afterWind*POH[ctx.ak]*k);return {ok:o50<=ctx.rwy&&as<=ctx.asda,o50,as};};
-  if(test(4750).ok){$('wt').value=4750;calc();noteW('The runway is not limiting. Maximum takeoff weight of 4,750 lb fits.','ok');return;}
-  let w=4740;while(w>=3000&&!test(w).ok)w-=10;
-  if(w<3000){noteW('It doesn’t fit even at 3,000 lb, the lightest weight on the charts. Consider a longer runway or cooler time of day.','warn');return;}
+  const test=w=>{const i={pa:ctx.pa,oatF:ctx.oatF,wt:w,wind:ctx.wind};const o50=up(run(CH[ctx.tk],i).dw*k),as=up(run(CH.as,i).dw*k);return {ok:o50<=ctx.rwy&&as<=ctx.asda,o50,as};};
+  if(test(5700).ok){$('wt').value=5700;calc();noteW('The runway is not limiting. The 5,700 lb maximum takeoff weight fits.','ok');return;}
+  let w=5690;while(w>=4000&&!test(w).ok)w-=10;
+  if(w<4000){noteW('It doesn’t fit even at 4,000 lb, the lightest weight on the charts. Consider a longer runway or a cooler time of day.','warn');return;}
   const r=test(w),lim=(ctx.rwy-r.o50)/ctx.rwy<(ctx.asda-r.as)/ctx.asda?'the 50 ft obstacle distance':'accelerate-stop';
   $('wt').value=w;calc();noteW(`Runway-limited weight is ${fmt(w)} lb, set by ${lim}${ctx.pad?' with your +'+ctx.pad*100+'% margin':''}. Check that it also works for weight and balance.`,'ok');
 };
@@ -678,7 +704,7 @@ $('wt').addEventListener('input',()=>{$('wNote').hidden=true;});$('lwt').addEven
 
 $('metar').addEventListener('input',()=>{const o=parseMetar($('metar').value);if(o&&(o.alt!=null||o.oat!=null||o.wspd!=null))applyWx(o,'Pasted METAR');});
 $('stn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();getWx();}});
-document.body.dataset.ph=ph;setLMode(lmode);setMode(mode);setPh(ph);setSite(site);wbRun();
+document.body.dataset.ph=ph;setMode(mode);setPh(ph);setSite(site);wbRun();
 if($('oId').value)lookupApt(true);
 if(site==='home'&&navigator.onLine!==false)getWx();
 </script>
